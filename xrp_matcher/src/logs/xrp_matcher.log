@@ -679,3 +679,158 @@
 2025-04-09 16:50:34,312 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274849, DateTime: 2025-04-09 16:50:34.312096, Symbol: XRPUSD, Side: Buy, Quantity: 12.42172776, Rate: 1.85836
 2025-04-09 16:50:34,345 - xrp_matcher.matcher - INFO - Processing execution ID: 412274849, Quantity: 12.42172776
 2025-04-09 16:50:34,345 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274849
+2025-04-09 16:50:35,605 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274866, DateTime: 2025-04-09 16:50:35.605369, Symbol: XRPUSD, Side: Buy, Quantity: 287.8349, Rate: 1.8599
+2025-04-09 16:50:35,653 - xrp_matcher.matcher - INFO - Processing execution ID: 412274866, Quantity: 287.8349
+2025-04-09 16:50:35,654 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274866
+2025-04-09 16:50:35,798 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274868, DateTime: 2025-04-09 16:50:35.798043, Symbol: XRPUSD, Side: Buy, Quantity: 193.631, Rate: 1.85967
+2025-04-09 16:50:35,854 - xrp_matcher.matcher - INFO - Processing execution ID: 412274868, Quantity: 193.631
+2025-04-09 16:50:35,854 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274868
+2025-04-09 16:50:36,632 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274869, DateTime: 2025-04-09 16:50:36.632713, Symbol: XRPUSD, Side: Buy, Quantity: 5.0, Rate: 1.85972
+2025-04-09 16:50:36,656 - xrp_matcher.matcher - INFO - Processing execution ID: 412274869, Quantity: 5.0
+2025-04-09 16:50:36,656 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274869
+2025-04-09 16:50:37,063 - xrp_matcher.bosonic - INFO - Bosonic authentication successful
+2025-04-09 16:50:37,065 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
+2025-04-09 16:50:37,065 - xrp_matcher.bosonic - ERROR - WebSocket connection error: module 'websockets' has no attribute 'connect'
+2025-04-09 16:50:37,065 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
+2025-04-09 16:50:37,499 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274872, DateTime: 2025-04-09 16:50:37.499571, Symbol: XRPUSD, Side: Buy, Quantity: 4377.56358809, Rate: 1.85937
+2025-04-09 16:50:37,557 - xrp_matcher.matcher - INFO - Processing execution ID: 412274872, Quantity: 4377.56358809
+2025-04-09 16:50:37,558 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274872
+2025-04-09 16:50:38,350 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274873, DateTime: 2025-04-09 16:50:38.350451, Symbol: XRPUSD, Side: Buy, Quantity: 156.12298, Rate: 1.85937
+2025-04-09 16:50:38,375 - xrp_matcher.matcher - INFO - Processing execution ID: 412274873, Quantity: 156.12298
+2025-04-09 16:50:38,375 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274873
+2025-04-09 16:50:38,457 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274874, DateTime: 2025-04-09 16:50:38.457904, Symbol: XRPUSD, Side: Buy, Quantity: 1.91e-06, Rate: 1.85937
+2025-04-09 16:50:38,475 - xrp_matcher.matcher - INFO - Processing execution ID: 412274874, Quantity: 1.91e-06
+2025-04-09 16:50:38,476 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274874
+2025-04-09 16:50:42,549 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274887, DateTime: 2025-04-09 16:50:42.549208, Symbol: XRPUSD, Side: Buy, Quantity: 12.3966828, Rate: 1.86022
+2025-04-09 16:50:42,599 - xrp_matcher.matcher - INFO - Processing execution ID: 412274887, Quantity: 12.3966828
+2025-04-09 16:50:42,599 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274887
+2025-04-09 16:50:42,716 - xrp_matcher.bosonic - INFO - Bosonic authentication successful
+2025-04-09 16:50:42,717 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
+2025-04-09 16:50:42,717 - xrp_matcher.bosonic - ERROR - WebSocket connection error: module 'websockets' has no attribute 'connect'
+2025-04-09 16:50:42,717 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
+2025-04-09 16:50:46,365 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274896, DateTime: 2025-04-09 16:50:46.365615, Symbol: XRPUSD, Side: Buy, Quantity: 200.0, Rate: 1.86031
+2025-04-09 16:50:46,392 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274897, DateTime: 2025-04-09 16:50:46.392029, Symbol: XRPUSD, Side: Buy, Quantity: 588.4, Rate: 1.86031
+2025-04-09 16:50:46,392 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274898, DateTime: 2025-04-09 16:50:46.392461, Symbol: XRPUSD, Side: Buy, Quantity: 2535.5, Rate: 1.86032
+2025-04-09 16:50:46,392 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274899, DateTime: 2025-04-09 16:50:46.392686, Symbol: XRPUSD, Side: Buy, Quantity: 649.50764552, Rate: 1.86033
+2025-04-09 16:50:46,393 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274900, DateTime: 2025-04-09 16:50:46.393655, Symbol: XRPUSD, Side: Buy, Quantity: 2687.54100199, Rate: 1.86044
+2025-04-09 16:50:46,393 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274901, DateTime: 2025-04-09 16:50:46.393933, Symbol: XRPUSD, Side: Buy, Quantity: 2687.42072108, Rate: 1.86052
+2025-04-09 16:50:46,394 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274902, DateTime: 2025-04-09 16:50:46.394434, Symbol: XRPUSD, Side: Buy, Quantity: 1552.44546825, Rate: 1.86064
+2025-04-09 16:50:46,395 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274903, DateTime: 2025-04-09 16:50:46.395532, Symbol: XRPUSD, Side: Buy, Quantity: 5374.43303811, Rate: 1.86067
+2025-04-09 16:50:46,395 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274904, DateTime: 2025-04-09 16:50:46.395796, Symbol: XRPUSD, Side: Buy, Quantity: 4030.83136172, Rate: 1.86072
+2025-04-09 16:50:46,396 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274905, DateTime: 2025-04-09 16:50:46.396475, Symbol: XRPUSD, Side: Buy, Quantity: 641.25, Rate: 1.86072
+2025-04-09 16:50:46,396 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274906, DateTime: 2025-04-09 16:50:46.396704, Symbol: XRPUSD, Side: Buy, Quantity: 5373.99294575, Rate: 1.86082
+2025-04-09 16:50:46,396 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274907, DateTime: 2025-04-09 16:50:46.396940, Symbol: XRPUSD, Side: Buy, Quantity: 641.25, Rate: 1.86092
+2025-04-09 16:50:46,451 - xrp_matcher.matcher - INFO - Processing execution ID: 412274896, Quantity: 200.0
+2025-04-09 16:50:46,451 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274896
+2025-04-09 16:50:46,451 - xrp_matcher.matcher - INFO - Processing execution ID: 412274897, Quantity: 588.4
+2025-04-09 16:50:46,451 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274897
+2025-04-09 16:50:46,451 - xrp_matcher.matcher - INFO - Processing execution ID: 412274898, Quantity: 2535.5
+2025-04-09 16:50:46,451 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274898
+2025-04-09 16:50:46,451 - xrp_matcher.matcher - INFO - Processing execution ID: 412274899, Quantity: 649.50764552
+2025-04-09 16:50:46,451 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274899
+2025-04-09 16:50:46,451 - xrp_matcher.matcher - INFO - Processing execution ID: 412274900, Quantity: 2687.54100199
+2025-04-09 16:50:46,451 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274900
+2025-04-09 16:50:46,451 - xrp_matcher.matcher - INFO - Processing execution ID: 412274901, Quantity: 2687.42072108
+2025-04-09 16:50:46,452 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274901
+2025-04-09 16:50:46,452 - xrp_matcher.matcher - INFO - Processing execution ID: 412274902, Quantity: 1552.44546825
+2025-04-09 16:50:46,452 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274902
+2025-04-09 16:50:46,452 - xrp_matcher.matcher - INFO - Processing execution ID: 412274903, Quantity: 5374.43303811
+2025-04-09 16:50:46,452 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274903
+2025-04-09 16:50:46,452 - xrp_matcher.matcher - INFO - Processing execution ID: 412274904, Quantity: 4030.83136172
+2025-04-09 16:50:46,452 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274904
+2025-04-09 16:50:46,452 - xrp_matcher.matcher - INFO - Processing execution ID: 412274905, Quantity: 641.25
+2025-04-09 16:50:46,452 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274905
+2025-04-09 16:50:46,452 - xrp_matcher.matcher - INFO - Processing execution ID: 412274906, Quantity: 5373.99294575
+2025-04-09 16:50:46,452 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274906
+2025-04-09 16:50:46,452 - xrp_matcher.matcher - INFO - Processing execution ID: 412274907, Quantity: 641.25
+2025-04-09 16:50:46,452 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274907
+2025-04-09 16:50:46,457 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274908, DateTime: 2025-04-09 16:50:46.457334, Symbol: XRPUSD, Side: Buy, Quantity: 17412.5380287, Rate: 1.86093
+2025-04-09 16:50:46,552 - xrp_matcher.matcher - INFO - Processing execution ID: 412274908, Quantity: 17412.5380287
+2025-04-09 16:50:46,553 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274908
+2025-04-09 16:50:48,353 - xrp_matcher.bosonic - INFO - Bosonic authentication successful
+2025-04-09 16:50:48,354 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
+2025-04-09 16:50:48,354 - xrp_matcher.bosonic - ERROR - WebSocket connection error: module 'websockets' has no attribute 'connect'
+2025-04-09 16:50:48,354 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
+2025-04-09 16:50:48,712 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274920, DateTime: 2025-04-09 16:50:48.712042, Symbol: XRPUSD, Side: Buy, Quantity: 147.79368057, Rate: 1.85983
+2025-04-09 16:50:48,766 - xrp_matcher.matcher - INFO - Processing execution ID: 412274920, Quantity: 147.79368057
+2025-04-09 16:50:48,766 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274920
+2025-04-09 16:50:49,177 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274921, DateTime: 2025-04-09 16:50:49.177565, Symbol: XRPUSD, Side: Buy, Quantity: 144.783076, Rate: 1.85982
+2025-04-09 16:50:49,267 - xrp_matcher.matcher - INFO - Processing execution ID: 412274921, Quantity: 144.783076
+2025-04-09 16:50:49,267 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274921
+2025-04-09 16:50:54,006 - xrp_matcher.bosonic - INFO - Bosonic authentication successful
+2025-04-09 16:50:54,007 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
+2025-04-09 16:50:54,007 - xrp_matcher.bosonic - ERROR - WebSocket connection error: module 'websockets' has no attribute 'connect'
+2025-04-09 16:50:54,007 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
+2025-04-09 16:50:56,270 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274928, DateTime: 2025-04-09 16:50:56.270269, Symbol: XRPUSD, Side: Buy, Quantity: 2688.67950049, Rate: 1.85965
+2025-04-09 16:50:56,283 - xrp_matcher.bitstamp - INFO - Execution: ID: 412274929, DateTime: 2025-04-09 16:50:56.283673, Symbol: XRPUSD, Side: Buy, Quantity: 1745.8050679, Rate: 1.85976
+2025-04-09 16:50:56,298 - xrp_matcher.matcher - INFO - Processing execution ID: 412274928, Quantity: 2688.67950049
+2025-04-09 16:50:56,299 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274928
+2025-04-09 16:50:56,299 - xrp_matcher.matcher - INFO - Processing execution ID: 412274929, Quantity: 1745.8050679
+2025-04-09 16:50:56,299 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412274929
+2025-04-09 16:50:59,653 - xrp_matcher.bosonic - INFO - Bosonic authentication successful
+2025-04-09 16:50:59,654 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
+2025-04-09 16:50:59,654 - xrp_matcher.bosonic - ERROR - WebSocket connection error: module 'websockets' has no attribute 'connect'
+2025-04-09 16:50:59,654 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
+2025-04-09 16:51:05,302 - xrp_matcher.bosonic - INFO - Bosonic authentication successful
+2025-04-09 16:51:05,302 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
+2025-04-09 16:51:05,303 - xrp_matcher.bosonic - ERROR - WebSocket connection error: module 'websockets' has no attribute 'connect'
+2025-04-09 16:51:05,303 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
+2025-04-09 16:51:10,924 - xrp_matcher.bosonic - INFO - Bosonic authentication successful
+2025-04-09 16:51:10,925 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
+2025-04-09 16:51:10,925 - xrp_matcher.bosonic - ERROR - WebSocket connection error: module 'websockets' has no attribute 'connect'
+2025-04-09 16:51:10,925 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
+2025-04-09 16:51:16,566 - xrp_matcher.bosonic - INFO - Bosonic authentication successful
+2025-04-09 16:51:16,567 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
+2025-04-09 16:51:16,567 - xrp_matcher.bosonic - ERROR - WebSocket connection error: module 'websockets' has no attribute 'connect'
+2025-04-09 16:51:16,567 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
+2025-04-09 16:51:22,205 - xrp_matcher.bosonic - INFO - Bosonic authentication successful
+2025-04-09 16:51:22,206 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
+2025-04-09 16:51:22,207 - xrp_matcher.bosonic - ERROR - WebSocket connection error: module 'websockets' has no attribute 'connect'
+2025-04-09 16:51:22,207 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
+2025-04-09 16:51:23,839 - xrp_matcher.bitstamp - INFO - Execution: ID: 412275023, DateTime: 2025-04-09 16:51:23.839453, Symbol: XRPUSD, Side: Buy, Quantity: 649.50764552, Rate: 1.85633
+2025-04-09 16:51:23,850 - xrp_matcher.matcher - INFO - Processing execution ID: 412275023, Quantity: 649.50764552
+2025-04-09 16:51:23,850 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412275023
+2025-04-09 16:51:23,861 - xrp_matcher.bitstamp - INFO - Execution: ID: 412275024, DateTime: 2025-04-09 16:51:23.861797, Symbol: XRPUSD, Side: Buy, Quantity: 2044.49235448, Rate: 1.8564
+2025-04-09 16:51:23,908 - xrp_matcher.bitstamp - INFO - Execution: ID: 412275025, DateTime: 2025-04-09 16:51:23.908400, Symbol: XRPUSD, Side: Buy, Quantity: 196.466, Rate: 1.85633
+2025-04-09 16:51:23,950 - xrp_matcher.matcher - INFO - Processing execution ID: 412275024, Quantity: 2044.49235448
+2025-04-09 16:51:23,950 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412275024
+2025-04-09 16:51:23,950 - xrp_matcher.matcher - INFO - Processing execution ID: 412275025, Quantity: 196.466
+2025-04-09 16:51:23,950 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412275025
+2025-04-09 16:51:27,848 - xrp_matcher.bosonic - INFO - Bosonic authentication successful
+2025-04-09 16:51:27,849 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
+2025-04-09 16:51:27,849 - xrp_matcher.bosonic - ERROR - WebSocket connection error: module 'websockets' has no attribute 'connect'
+2025-04-09 16:51:27,849 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
+2025-04-09 16:51:33,483 - xrp_matcher.bosonic - INFO - Bosonic authentication successful
+2025-04-09 16:51:33,484 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
+2025-04-09 16:51:33,484 - xrp_matcher.bosonic - ERROR - WebSocket connection error: module 'websockets' has no attribute 'connect'
+2025-04-09 16:51:33,484 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
+2025-04-09 16:51:36,708 - xrp_matcher.bitstamp - INFO - Execution: ID: 412275053, DateTime: 2025-04-09 16:51:36.708662, Symbol: XRPUSD, Side: Buy, Quantity: 200.0, Rate: 1.85596
+2025-04-09 16:51:36,720 - xrp_matcher.bitstamp - INFO - Execution: ID: 412275054, DateTime: 2025-04-09 16:51:36.720103, Symbol: XRPUSD, Side: Buy, Quantity: 294.04661099, Rate: 1.85597
+2025-04-09 16:51:36,757 - xrp_matcher.matcher - INFO - Processing execution ID: 412275053, Quantity: 200.0
+2025-04-09 16:51:36,757 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412275053
+2025-04-09 16:51:36,757 - xrp_matcher.matcher - INFO - Processing execution ID: 412275054, Quantity: 294.04661099
+2025-04-09 16:51:36,757 - xrp_matcher.matcher - WARNING - No more bids available to fill execution 412275054
+2025-04-09 16:51:39,123 - xrp_matcher.bosonic - INFO - Bosonic authentication successful
+2025-04-09 16:51:39,123 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
+2025-04-09 16:51:39,124 - xrp_matcher.bosonic - ERROR - WebSocket connection error: module 'websockets' has no attribute 'connect'
+2025-04-09 16:51:39,124 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
+2025-04-09 16:51:44,746 - xrp_matcher.bosonic - INFO - Bosonic authentication successful
+2025-04-09 16:51:44,747 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
+2025-04-09 16:51:44,747 - xrp_matcher.bosonic - ERROR - WebSocket connection error: module 'websockets' has no attribute 'connect'
+2025-04-09 16:51:44,747 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
+2025-04-09 16:51:50,387 - xrp_matcher.bosonic - INFO - Bosonic authentication successful
+2025-04-09 16:51:50,388 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
+2025-04-09 16:51:50,388 - xrp_matcher.bosonic - ERROR - WebSocket connection error: module 'websockets' has no attribute 'connect'
+2025-04-09 16:51:50,388 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
+2025-04-09 16:51:56,028 - xrp_matcher.bosonic - INFO - Bosonic authentication successful
+2025-04-09 16:51:56,029 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
+2025-04-09 16:51:56,030 - xrp_matcher.bosonic - ERROR - WebSocket connection error: module 'websockets' has no attribute 'connect'
+2025-04-09 16:51:56,030 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
+2025-04-09 16:52:01,679 - xrp_matcher.bosonic - INFO - Bosonic authentication successful
+2025-04-09 16:52:01,680 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
+2025-04-09 16:52:01,680 - xrp_matcher.bosonic - ERROR - WebSocket connection error: module 'websockets' has no attribute 'connect'
+2025-04-09 16:52:01,680 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
+2025-04-09 16:52:07,306 - xrp_matcher.bosonic - INFO - Bosonic authentication successful
+2025-04-09 16:52:07,307 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
+2025-04-09 16:52:07,307 - xrp_matcher.bosonic - ERROR - WebSocket connection error: module 'websockets' has no attribute 'connect'
+2025-04-09 16:52:07,307 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
