@@ -1456,3 +1456,7 @@
 2025-04-09 06:19:32,139 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
 2025-04-09 06:19:32,139 - xrp_matcher.bosonic - ERROR - Bosonic WebSocket connection error: module 'websockets' has no attribute 'connect'
 2025-04-09 06:19:32,140 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
+2025-04-09 06:19:37,791 - xrp_matcher.bosonic - INFO - Bosonic authentication successful
+2025-04-09 06:19:37,792 - xrp_matcher.bosonic - INFO - Connecting to Bosonic WebSocket: wss://trad6.bosonic.digital/websocket/trader
+2025-04-09 06:19:37,792 - xrp_matcher.bosonic - ERROR - Bosonic WebSocket connection error: module 'websockets' has no attribute 'connect'
+2025-04-09 06:19:37,792 - xrp_matcher.bosonic - INFO - Attempting to reconnect to Bosonic in 5 seconds...
