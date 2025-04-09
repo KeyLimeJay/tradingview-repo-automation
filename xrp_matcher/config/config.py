@@ -6,7 +6,7 @@ Loads settings from environment variables.
 
 import os
 import logging
-from dotenv import load_dotenv
+from dotenv import load_dotenv  # Changed from 'import dotenv'
 
 # Load environment variables from .env file
 load_dotenv()
