@@ -31,6 +31,7 @@ class BosonicClient:
         self.running_event = running_event
         self.loop = None
         self.task = None
+        self.ws = None
     
     async def login(self):
         """Authenticate with the Bosonic API to get a token for WebSocket connection."""
@@ -71,14 +72,14 @@ class BosonicClient:
             logger.error(f"Bosonic authentication error: {str(e)}")
             return None
     
-    async def send_subscriptions(self, ws):
+    async def send_subscriptions(self):
         """Send subscription messages to WebSocket."""
         subscriptions = [
             {"type": "ticker.subscribe"},
             {"type": "marketdata.subscribe"}
         ]
         for sub in subscriptions:
-            await ws.send(json.dumps(sub))
+            await self.ws.send(json.dumps(sub))
             logger.debug(f"Sent Bosonic subscription: {sub}")
     
     async def handle_message(self, message):
@@ -225,45 +226,49 @@ class BosonicClient:
                 
                 logger.info(f"Connecting to Bosonic WebSocket: {BOSONIC_WS_URL}")
                 
-                # For websockets 9.1, use this connection method
-                ws = await websockets.connect(
-                    BOSONIC_WS_URL,
-                    extra_headers={
-                        'Origin': BOSONIC_API_BASE_URL,
-                        'User-Agent': 'Mozilla/5.0',
-                        'Cookie': 'mfaEnabledUser=false; mfaEnabledTm=false'
-                    },
-                    subprotocols=[token]
-                )
-                
+                # Establish WebSocket connection
                 try:
+                    self.ws = await websockets.connect(
+                        BOSONIC_WS_URL,
+                        extra_headers={
+                            'Origin': BOSONIC_API_BASE_URL,
+                            'User-Agent': 'Mozilla/5.0',
+                            'Authorization': f'Bearer {token}'
+                        }
+                    )
+                    
                     logger.info("Bosonic WebSocket connected")
                     
-                    await self.send_subscriptions(ws)
+                    # Send subscriptions
+                    await self.send_subscriptions()
                     
-                    # Process messages until stopped
-                    last_heartbeat = time.time()
+                    # Process messages
+                    try:
+                        while self.running_event.is_set():
+                            try:
+                                # Wait for message with timeout
+                                message = await asyncio.wait_for(self.ws.recv(), timeout=30)
+                                await self.handle_message(message)
+                            except asyncio.TimeoutError:
+                                # Send periodic ping to keep connection alive
+                                await self.ws.ping()
+                                logger.debug("Sent Bosonic WebSocket ping")
+                            except websockets.exceptions.ConnectionClosed:
+                                logger.warning("Bosonic WebSocket connection closed")
+                                break
+                    except Exception as comm_error:
+                        logger.error(f"WebSocket communication error: {comm_error}")
                     
-                    while self.running_event.is_set():
-                        try:
-                            # Use wait_for with a timeout
-                            message = await asyncio.wait_for(ws.recv(), timeout=5)
-                            await self.handle_message(message)
-                        except asyncio.TimeoutError:
-                            # Check if we need to send a heartbeat
-                            current_time = time.time()
-                            if current_time - last_heartbeat > 30:  # 30 seconds heartbeat interval
-                                await ws.ping()
-                                logger.debug("Sent Bosonic heartbeat ping")
-                                last_heartbeat = current_time
-                        except websockets.exceptions.ConnectionClosed:
-                            logger.warning("Bosonic WebSocket connection closed")
-                            break
+                except Exception as conn_error:
+                    logger.error(f"WebSocket connection error: {conn_error}")
                 finally:
-                    await ws.close()
+                    # Ensure WebSocket is closed
+                    if self.ws:
+                        await self.ws.close()
+                        self.ws = None
             
             except Exception as e:
-                logger.error(f"Bosonic WebSocket connection error: {str(e)}")
+                logger.error(f"Unexpected Bosonic WebSocket error: {e}")
                 
             # Wait before attempting to reconnect
             if self.running_event.is_set():
@@ -280,8 +285,13 @@ class BosonicClient:
         
         # Run the loop in a thread
         def run_asyncio_loop():
-            self.loop.run_forever()
-            
+            try:
+                self.loop.run_forever()
+            except Exception as e:
+                logger.error(f"Error in event loop: {e}")
+            finally:
+                self.loop.close()
+                
         import threading
         asyncio_thread = threading.Thread(target=run_asyncio_loop)
         asyncio_thread.daemon = True
@@ -291,5 +301,6 @@ class BosonicClient:
     
     def stop(self):
         """Stop the client."""
-        if self.loop and self.loop.is_running():
-            self.loop.call_soon_threadsafe(lambda: self.loop.stop())
+        if self.loop and not self.loop.is_closed():
+            # Schedule stopping the loop
+            self.loop.call_soon_threadsafe(self.loop.stop)
