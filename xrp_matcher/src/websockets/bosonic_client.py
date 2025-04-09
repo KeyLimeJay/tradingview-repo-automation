@@ -1,5 +1,4 @@
 # bosonic_client.py
-# bosonic_client.py
 """
 Bosonic WebSocket client for receiving bid data.
 """
@@ -227,39 +226,48 @@ class BosonicClient:
                 
                 logger.info(f"Connecting to Bosonic WebSocket: {BOSONIC_WS_URL}")
                 
-                # Establish WebSocket connection using async with syntax
+                # Establish WebSocket connection - using the older style approach
                 try:
-                    # This is the key change - using async with pattern
-                    async with websockets.client.connect(
+                    # Create a websocket connection
+                    headers = {
+                        'Origin': BOSONIC_API_BASE_URL,
+                        'User-Agent': 'Mozilla/5.0',
+                        'Authorization': f'Bearer {token}'
+                    }
+                    
+                    # Create a websocket connection manually without using async with
+                    ws = await websockets.connect(
                         BOSONIC_WS_URL,
-                        extra_headers={
-                            'Origin': BOSONIC_API_BASE_URL,
-                            'User-Agent': 'Mozilla/5.0',
-                            'Authorization': f'Bearer {token}'
-                        }
-                    ) as ws:
-                        logger.info("Bosonic WebSocket connected")
-                        
-                        # Send subscriptions
-                        await self.send_subscriptions(ws)
-                        
-                        # Process messages
-                        while self.running_event.is_set():
+                        extra_headers=headers,
+                        subprotocols=[token] if token else None
+                    )
+                    
+                    logger.info("Bosonic WebSocket connected")
+                    
+                    # Send subscriptions
+                    await self.send_subscriptions(ws)
+                    
+                    # Process messages
+                    while self.running_event.is_set():
+                        try:
+                            # Wait for message with timeout
+                            message = await asyncio.wait_for(ws.recv(), timeout=30)
+                            await self.handle_message(message)
+                        except asyncio.TimeoutError:
+                            # Send periodic ping to keep connection alive
                             try:
-                                # Wait for message with timeout
-                                message = await asyncio.wait_for(ws.recv(), timeout=30)
-                                await self.handle_message(message)
-                            except asyncio.TimeoutError:
-                                # Send periodic ping to keep connection alive
-                                try:
-                                    await ws.ping()
-                                    logger.debug("Sent Bosonic WebSocket ping")
-                                except:
-                                    logger.warning("Failed to send ping, connection may be closed")
-                                    break
-                            except websockets.exceptions.ConnectionClosed:
-                                logger.warning("Bosonic WebSocket connection closed")
+                                pong_waiter = await ws.ping()
+                                await asyncio.wait_for(pong_waiter, timeout=10)
+                                logger.debug("Sent Bosonic WebSocket ping")
+                            except Exception as ping_error:
+                                logger.warning(f"Failed to send ping: {str(ping_error)}")
                                 break
+                        except websockets.exceptions.ConnectionClosed as cc:
+                            logger.warning(f"Bosonic WebSocket connection closed: {str(cc)}")
+                            break
+                        
+                    # Make sure to close the connection when done
+                    await ws.close()
                     
                 except Exception as conn_error:
                     logger.error(f"WebSocket connection error: {conn_error}")
