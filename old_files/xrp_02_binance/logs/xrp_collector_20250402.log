@@ -1,0 +1,223 @@
+2025-04-02 19:58:25,115 - INFO - Starting XRP data collection process...
+2025-04-02 19:58:25,115 - INFO - Found 7 days with missing data: [datetime.date(2025, 4, 2), datetime.date(2025, 4, 1), datetime.date(2025, 3, 31), datetime.date(2025, 3, 30), datetime.date(2025, 3, 29), datetime.date(2025, 3, 28), datetime.date(2025, 3, 27)]
+2025-04-02 19:58:25,115 - INFO - Processing data for 2025-04-02...
+2025-04-02 19:58:25,115 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04-02.zip
+2025-04-02 19:58:25,658 - INFO - Daily data file not found (404), trying monthly data...
+2025-04-02 19:58:25,658 - INFO - Attempting to download monthly data from: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip
+2025-04-02 19:58:26,153 - WARNING - Error retrieving monthly data: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip. Retrying (1/3)...
+2025-04-02 19:58:29,641 - WARNING - Error retrieving monthly data: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip. Retrying (2/3)...
+2025-04-02 19:58:33,122 - ERROR - Maximum retries reached for monthly data. Error: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip
+2025-04-02 19:58:33,123 - WARNING - No data retrieved for 2025-04-02
+2025-04-02 19:58:34,123 - INFO - Processing data for 2025-04-01...
+2025-04-02 19:58:34,123 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04-01.zip
+2025-04-02 19:58:34,810 - INFO - Downloaded daily data successfully for 2025-04-01
+2025-04-02 20:39:07,341 - INFO - Starting XRP data collection process...
+2025-04-02 20:39:07,341 - INFO - Found 7 days with missing data: [datetime.date(2025, 4, 2), datetime.date(2025, 4, 1), datetime.date(2025, 3, 31), datetime.date(2025, 3, 30), datetime.date(2025, 3, 29), datetime.date(2025, 3, 28), datetime.date(2025, 3, 27)]
+2025-04-02 20:39:07,341 - INFO - Processing data for 2025-04-02...
+2025-04-02 20:39:07,341 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04-02.zip
+2025-04-02 20:39:07,848 - INFO - Daily data file not found (404), trying monthly data...
+2025-04-02 20:39:07,848 - INFO - Attempting to download monthly data from: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip
+2025-04-02 20:39:08,334 - WARNING - Error retrieving monthly data: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip. Retrying (1/3)...
+2025-04-02 20:39:11,899 - WARNING - Error retrieving monthly data: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip. Retrying (2/3)...
+2025-04-02 20:39:15,388 - ERROR - Maximum retries reached for monthly data. Error: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip
+2025-04-02 20:39:15,388 - WARNING - No data retrieved for 2025-04-02
+2025-04-02 20:39:16,388 - INFO - Processing data for 2025-04-01...
+2025-04-02 20:39:16,388 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04-01.zip
+2025-04-02 20:39:17,032 - INFO - Downloaded daily data successfully for 2025-04-01
+2025-04-02 20:39:17,034 - WARNING - Standard timestamp conversion failed for open_time: cannot convert input with unit 'ms'
+2025-04-02 20:39:17,035 - ERROR - All timestamp conversion methods failed for open_time: cannot convert input 1743465600000.0 with the unit 's'
+2025-04-02 20:39:17,070 - WARNING - Standard timestamp conversion failed for close_time: cannot convert input with unit 'ms'
+2025-04-02 20:39:17,071 - ERROR - All timestamp conversion methods failed for close_time: cannot convert input 1743465659999.999 with the unit 's'
+2025-04-02 20:39:17,127 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250401.csv
+2025-04-02 20:39:17,127 - INFO - Creating new combined file with 1440 records
+2025-04-02 20:39:17,143 - INFO - Combined file saved with 1440 total records
+2025-04-02 20:39:17,143 - INFO - Successfully processed 1440 records for 2025-04-01
+2025-04-02 20:39:18,144 - INFO - Processing data for 2025-03-31...
+2025-04-02 20:39:18,144 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-03-31.zip
+2025-04-02 20:39:18,361 - INFO - Downloaded daily data successfully for 2025-03-31
+2025-04-02 20:39:18,362 - WARNING - Standard timestamp conversion failed for open_time: cannot convert input with unit 'ms'
+2025-04-02 20:39:18,363 - ERROR - All timestamp conversion methods failed for open_time: cannot convert input 1743379200000.0 with the unit 's'
+2025-04-02 20:39:18,403 - WARNING - Standard timestamp conversion failed for close_time: cannot convert input with unit 'ms'
+2025-04-02 20:39:18,404 - ERROR - All timestamp conversion methods failed for close_time: cannot convert input 1743379259999.999 with the unit 's'
+2025-04-02 20:39:18,451 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250331.csv
+2025-04-02 20:39:18,457 - INFO - No new records to add to combined file
+2025-04-02 20:39:18,473 - INFO - Combined file saved with 1440 total records
+2025-04-02 20:39:18,473 - INFO - Successfully processed 1440 records for 2025-03-31
+2025-04-02 20:39:19,474 - INFO - Processing data for 2025-03-30...
+2025-04-02 20:39:19,474 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-03-30.zip
+2025-04-02 20:39:20,136 - INFO - Downloaded daily data successfully for 2025-03-30
+2025-04-02 20:39:20,137 - WARNING - Standard timestamp conversion failed for open_time: cannot convert input with unit 'ms'
+2025-04-02 20:39:20,138 - ERROR - All timestamp conversion methods failed for open_time: cannot convert input 1743292800000.0 with the unit 's'
+2025-04-02 20:39:20,182 - WARNING - Standard timestamp conversion failed for close_time: cannot convert input with unit 'ms'
+2025-04-02 20:39:20,183 - ERROR - All timestamp conversion methods failed for close_time: cannot convert input 1743292859999.999 with the unit 's'
+2025-04-02 20:39:20,234 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250330.csv
+2025-04-02 20:39:20,241 - INFO - No new records to add to combined file
+2025-04-02 20:39:20,264 - INFO - Combined file saved with 1440 total records
+2025-04-02 20:39:20,264 - INFO - Successfully processed 1440 records for 2025-03-30
+2025-04-02 20:39:21,265 - INFO - Processing data for 2025-03-29...
+2025-04-02 20:39:21,265 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-03-29.zip
+2025-04-02 20:39:21,907 - INFO - Downloaded daily data successfully for 2025-03-29
+2025-04-02 20:39:21,908 - WARNING - Standard timestamp conversion failed for open_time: cannot convert input with unit 'ms'
+2025-04-02 20:39:21,909 - ERROR - All timestamp conversion methods failed for open_time: cannot convert input 1743206400000.0 with the unit 's'
+2025-04-02 20:39:21,941 - WARNING - Standard timestamp conversion failed for close_time: cannot convert input with unit 'ms'
+2025-04-02 20:39:21,942 - ERROR - All timestamp conversion methods failed for close_time: cannot convert input 1743206459999.999 with the unit 's'
+2025-04-02 20:39:21,995 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250329.csv
+2025-04-02 20:39:22,001 - INFO - No new records to add to combined file
+2025-04-02 20:39:22,019 - INFO - Combined file saved with 1440 total records
+2025-04-02 20:39:22,019 - INFO - Successfully processed 1440 records for 2025-03-29
+2025-04-02 20:39:23,020 - INFO - Processing data for 2025-03-28...
+2025-04-02 20:39:23,020 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-03-28.zip
+2025-04-02 20:39:23,642 - INFO - Downloaded daily data successfully for 2025-03-28
+2025-04-02 20:39:23,654 - WARNING - Standard timestamp conversion failed for open_time: cannot convert input with unit 'ms'
+2025-04-02 20:39:23,654 - ERROR - All timestamp conversion methods failed for open_time: cannot convert input 1743120000000.0 with the unit 's'
+2025-04-02 20:39:23,690 - WARNING - Standard timestamp conversion failed for close_time: cannot convert input with unit 'ms'
+2025-04-02 20:39:23,697 - ERROR - All timestamp conversion methods failed for close_time: cannot convert input 1743120059999.999 with the unit 's'
+2025-04-02 20:39:23,742 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250328.csv
+2025-04-02 20:39:23,748 - INFO - No new records to add to combined file
+2025-04-02 20:39:23,762 - INFO - Combined file saved with 1440 total records
+2025-04-02 20:39:23,762 - INFO - Successfully processed 1440 records for 2025-03-28
+2025-04-02 20:39:24,763 - INFO - Processing data for 2025-03-27...
+2025-04-02 20:39:24,763 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-03-27.zip
+2025-04-02 20:39:25,371 - INFO - Downloaded daily data successfully for 2025-03-27
+2025-04-02 20:39:25,372 - WARNING - Standard timestamp conversion failed for open_time: cannot convert input with unit 'ms'
+2025-04-02 20:39:25,373 - ERROR - All timestamp conversion methods failed for open_time: cannot convert input 1743033600000.0 with the unit 's'
+2025-04-02 20:39:25,427 - WARNING - Standard timestamp conversion failed for close_time: cannot convert input with unit 'ms'
+2025-04-02 20:39:25,434 - ERROR - All timestamp conversion methods failed for close_time: cannot convert input 1743033659999.999 with the unit 's'
+2025-04-02 20:39:25,498 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250327.csv
+2025-04-02 20:39:25,504 - INFO - No new records to add to combined file
+2025-04-02 20:39:25,521 - INFO - Combined file saved with 1440 total records
+2025-04-02 20:39:25,521 - INFO - Successfully processed 1440 records for 2025-03-27
+2025-04-02 20:39:26,521 - INFO - Data collection summary: 6 dates successful, 1 dates failed
+2025-04-02 20:39:26,522 - INFO - Data collection process completed successfully!
+2025-04-02 20:46:58,879 - INFO - Starting XRP data collection process...
+2025-04-02 20:46:58,880 - INFO - Found 7 days with missing data: [datetime.date(2025, 4, 2), datetime.date(2025, 4, 1), datetime.date(2025, 3, 31), datetime.date(2025, 3, 30), datetime.date(2025, 3, 29), datetime.date(2025, 3, 28), datetime.date(2025, 3, 27)]
+2025-04-02 20:46:58,880 - INFO - Processing data for 2025-04-02...
+2025-04-02 20:46:58,880 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04-02.zip
+2025-04-02 20:46:59,363 - INFO - Daily data file not found (404), trying monthly data...
+2025-04-02 20:46:59,364 - INFO - Attempting to download monthly data from: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip
+2025-04-02 20:46:59,859 - WARNING - Error retrieving monthly data: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip. Retrying (1/3)...
+2025-04-02 20:47:03,346 - WARNING - Error retrieving monthly data: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip. Retrying (2/3)...
+2025-04-02 20:47:06,851 - ERROR - Maximum retries reached for monthly data. Error: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip
+2025-04-02 20:47:06,851 - WARNING - No data retrieved for 2025-04-02
+2025-04-02 20:47:07,856 - INFO - Processing data for 2025-04-01...
+2025-04-02 20:47:07,856 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04-01.zip
+2025-04-02 20:47:08,539 - INFO - Downloaded daily data successfully for 2025-04-01
+2025-04-02 20:47:08,541 - WARNING - Standard timestamp conversion failed for open_time: cannot convert input with unit 'ms'
+2025-04-02 20:47:08,542 - ERROR - All timestamp conversion methods failed for open_time: cannot convert input 1743465600000.0 with the unit 's'
+2025-04-02 20:47:08,592 - WARNING - Standard timestamp conversion failed for close_time: cannot convert input with unit 'ms'
+2025-04-02 20:47:08,593 - ERROR - All timestamp conversion methods failed for close_time: cannot convert input 1743465659999.999 with the unit 's'
+2025-04-02 20:47:08,647 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250401.csv
+2025-04-02 20:47:08,647 - INFO - Creating new combined file with 1440 records
+2025-04-02 20:47:08,660 - INFO - Combined file saved with 1440 total records
+2025-04-02 20:47:08,660 - INFO - Successfully processed 1440 records for 2025-04-01
+2025-04-02 20:47:09,661 - INFO - Processing data for 2025-03-31...
+2025-04-02 20:47:09,661 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-03-31.zip
+2025-04-02 20:47:10,339 - INFO - Downloaded daily data successfully for 2025-03-31
+2025-04-02 20:47:10,343 - WARNING - Standard timestamp conversion failed for open_time: cannot convert input with unit 'ms'
+2025-04-02 20:47:10,344 - ERROR - All timestamp conversion methods failed for open_time: cannot convert input 1743379200000.0 with the unit 's'
+2025-04-02 20:47:10,385 - WARNING - Standard timestamp conversion failed for close_time: cannot convert input with unit 'ms'
+2025-04-02 20:47:10,386 - ERROR - All timestamp conversion methods failed for close_time: cannot convert input 1743379259999.999 with the unit 's'
+2025-04-02 20:47:10,434 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250331.csv
+2025-04-02 20:47:10,439 - INFO - No new records to add to combined file
+2025-04-02 20:47:10,455 - INFO - Combined file saved with 1440 total records
+2025-04-02 20:47:10,455 - INFO - Successfully processed 1440 records for 2025-03-31
+2025-04-02 20:47:11,455 - INFO - Processing data for 2025-03-30...
+2025-04-02 20:47:11,456 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-03-30.zip
+2025-04-02 20:47:12,093 - INFO - Downloaded daily data successfully for 2025-03-30
+2025-04-02 20:47:12,094 - WARNING - Standard timestamp conversion failed for open_time: cannot convert input with unit 'ms'
+2025-04-02 20:47:12,095 - ERROR - All timestamp conversion methods failed for open_time: cannot convert input 1743292800000.0 with the unit 's'
+2025-04-02 20:47:12,155 - WARNING - Standard timestamp conversion failed for close_time: cannot convert input with unit 'ms'
+2025-04-02 20:47:12,156 - ERROR - All timestamp conversion methods failed for close_time: cannot convert input 1743292859999.999 with the unit 's'
+2025-04-02 20:47:12,210 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250330.csv
+2025-04-02 20:47:12,216 - INFO - No new records to add to combined file
+2025-04-02 20:47:12,233 - INFO - Combined file saved with 1440 total records
+2025-04-02 20:47:12,233 - INFO - Successfully processed 1440 records for 2025-03-30
+2025-04-02 20:47:13,234 - INFO - Processing data for 2025-03-29...
+2025-04-02 20:47:13,235 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-03-29.zip
+2025-04-02 20:47:13,855 - INFO - Downloaded daily data successfully for 2025-03-29
+2025-04-02 20:47:13,856 - WARNING - Standard timestamp conversion failed for open_time: cannot convert input with unit 'ms'
+2025-04-02 20:47:13,857 - ERROR - All timestamp conversion methods failed for open_time: cannot convert input 1743206400000.0 with the unit 's'
+2025-04-02 20:47:13,887 - WARNING - Standard timestamp conversion failed for close_time: cannot convert input with unit 'ms'
+2025-04-02 20:47:13,888 - ERROR - All timestamp conversion methods failed for close_time: cannot convert input 1743206459999.999 with the unit 's'
+2025-04-02 20:47:13,933 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250329.csv
+2025-04-02 20:47:13,938 - INFO - No new records to add to combined file
+2025-04-02 20:47:13,987 - INFO - Combined file saved with 1440 total records
+2025-04-02 20:47:13,988 - INFO - Successfully processed 1440 records for 2025-03-29
+2025-04-02 20:47:14,989 - INFO - Processing data for 2025-03-28...
+2025-04-02 20:47:14,989 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-03-28.zip
+2025-04-02 20:47:15,658 - INFO - Downloaded daily data successfully for 2025-03-28
+2025-04-02 20:47:15,659 - WARNING - Standard timestamp conversion failed for open_time: cannot convert input with unit 'ms'
+2025-04-02 20:47:15,660 - ERROR - All timestamp conversion methods failed for open_time: cannot convert input 1743120000000.0 with the unit 's'
+2025-04-02 20:47:15,746 - WARNING - Standard timestamp conversion failed for close_time: cannot convert input with unit 'ms'
+2025-04-02 20:47:15,747 - ERROR - All timestamp conversion methods failed for close_time: cannot convert input 1743120059999.999 with the unit 's'
+2025-04-02 20:47:15,804 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250328.csv
+2025-04-02 20:47:15,811 - INFO - No new records to add to combined file
+2025-04-02 20:47:15,829 - INFO - Combined file saved with 1440 total records
+2025-04-02 20:47:15,829 - INFO - Successfully processed 1440 records for 2025-03-28
+2025-04-02 20:47:16,830 - INFO - Processing data for 2025-03-27...
+2025-04-02 20:47:16,830 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-03-27.zip
+2025-04-02 20:47:17,463 - INFO - Downloaded daily data successfully for 2025-03-27
+2025-04-02 20:47:17,464 - WARNING - Standard timestamp conversion failed for open_time: cannot convert input with unit 'ms'
+2025-04-02 20:47:17,465 - ERROR - All timestamp conversion methods failed for open_time: cannot convert input 1743033600000.0 with the unit 's'
+2025-04-02 20:47:17,497 - WARNING - Standard timestamp conversion failed for close_time: cannot convert input with unit 'ms'
+2025-04-02 20:47:17,498 - ERROR - All timestamp conversion methods failed for close_time: cannot convert input 1743033659999.999 with the unit 's'
+2025-04-02 20:47:17,542 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250327.csv
+2025-04-02 20:47:17,548 - INFO - No new records to add to combined file
+2025-04-02 20:47:17,569 - INFO - Combined file saved with 1440 total records
+2025-04-02 20:47:17,569 - INFO - Successfully processed 1440 records for 2025-03-27
+2025-04-02 20:47:18,570 - INFO - Data collection summary: 6 dates successful, 1 dates failed
+2025-04-02 20:47:18,570 - INFO - Data collection process completed successfully!
+2025-04-02 20:47:42,668 - INFO - Starting XRP data collection process...
+2025-04-02 20:47:42,701 - INFO - Found 7 days with missing data: [datetime.date(2025, 4, 2), datetime.date(2025, 4, 1), datetime.date(2025, 3, 31), datetime.date(2025, 3, 30), datetime.date(2025, 3, 29), datetime.date(2025, 3, 28), datetime.date(2025, 3, 27)]
+2025-04-02 20:47:42,701 - INFO - Processing data for 2025-04-02...
+2025-04-02 20:47:42,701 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04-02.zip
+2025-04-02 20:47:43,194 - INFO - Daily data file not found (404), trying monthly data...
+2025-04-02 20:47:43,195 - INFO - Attempting to download monthly data from: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip
+2025-04-02 20:47:43,681 - WARNING - Error retrieving monthly data: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip. Retrying (1/3)...
+2025-04-02 20:47:47,179 - WARNING - Error retrieving monthly data: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip. Retrying (2/3)...
+2025-04-02 20:47:50,667 - ERROR - Maximum retries reached for monthly data. Error: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip
+2025-04-02 20:47:50,667 - WARNING - No data retrieved for 2025-04-02
+2025-04-02 20:47:51,667 - INFO - Processing data for 2025-04-01...
+2025-04-02 20:47:51,668 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04-01.zip
+2025-04-02 20:47:52,309 - INFO - Downloaded daily data successfully for 2025-04-01
+2025-04-02 20:47:52,329 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250401.csv
+2025-04-02 20:47:52,334 - INFO - No new records to add to combined file
+2025-04-02 20:47:52,349 - INFO - Combined file saved with 1440 total records
+2025-04-02 20:47:52,349 - INFO - Successfully processed 1440 records for 2025-04-01
+2025-04-02 20:47:53,350 - INFO - Processing data for 2025-03-31...
+2025-04-02 20:47:53,350 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-03-31.zip
+2025-04-02 20:47:54,026 - INFO - Downloaded daily data successfully for 2025-03-31
+2025-04-02 20:47:54,055 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250331.csv
+2025-04-02 20:47:54,060 - INFO - No new records to add to combined file
+2025-04-02 20:47:54,081 - INFO - Combined file saved with 1440 total records
+2025-04-02 20:47:54,081 - INFO - Successfully processed 1440 records for 2025-03-31
+2025-04-02 20:47:55,082 - INFO - Processing data for 2025-03-30...
+2025-04-02 20:47:55,082 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-03-30.zip
+2025-04-02 20:47:55,760 - INFO - Downloaded daily data successfully for 2025-03-30
+2025-04-02 20:47:55,777 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250330.csv
+2025-04-02 20:47:55,781 - INFO - No new records to add to combined file
+2025-04-02 20:47:55,796 - INFO - Combined file saved with 1440 total records
+2025-04-02 20:47:55,796 - INFO - Successfully processed 1440 records for 2025-03-30
+2025-04-02 20:47:56,797 - INFO - Processing data for 2025-03-29...
+2025-04-02 20:47:56,797 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-03-29.zip
+2025-04-02 20:47:57,423 - INFO - Downloaded daily data successfully for 2025-03-29
+2025-04-02 20:47:57,441 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250329.csv
+2025-04-02 20:47:57,445 - INFO - No new records to add to combined file
+2025-04-02 20:47:57,463 - INFO - Combined file saved with 1440 total records
+2025-04-02 20:47:57,463 - INFO - Successfully processed 1440 records for 2025-03-29
+2025-04-02 20:47:58,464 - INFO - Processing data for 2025-03-28...
+2025-04-02 20:47:58,464 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-03-28.zip
+2025-04-02 20:47:59,154 - INFO - Downloaded daily data successfully for 2025-03-28
+2025-04-02 20:47:59,172 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250328.csv
+2025-04-02 20:47:59,177 - INFO - No new records to add to combined file
+2025-04-02 20:47:59,197 - INFO - Combined file saved with 1440 total records
+2025-04-02 20:47:59,197 - INFO - Successfully processed 1440 records for 2025-03-28
+2025-04-02 20:48:00,198 - INFO - Processing data for 2025-03-27...
+2025-04-02 20:48:00,198 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-03-27.zip
+2025-04-02 20:48:00,861 - INFO - Downloaded daily data successfully for 2025-03-27
+2025-04-02 20:48:00,881 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250327.csv
+2025-04-02 20:48:00,886 - INFO - No new records to add to combined file
+2025-04-02 20:48:00,904 - INFO - Combined file saved with 1440 total records
+2025-04-02 20:48:00,904 - INFO - Successfully processed 1440 records for 2025-03-27
+2025-04-02 20:48:01,905 - INFO - Data collection summary: 6 dates successful, 1 dates failed
+2025-04-02 20:48:01,905 - INFO - Data collection process completed successfully!

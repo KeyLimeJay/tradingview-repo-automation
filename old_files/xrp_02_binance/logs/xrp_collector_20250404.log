@@ -1,0 +1,30 @@
+2025-04-04 15:22:34,479 - INFO - Starting XRP data collection process...
+2025-04-04 15:22:34,592 - INFO - Found 2 days with missing data: [datetime.date(2025, 4, 4), datetime.date(2025, 4, 3)]
+2025-04-04 15:22:34,593 - INFO - Processing data for 2025-04-04...
+2025-04-04 15:22:34,593 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04-04.zip
+2025-04-04 15:22:35,073 - INFO - Daily data file not found (404), trying monthly data...
+2025-04-04 15:22:35,074 - INFO - Attempting to download monthly data from: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip
+2025-04-04 15:22:35,613 - WARNING - Error retrieving monthly data: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip. Retrying (1/3)...
+2025-04-04 15:22:39,104 - WARNING - Error retrieving monthly data: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip. Retrying (2/3)...
+2025-04-04 15:22:42,592 - ERROR - Maximum retries reached for monthly data. Error: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip
+2025-04-04 15:22:42,592 - WARNING - No data retrieved for 2025-04-04
+2025-04-04 15:22:43,593 - INFO - Processing data for 2025-04-03...
+2025-04-04 15:22:43,593 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04-03.zip
+2025-04-04 15:22:44,236 - INFO - Downloaded daily data successfully for 2025-04-03
+2025-04-04 15:22:44,258 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250403.csv
+2025-04-04 15:22:44,274 - INFO - Read existing combined file with 8640 rows
+2025-04-04 15:22:44,276 - INFO - Combined dataframe has 10080 rows before deduplication
+2025-04-04 15:22:44,380 - INFO - Saved combined file with 10080 total rows
+2025-04-04 15:22:44,380 - INFO - Successfully processed 1440 records for 2025-04-03
+2025-04-04 15:22:45,381 - INFO - Data collection summary: 1 dates successful, 1 dates failed
+2025-04-04 15:22:45,399 - INFO - Combined file date counts:
+2025-04-04 15:22:45,399 - INFO -   2025-03-28: 1440 records
+2025-04-04 15:22:45,399 - INFO -   2025-03-29: 1440 records
+2025-04-04 15:22:45,399 - INFO -   2025-03-30: 1440 records
+2025-04-04 15:22:45,399 - INFO -   2025-03-31: 1440 records
+2025-04-04 15:22:45,399 - INFO -   2025-04-01: 1440 records
+2025-04-04 15:22:45,399 - INFO -   2025-04-02: 1440 records
+2025-04-04 15:22:45,399 - INFO -   2025-04-03: 1440 records
+2025-04-04 15:22:45,400 - INFO - Combined file contains data from 2025-03-28 00:00:00 to 2025-04-03 23:59:00
+2025-04-04 15:22:45,400 - INFO - Total records in combined file: 10080
+2025-04-04 15:22:45,400 - INFO - Data collection process completed!

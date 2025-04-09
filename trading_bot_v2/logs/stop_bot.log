@@ -1,0 +1,214 @@
+Fri Mar 21 19:15:18 UTC 2025: Attempting to stop trading bot...
+Found PID file with PID: 3005842
+Process 3005842 is running. Attempting to kill...
+Successfully terminated process 3005842
+Removed PID file
+No main bot processes found running
+No other trading-related processes found
+Removed bot_running marker file
+-----------------------------------------
+SHUTDOWN VERIFICATION REPORT
+Timestamp: Fri Mar 21 19:15:20 UTC 2025
+Status: SUCCESS
+Details:
+  - Terminated main bot process 3005842
+  - No main bot processes were running
+  - No other trading-related processes were running
+  - Removed .bot_running marker file
+NOTE: Other Python processes are still running (may be unrelated):
+root        2160  7.1  0.0 346872 27404 ?        Rs    2022 98479:45 /usr/bin/python2 /usr/bin/supervisord -c /etc/supervisord.conf
+root        2173  1.0  0.0 951528 103584 ?       Ssl   2022 14869:35 /usr/libexec/platform-python -Es /usr/sbin/tuned -l -P
+mihaelp   590239  0.0  0.0 251408 10652 ?        Ss   Mar14   4:07 /usr/bin/python3.6 /usr/bin/balances/atomic5.py
+jlimon   2448261  0.0  0.0   5280   960 ?        S    01:56   0:01 /home/jlimon/.vscode-server/extensions/ms-python.python-2025.2.0-linux-x64/python-env-tools/bin/pet server
+jlimon   2448383  0.2  0.1 13143256 519668 ?     Sl   01:56   2:13 /home/jlimon/.vscode-server/cli/servers/Stable-ddc367ed5c8936efe395cffeec279b04ffd7db78/server/node /home/jlimon/.vscode-server/extensions/ms-python.vscode-pylance-2025.3.2/dist/server.bundle.js --cancellationReceive=file:070e395ece7d81d6e7b10fa1e4c3d5117723a3468d --node-ipc --clientProcessId=2427617
+jlimon   2541495  0.0  0.0 289956 13236 ?        S    02:31   0:00 /bin/python /home/jlimon/.vscode-server/extensions/ms-python.python-2025.2.0-linux-x64/python_files/python_server.py
+mihaelp  3470708  0.0  0.0 400424  7124 ?        Ss    2023  73:56 /usr/bin/python3.6 /usr/bin/balances/MDService.py
+-----------------------------------------
+Bot shutdown process completed with status: SUCCESS
+Monitoring has been disabled. Bot will not restart automatically.
+Monitoring will be automatically re-enabled when you run start_trading_bot.sh
+-----------------------------------------
+FINAL STATUS: SUCCESS
+MONITORING: Disabled (bot will not restart automatically)
+-----------------------------------------
+Fri Mar 28 16:32:31 UTC 2025: Attempting to stop trading bot...
+Found PID file with PID: 1217636
+Process 1217636 is running. Attempting to kill...
+Successfully terminated process 1217636
+Removed PID file
+No main bot processes found running
+No other trading-related processes found
+Removed bot_running marker file
+-----------------------------------------
+SHUTDOWN VERIFICATION REPORT
+Timestamp: Fri Mar 28 16:32:33 UTC 2025
+Status: SUCCESS
+Details:
+  - Terminated main bot process 1217636
+  - No main bot processes were running
+  - No other trading-related processes were running
+  - Removed .bot_running marker file
+NOTE: Other Python processes are still running (may be unrelated):
+root        2160  7.4  0.0 346872 27756 ?        Ss    2022 103030:19 /usr/bin/python2 /usr/bin/supervisord -c /etc/supervisord.conf
+root        2173  1.0  0.0 951528 103364 ?       Ssl   2022 14973:21 /usr/libexec/platform-python -Es /usr/sbin/tuned -l -P
+mihaelp  3456553  0.5  0.0 251920 13172 ?        Ss   13:58   0:53 /usr/bin/python3.6 /usr/bin/balances/atomic5.py
+mihaelp  3470708  0.0  0.0 400424  7124 ?        Ss    2023  74:46 /usr/bin/python3.6 /usr/bin/balances/MDService.py
+-----------------------------------------
+Bot shutdown process completed with status: SUCCESS
+Monitoring has been disabled. Bot will not restart automatically.
+Monitoring will be automatically re-enabled when you run start_trading_bot.sh
+-----------------------------------------
+FINAL STATUS: SUCCESS
+MONITORING: Disabled (bot will not restart automatically)
+-----------------------------------------
+Mon Mar 31 20:14:57 UTC 2025: Attempting to stop trading bot...
+Found PID file with PID: 3952186
+Process 3952186 is running. Attempting to kill...
+Successfully terminated process 3952186
+Removed PID file
+No main bot processes found running
+No other trading-related processes found
+Removed bot_running marker file
+-----------------------------------------
+SHUTDOWN VERIFICATION REPORT
+Timestamp: Mon Mar 31 20:14:59 UTC 2025
+Status: SUCCESS
+Details:
+  - Terminated main bot process 3952186
+  - No main bot processes were running
+  - No other trading-related processes were running
+  - Removed .bot_running marker file
+NOTE: Other Python processes are still running (may be unrelated):
+root        2160  7.5  0.0 346872 22492 ?        Ss    2022 105166:50 /usr/bin/python2 /usr/bin/supervisord -c /etc/supervisord.conf
+root        2173  1.0  0.0 952552 105552 ?       Ssl   2022 15019:10 /usr/libexec/platform-python -Es /usr/sbin/tuned -l -P
+jlimon    894592  0.0  0.0 618456 30708 ?        S    Mar30   0:12 python src/main.py
+jlimon   3241950  0.0  0.0   5252  3912 ?        S    15:59   0:00 /home/jlimon/.vscode-server/extensions/ms-python.python-2025.2.0-linux-x64/python-env-tools/bin/pet server
+jlimon   3242079  0.1  0.1 13082204 439824 ?     Sl   15:59   0:30 /home/jlimon/.vscode-server/cli/servers/Stable-ddc367ed5c8936efe395cffeec279b04ffd7db78/server/node /home/jlimon/.vscode-server/extensions/ms-python.vscode-pylance-2025.3.2/dist/server.bundle.js --cancellationReceive=file:9534e983403143ea32b9b9b1c5c5f67f788e89ecf7 --node-ipc --clientProcessId=3233352
+jlimon   3442619  5.6  0.0 625308 39824 pts/15   Sl   Mar30  93:46 python src/main.py
+mihaelp  3470708  0.0  0.0 400424  7124 ?        Ss    2023  75:09 /usr/bin/python3.6 /usr/bin/balances/MDService.py
+jlimon   3977028  0.0  0.0 470580 27120 ?        S    Mar29   0:41 python src/main.py
+mihaelp  3998401  0.5  0.0 250296 11492 ?        Ss   20:12   0:00 /usr/bin/python3.6 /usr/bin/balances/atomic5.py
+-----------------------------------------
+Bot shutdown process completed with status: SUCCESS
+Monitoring has been disabled. Bot will not restart automatically.
+Monitoring will be automatically re-enabled when you run start_trading_bot.sh
+-----------------------------------------
+FINAL STATUS: SUCCESS
+MONITORING: Disabled (bot will not restart automatically)
+-----------------------------------------
+Thu Apr  3 15:24:47 UTC 2025: Attempting to stop trading bot...
+Found PID file with PID: 150344
+Process 150344 is running. Attempting to kill...
+Successfully terminated process 150344
+Removed PID file
+No main bot processes found running
+No other trading-related processes found
+Removed bot_running marker file
+-----------------------------------------
+SHUTDOWN VERIFICATION REPORT
+Timestamp: Thu Apr  3 15:24:49 UTC 2025
+Status: SUCCESS
+Details:
+  - Terminated main bot process 150344
+  - No main bot processes were running
+  - No other trading-related processes were running
+  - Removed .bot_running marker file
+NOTE: Other Python processes are still running (may be unrelated):
+root        2160  7.6  0.0 346872 23964 ?        Ss    2022 106563:43 /usr/bin/python2 /usr/bin/supervisord -c /etc/supervisord.conf
+root        2173  1.0  0.0 953576 108640 ?       Ssl   2022 15060:45 /usr/libexec/platform-python -Es /usr/sbin/tuned -l -P
+jlimon    894592  0.0  0.0 618456 27984 ?        S    Mar30   0:16 python src/main.py
+mihaelp  2218445  0.2  0.0 251072 10704 ?        Ss   10:16   0:40 /usr/bin/python3.6 /usr/bin/balances/atomic5.py
+jlimon   3009177  0.5  0.0 626160 35376 ?        Sl   Apr02   8:06 python src/main.py
+jlimon   3109037  1.0  0.0   4904  3908 ?        S    15:23   0:00 /home/jlimon/.vscode-server/extensions/ms-python.python-2025.2.0-linux-x64/python-env-tools/bin/pet server
+jlimon   3109223  4.6  0.1 12893320 304840 ?     Sl   15:23   0:02 /home/jlimon/.vscode-server/cli/servers/Stable-ddc367ed5c8936efe395cffeec279b04ffd7db78/server/node /home/jlimon/.vscode-server/extensions/ms-python.vscode-pylance-2025.4.1/dist/server.bundle.js --cancellationReceive=file:38de1a41204ed10f3b57410bd3a11f884cb086b71d --node-ipc --clientProcessId=3050259
+jlimon   3371284  2.8  0.0 622668 31960 ?        S    Apr01  78:37 python src/main.py
+jlimon   3442619  1.6  0.0 625308 39376 ?        Sl   Mar30  94:05 python src/main.py
+mihaelp  3470708  0.0  0.0 400424  7124 ?        Ss    2023  75:28 /usr/bin/python3.6 /usr/bin/balances/MDService.py
+jlimon   3895949  2.1  0.0 626972 39172 ?        S    Apr02  24:59 python src/main.py
+jlimon   3977028  0.0  0.0 470580 25908 ?        S    Mar29   0:45 python src/main.py
+-----------------------------------------
+Bot shutdown process completed with status: SUCCESS
+Monitoring has been disabled. Bot will not restart automatically.
+Monitoring will be automatically re-enabled when you run start_trading_bot.sh
+-----------------------------------------
+FINAL STATUS: SUCCESS
+MONITORING: Disabled (bot will not restart automatically)
+-----------------------------------------
+Thu Apr  3 20:48:56 UTC 2025: Attempting to stop trading bot...
+Found PID file with PID: 3599342
+Process 3599342 is running. Attempting to kill...
+Successfully terminated process 3599342
+Removed PID file
+No main bot processes found running
+No other trading-related processes found
+Removed bot_running marker file
+-----------------------------------------
+SHUTDOWN VERIFICATION REPORT
+Timestamp: Thu Apr  3 20:48:58 UTC 2025
+Status: SUCCESS
+Details:
+  - Terminated main bot process 3599342
+  - No main bot processes were running
+  - No other trading-related processes were running
+  - Removed .bot_running marker file
+NOTE: Other Python processes are still running (may be unrelated):
+root        2160  7.6  0.0 346872 24144 ?        Rs    2022 106700:25 /usr/bin/python2 /usr/bin/supervisord -c /etc/supervisord.conf
+root        2173  1.0  0.0 953576 108636 ?       Ssl   2022 15064:02 /usr/libexec/platform-python -Es /usr/sbin/tuned -l -P
+jlimon    894592  0.0  0.0 618456 27984 ?        S    Mar30   0:16 python src/main.py
+mihaelp  2218445  0.1  0.0 251072 10704 ?        Ss   10:16   0:47 /usr/bin/python3.6 /usr/bin/balances/atomic5.py
+jlimon   3009177  0.4  0.0 626160 35376 ?        Sl   Apr02   8:07 python src/main.py
+jlimon   3371284  2.5  0.0 622668 31960 ?        S    Apr01  78:37 python src/main.py
+jlimon   3442619  1.5  0.0 625308 39376 ?        Sl   Mar30  94:05 python src/main.py
+mihaelp  3470708  0.0  0.0 400424  7124 ?        Ss    2023  75:30 /usr/bin/python3.6 /usr/bin/balances/MDService.py
+jlimon   3605053  3.7  0.0 621204 35088 pts/48   Sl   18:18   5:37 python src/main.py
+jlimon   3663557  0.0  0.0   5196  3396 ?        S    18:37   0:00 /home/jlimon/.vscode-server/extensions/ms-python.python-2025.2.0-linux-x64/python-env-tools/bin/pet server
+jlimon   3663910  0.4  0.1 13153212 517208 ?     Sl   18:37   0:32 /home/jlimon/.vscode-server/cli/servers/Stable-ddc367ed5c8936efe395cffeec279b04ffd7db78/server/node /home/jlimon/.vscode-server/extensions/ms-python.vscode-pylance-2025.4.1/dist/server.bundle.js --cancellationReceive=file:ff514cf6f26c46775c975be26efb1720397d6e6030 --node-ipc --clientProcessId=3595575
+jlimon   3895949  1.6  0.0 626972 39120 ?        S    Apr02  24:59 python src/main.py
+jlimon   3977028  0.0  0.0 470580 25908 ?        S    Mar29   0:45 python src/main.py
+-----------------------------------------
+Bot shutdown process completed with status: SUCCESS
+Monitoring has been disabled. Bot will not restart automatically.
+Monitoring will be automatically re-enabled when you run start_trading_bot.sh
+-----------------------------------------
+FINAL STATUS: SUCCESS
+MONITORING: Disabled (bot will not restart automatically)
+-----------------------------------------
+Fri Apr  4 21:38:40 UTC 2025: Attempting to stop trading bot...
+Found PID file with PID: 2322796
+Process 2322796 no longer exists
+Removed PID file
+No main bot processes found running
+No other trading-related processes found
+Removed bot_running marker file
+-----------------------------------------
+SHUTDOWN VERIFICATION REPORT
+Timestamp: Fri Apr  4 21:38:40 UTC 2025
+Status: SUCCESS
+Details:
+  - Process 2322796 was not running
+  - No main bot processes were running
+  - No other trading-related processes were running
+  - Removed .bot_running marker file
+NOTE: Other Python processes are still running (may be unrelated):
+root        2160  7.6  0.0 346872 23540 ?        Ss    2022 107326:19 /usr/bin/python2 /usr/bin/supervisord -c /etc/supervisord.conf
+root        2173  1.0  0.0 953832 109392 ?       Ssl   2022 15077:59 /usr/libexec/platform-python -Es /usr/sbin/tuned -l -P
+jlimon    894592  0.0  0.0 618456 27948 ?        S    Mar30   0:17 python src/main.py
+mihaelp  2218445  0.0  0.0 251072 11168 ?        Ss   Apr03   1:15 /usr/bin/python3.6 /usr/bin/balances/atomic5.py
+jlimon   2330259  4.6  0.0 621576 37084 pts/50   Sl   11:36  27:43 python src/main.py
+jlimon   3009177  0.2  0.0 626160 35288 ?        Sl   Apr02   8:08 python src/main.py
+jlimon   3169110  0.0  0.0   5200  3972 ?        S    16:26   0:00 /home/jlimon/.vscode-server/extensions/ms-python.python-2025.2.0-linux-x64/python-env-tools/bin/pet server
+jlimon   3169269  0.0  0.1 13075236 420164 ?     Sl   16:26   0:11 /home/jlimon/.vscode-server/cli/servers/Stable-ddc367ed5c8936efe395cffeec279b04ffd7db78/server/node /home/jlimon/.vscode-server/extensions/ms-python.vscode-pylance-2025.4.1/dist/server.bundle.js --cancellationReceive=file:1df73ab5a12738de0a5813dbc18a0b0ef3f97d3132 --node-ipc --clientProcessId=2315214
+jlimon   3371284  1.7  0.0 622668 31900 ?        S    Apr01  78:39 python src/main.py
+jlimon   3442619  1.2  0.0 625308 39328 ?        Sl   Mar30  94:07 python src/main.py
+mihaelp  3470708  0.0  0.0 400424  7124 ?        Ss    2023  75:37 /usr/bin/python3.6 /usr/bin/balances/MDService.py
+jlimon   3605053  1.2  0.0 620624 35508 ?        S    Apr03  20:38 python src/main.py
+jlimon   3895949  0.8  0.0 626972 39024 ?        S    Apr02  25:01 python src/main.py
+jlimon   3977028  0.0  0.0 470580 25864 ?        S    Mar29   0:46 python src/main.py
+-----------------------------------------
+Bot shutdown process completed with status: SUCCESS
+Monitoring has been disabled. Bot will not restart automatically.
+Monitoring will be automatically re-enabled when you run start_trading_bot.sh
+-----------------------------------------
+FINAL STATUS: SUCCESS
+MONITORING: Disabled (bot will not restart automatically)
+-----------------------------------------

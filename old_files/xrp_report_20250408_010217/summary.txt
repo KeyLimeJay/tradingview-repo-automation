@@ -1,0 +1,18 @@
+XRP Trading Report - Generated on 2025-04-08 01:02:20
+
+This report contains 5 charts analyzing XRP trading performance:
+
+1. XRP Cumulative P&L - Shows profit and loss over time
+2. XRP Cumulative Quantity - Shows total XRP traded
+3. XRP Cumulative Executions - Shows number of trades
+4. XRP P&L Distribution - Shows distribution of profits
+5. XRP Daily P&L Distribution - Shows daily performance
+
+Overall P&L Statistics:
+- Min: $-5.92
+- Max: $19451.09
+- Final: $19394.59
+
+To share this report via WhatsApp:
+1. Send each PNG image file
+2. Copy and paste the corresponding text from each _desc.txt file

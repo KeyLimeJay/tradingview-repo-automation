@@ -1,0 +1,8 @@
+XRP Daily P&L Distribution Over Time
+
+This chart shows the daily P&L distribution over time for XRP trading.
+• Trading days: 9
+• Profitable days: 9 (100.0%)
+• Best day: 0.0552%
+• Worst day: 0.0140%
+• Analysis period: 2025-03-29 to 2025-04-06

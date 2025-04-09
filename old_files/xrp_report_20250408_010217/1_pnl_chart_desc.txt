@@ -1,0 +1,7 @@
+XRP Cumulative P&L
+
+This chart shows the cumulative Profit & Loss over time for XRP trading.
+• Final P&L: $19394.59
+• Maximum P&L: $19394.59
+• Minimum P&L: $294.86
+• Analysis period: 2025-03-29 to 2025-04-06

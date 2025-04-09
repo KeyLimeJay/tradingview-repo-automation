@@ -1,0 +1,150 @@
+0000000000000000000000000000000000000000 b245c167dd3e1ebefb1e03e19cbb4e18625915a8 Jared Limon <jared.limon@bosonic.digital> 1741619928 +0000	branch: Created from HEAD
+b245c167dd3e1ebefb1e03e19cbb4e18625915a8 1ef99ed1da45f0a440f3823a6f58986235f30da9 Jared Limon <jared.limon@bosonic.digital> 1741620491 +0000	commit: Logs
+1ef99ed1da45f0a440f3823a6f58986235f30da9 fa679415c9d3cc76c27396d7b798f0af114e35f9 Jared Limon <jared.limon@bosonic.digital> 1741626140 +0000	commit: Trading Bot Changes
+fa679415c9d3cc76c27396d7b798f0af114e35f9 0fdd2543fada96b8bcad91d602541c526c6b85ed Jared Limon <jared.limon@bosonic.digital> 1741645674 +0000	commit: Logic changes
+0fdd2543fada96b8bcad91d602541c526c6b85ed a3a95900e603713875914c3453b18b9d34644742 Jared Limon <jared.limon@bosonic.digital> 1741839587 +0000	commit: Fixes
+a3a95900e603713875914c3453b18b9d34644742 43ad86d24079a36a4388d32be19ef4894e0957a6 Jared Limon <jared.limon@bosonic.digital> 1741903305 +0000	commit: Update
+43ad86d24079a36a4388d32be19ef4894e0957a6 5730b4f5d63b430fcc7d43ba284f3af0b864407a Jared Limon <jared.limon@bosonic.digital> 1741903599 +0000	commit: Sim Loop
+5730b4f5d63b430fcc7d43ba284f3af0b864407a 33b5aa5bdb8da3374bdddc37b946f2717f995c52 Jared Limon <jared.limon@bosonic.digital> 1741903982 +0000	commit: Adjustment
+33b5aa5bdb8da3374bdddc37b946f2717f995c52 c2a020777a002784e8c6f340b3c1b710bb21edb9 Jared Limon <jared.limon@bosonic.digital> 1741904052 +0000	commit: Name Change
+c2a020777a002784e8c6f340b3c1b710bb21edb9 7f3a6825e17752c3ff5fdf924cf4d9a13b6b81e8 Jared Limon <jared.limon@bosonic.digital> 1741904149 +0000	commit: Python 3.6
+7f3a6825e17752c3ff5fdf924cf4d9a13b6b81e8 4e0ac5f89b7d5650133a35896735fcb4b144bdc4 Jared Limon <jared.limon@bosonic.digital> 1741905156 +0000	commit: Adjustments
+4e0ac5f89b7d5650133a35896735fcb4b144bdc4 29d70d139ccee3c67879d226335f59419be86077 Jared Limon <jared.limon@bosonic.digital> 1741906140 +0000	commit: Save
+29d70d139ccee3c67879d226335f59419be86077 4e4e61d0b4a0bf4008ccfaff76e5591622ad3590 Jared Limon <jared.limon@bosonic.digital> 1741920901 +0000	commit: trading_bot fix
+4e4e61d0b4a0bf4008ccfaff76e5591622ad3590 664452349cb20850031170775b4e5bb6fbf52c12 Jared Limon <jared.limon@bosonic.digital> 1741920942 +0000	commit: logs
+664452349cb20850031170775b4e5bb6fbf52c12 ffec889ddeb534652c86f55a8607f417b3bdceca Jared Limon <jared.limon@bosonic.digital> 1741957870 +0000	commit: Stop
+ffec889ddeb534652c86f55a8607f417b3bdceca c536f5d8960078e23730b17fc65a1ec5d18d0e45 Jared Limon <jared.limon@bosonic.digital> 1741958136 +0000	commit: Stop
+c536f5d8960078e23730b17fc65a1ec5d18d0e45 88cf87bea0a268ef67016eb90ad694e5f9e61274 Jared Limon <jared.limon@bosonic.digital> 1741965353 +0000	commit: Truncated
+88cf87bea0a268ef67016eb90ad694e5f9e61274 0826387b4e64ad019f23d4335fa22c0a5b3fbdc5 Jared Limon <jared.limon@bosonic.digital> 1741979668 +0000	commit: Shut Down
+0826387b4e64ad019f23d4335fa22c0a5b3fbdc5 ac380a0bb9afa1c065b265f07e082fe6e9b07651 Jared Limon <jared.limon@bosonic.digital> 1741979712 +0000	commit: Logs
+ac380a0bb9afa1c065b265f07e082fe6e9b07651 752f91d9ddd11c0474657ca58c38424e20755096 Jared Limon <jared.limon@bosonic.digital> 1741980512 +0000	commit: Monitor_Stop
+752f91d9ddd11c0474657ca58c38424e20755096 6eabd411502fa4ac7caa2564158d9b05667bbf60 Jared Limon <jared.limon@bosonic.digital> 1741980642 +0000	commit: STOP
+6eabd411502fa4ac7caa2564158d9b05667bbf60 a087b15258704a7b01e1d8a101823b84f7f6761b Jared Limon <jared.limon@bosonic.digital> 1741980756 +0000	commit: STOP Again
+a087b15258704a7b01e1d8a101823b84f7f6761b d1294df99ce9db1d7a088274e2d35a8fcbea7d44 Jared Limon <jared.limon@bosonic.digital> 1742068828 +0000	commit: Corrections
+d1294df99ce9db1d7a088274e2d35a8fcbea7d44 0518a14dbf24d854d04b3202681b45bb2df9a926 Jared Limon <jared.limon@bosonic.digital> 1742077474 +0000	commit: Limit
+0518a14dbf24d854d04b3202681b45bb2df9a926 fc71353ea09d06c9acd13fd1cb56085b955902fb Jared Limon <jared.limon@bosonic.digital> 1742081931 +0000	commit: Hedges
+fc71353ea09d06c9acd13fd1cb56085b955902fb 52c859f065de6142d0c9943c76f700e3ea700bf2 Jared Limon <jared.limon@bosonic.digital> 1742083028 +0000	commit: Sequence
+52c859f065de6142d0c9943c76f700e3ea700bf2 23c3b654dc987b3db886f691b94bfe69e575ce2a Jared Limon <jared.limon@bosonic.digital> 1742087399 +0000	commit: Logic Changes
+23c3b654dc987b3db886f691b94bfe69e575ce2a fdeaa290e2c3c882133c1678fdd49300c699c7c2 Jared Limon <jared.limon@bosonic.digital> 1742166591 +0000	commit: Trading Test
+fdeaa290e2c3c882133c1678fdd49300c699c7c2 5ca7c99cf722f6205f9a62456c5bf27416a385a3 Jared Limon <jared.limon@bosonic.digital> 1742186724 +0000	commit: All changes
+5ca7c99cf722f6205f9a62456c5bf27416a385a3 f925e964cf697999a2a5215a2227222c58726b4c Jared Limon <jared.limon@bosonic.digital> 1742186944 +0000	commit: test Changes
+f925e964cf697999a2a5215a2227222c58726b4c 12ae821844b99758209cfd651c18fca63d6f4b89 Jared Limon <jared.limon@bosonic.digital> 1742190528 +0000	commit: Comments
+12ae821844b99758209cfd651c18fca63d6f4b89 b9c23cbd4d27e34a06ca607d8dff5f3f7ed67f49 Jared Limon <jared.limon@bosonic.digital> 1742193446 +0000	commit: Monitor
+b9c23cbd4d27e34a06ca607d8dff5f3f7ed67f49 f309eba122c662b1eff25b22a6d8d900e5f25fac Jared Limon <jared.limon@bosonic.digital> 1742194888 +0000	commit: Validations
+f309eba122c662b1eff25b22a6d8d900e5f25fac c151e16a447952556c8fb4c1f8f9c56643a67c02 Jared Limon <jared.limon@bosonic.digital> 1742219053 +0000	commit: Changes
+c151e16a447952556c8fb4c1f8f9c56643a67c02 8167959c097a18b061664b1a6cf66c072466d6d4 Jared Limon <jared.limon@bosonic.digital> 1742219814 +0000	commit: Check Repos
+8167959c097a18b061664b1a6cf66c072466d6d4 ab87492f8371496f6926e711de19d5854e22dbc1 Jared Limon <jared.limon@bosonic.digital> 1742221731 +0000	commit: Commit
+ab87492f8371496f6926e711de19d5854e22dbc1 c44b72badfa16195195cd7bcc7bebdc25ecfde3a Jared Limon <jared.limon@bosonic.digital> 1742230637 +0000	commit: monitor
+c44b72badfa16195195cd7bcc7bebdc25ecfde3a 625ae19276b6deaeba82bf3a97f7383ab402f1a9 Jared Limon <jared.limon@bosonic.digital> 1742230709 +0000	commit: Monitor
+625ae19276b6deaeba82bf3a97f7383ab402f1a9 b3081793b9e94b3df72c01b16aa28d499b376be3 Jared Limon <jared.limon@bosonic.digital> 1742231702 +0000	commit: Logs
+b3081793b9e94b3df72c01b16aa28d499b376be3 4e2167a244780f60396ce55c1f67adc5540a11ab Jared Limon <jared.limon@bosonic.digital> 1742231722 +0000	commit: Logs
+4e2167a244780f60396ce55c1f67adc5540a11ab 1579c0370fce027e9ac4033ffdc95d503a0a1f37 Jared Limon <jared.limon@bosonic.digital> 1742299504 +0000	commit: cleanup
+1579c0370fce027e9ac4033ffdc95d503a0a1f37 a695e86afcac6bdafa6cb2a5640e63fc1fc1d939 Jared Limon <jared.limon@bosonic.digital> 1742300269 +0000	commit: changes
+a695e86afcac6bdafa6cb2a5640e63fc1fc1d939 4c3e98e0256c94afee6480931b38e697410327d7 Jared Limon <jared.limon@bosonic.digital> 1742312497 +0000	commit: Changes to trading bot
+4c3e98e0256c94afee6480931b38e697410327d7 9d116eb292755c2b895727d69169525146b90431 Jared Limon <jared.limon@bosonic.digital> 1742313137 +0000	commit: Log Changes
+9d116eb292755c2b895727d69169525146b90431 d4201f7bf6d5f0f948fdb1683f6ac4950b72a7a8 Jared Limon <jared.limon@bosonic.digital> 1742320346 +0000	commit: Changes
+d4201f7bf6d5f0f948fdb1683f6ac4950b72a7a8 ac4c7bff6376fa755b9521ed93f7f6a586753407 Jared Limon <jared.limon@bosonic.digital> 1742323116 +0000	commit: Changes
+ac4c7bff6376fa755b9521ed93f7f6a586753407 56199126bbca5ddaf9abf135effcbba6ea6e8a60 Jared Limon <jared.limon@bosonic.digital> 1742330987 +0000	commit: All
+56199126bbca5ddaf9abf135effcbba6ea6e8a60 10404be5c3b0b3ae81025bdb8a8c659834821dda Jared Limon <jared.limon@bosonic.digital> 1742342841 +0000	commit: Multi_Account
+10404be5c3b0b3ae81025bdb8a8c659834821dda 4aa6535d2167d4dd2e1e1a2407e18a532c35f664 Jared Limon <jared.limon@bosonic.digital> 1742393637 +0000	commit: DGTL TRUST
+4aa6535d2167d4dd2e1e1a2407e18a532c35f664 2e87ecee1b08994894f603948fb85933406ebd2f Jared Limon <jared.limon@bosonic.digital> 1742393654 +0000	commit: DGTL TRUST
+2e87ecee1b08994894f603948fb85933406ebd2f 4489389fb417e9fa9d5f1b50587ab18b8494d5cd Jared Limon <jared.limon@bosonic.digital> 1742393668 +0000	commit: DGTL TRUST
+4489389fb417e9fa9d5f1b50587ab18b8494d5cd 1bad77d7c6d65ea44a16ec126b2fe5eb3889ed5d Jared Limon <jared.limon@bosonic.digital> 1742395535 +0000	commit: All Changes
+1bad77d7c6d65ea44a16ec126b2fe5eb3889ed5d da8576397a28ef8946f7627c68c8e01e8b5eb809 Jared Limon <jared.limon@bosonic.digital> 1742527431 +0000	commit: Commit
+da8576397a28ef8946f7627c68c8e01e8b5eb809 46f55db6f9e72d81d5a24d65d821d30cd7108d38 Jared Limon <jared.limon@bosonic.digital> 1742531711 +0000	commit: v3
+46f55db6f9e72d81d5a24d65d821d30cd7108d38 bf40ca75853b50faa7a216397ef79a7133a4e333 Jared Limon <jared.limon@bosonic.digital> 1742531730 +0000	commit: logs
+bf40ca75853b50faa7a216397ef79a7133a4e333 c29282795fce0c430125ceaa5fcf04b08ef57121 Jared Limon <jared.limon@bosonic.digital> 1742534431 +0000	commit: trading_bot_02
+c29282795fce0c430125ceaa5fcf04b08ef57121 96c93cce57197bde0b23b186ec81a9561364198c Jared Limon <jared.limon@bosonic.digital> 1743181566 +0000	commit: Change Config
+96c93cce57197bde0b23b186ec81a9561364198c 4218358e015ac6da113bfd873008ec6932516c0f Jared Limon <jared.limon@bosonic.digital> 1743188429 +0000	commit: All
+4218358e015ac6da113bfd873008ec6932516c0f 89810f5a161a79aa5236a840544bdc466d6c3cc1 Jared Limon <jared.limon@bosonic.digital> 1743188761 +0000	commit: Chnages
+89810f5a161a79aa5236a840544bdc466d6c3cc1 e24fa091557fd2e03d09a9d49f3950919a3f591e Jared Limon <jared.limon@bosonic.digital> 1743263578 +0000	commit: Changes
+e24fa091557fd2e03d09a9d49f3950919a3f591e ada7846c327e00a3da54c3d41772aca192f46884 Jared Limon <jared.limon@bosonic.digital> 1743265700 +0000	commit: Alll
+ada7846c327e00a3da54c3d41772aca192f46884 30bcecff7fcd5f26c14542b0e568bbc2c54eab78 Jared Limon <jared.limon@bosonic.digital> 1743271933 +0000	commit: Install
+30bcecff7fcd5f26c14542b0e568bbc2c54eab78 00dca2130c33bc2eb7f1c4a0eba4401ffaba5595 Jared Limon <jared.limon@bosonic.digital> 1743271969 +0000	commit: Install
+00dca2130c33bc2eb7f1c4a0eba4401ffaba5595 a2a955ead48d1233311b9147c331036548d58ff2 Jared Limon <jared.limon@bosonic.digital> 1743272451 +0000	commit: test
+a2a955ead48d1233311b9147c331036548d58ff2 472eb63df306732c4007a7ea5ef23e68b1644358 Jared Limon <jared.limon@bosonic.digital> 1743272617 +0000	commit: Edits
+472eb63df306732c4007a7ea5ef23e68b1644358 191534cf925965ade4d17b97415e80f2c1c17b73 Jared Limon <jared.limon@bosonic.digital> 1743273177 +0000	commit: Warning
+191534cf925965ade4d17b97415e80f2c1c17b73 7a729eba900c1e7a7f31c4165b2b0a5ec90f3e03 Jared Limon <jared.limon@bosonic.digital> 1743273801 +0000	commit: Commit
+7a729eba900c1e7a7f31c4165b2b0a5ec90f3e03 f2753c8848806dfc471332760039945f71471d17 Jared Limon <jared.limon@bosonic.digital> 1743274905 +0000	commit: Fixes
+f2753c8848806dfc471332760039945f71471d17 051f6fa6d793c71940b5d45253a8409f9d3b7673 Jared Limon <jared.limon@bosonic.digital> 1743437951 +0000	commit: Changes
+051f6fa6d793c71940b5d45253a8409f9d3b7673 9d70f0057d86ff19f3c8209d7ea1c85d89326d6b Jared Limon <jared.limon@bosonic.digital> 1743438186 +0000	commit: Updated
+9d70f0057d86ff19f3c8209d7ea1c85d89326d6b 664fd08cc3e5920b146da3737836773e20d83bff Jared Limon <jared.limon@bosonic.digital> 1743438756 +0000	commit: Test
+664fd08cc3e5920b146da3737836773e20d83bff 8633c7615089bfbc631e3b1d402a759a25866c8c Jared Limon <jared.limon@bosonic.digital> 1743466623 +0000	commit: Pandas
+8633c7615089bfbc631e3b1d402a759a25866c8c 6ebc17d709316db6a256099ed24865066c2dcc7e Jared Limon <jared.limon@bosonic.digital> 1743467698 +0000	commit: Updates
+6ebc17d709316db6a256099ed24865066c2dcc7e 25380c9b37331b13511472d60ae414e4d9475191 Jared Limon <jared.limon@bosonic.digital> 1743468751 +0000	commit: Request
+25380c9b37331b13511472d60ae414e4d9475191 89ef7c398325c74a1fe1116cce7afdb508eaec49 Jared Limon <jared.limon@bosonic.digital> 1743471418 +0000	commit: B
+89ef7c398325c74a1fe1116cce7afdb508eaec49 36d8f63d298eb3b95aadf9f956f385d31caf2c76 Jared Limon <jared.limon@bosonic.digital> 1743472025 +0000	commit: Save
+36d8f63d298eb3b95aadf9f956f385d31caf2c76 909884a81f71d5a1cc7d39743ab3462d0a3f7232 Jared Limon <jared.limon@bosonic.digital> 1743472857 +0000	commit: B
+909884a81f71d5a1cc7d39743ab3462d0a3f7232 c097defe9582aca58a5497958a3ff302c38ea744 Jared Limon <jared.limon@bosonic.digital> 1743473187 +0000	commit: B
+c097defe9582aca58a5497958a3ff302c38ea744 ec66e5b60eebc9cf576f06fdf34f77c6688cd5dc Jared Limon <jared.limon@bosonic.digital> 1743473403 +0000	commit: k
+ec66e5b60eebc9cf576f06fdf34f77c6688cd5dc ed7bf4ee7eb11b42a19b1f295daddb72939c7256 Jared Limon <jared.limon@bosonic.digital> 1743473695 +0000	commit: K
+ed7bf4ee7eb11b42a19b1f295daddb72939c7256 60ee1dc077f3064eb43f56eaa0576b40192e4368 Jared Limon <jared.limon@bosonic.digital> 1743473739 +0000	commit: K
+60ee1dc077f3064eb43f56eaa0576b40192e4368 fe7c763729d116901670a05b84714080f13fd7d0 Jared Limon <jared.limon@bosonic.digital> 1743474360 +0000	commit: D
+fe7c763729d116901670a05b84714080f13fd7d0 0ed70ad55bf52cc0c062aad9b6396a8c0c8cc8c9 Jared Limon <jared.limon@bosonic.digital> 1743475674 +0000	commit: t
+0ed70ad55bf52cc0c062aad9b6396a8c0c8cc8c9 cf156550749ec49c3b7f1989ef206dba88373f57 Jared Limon <jared.limon@bosonic.digital> 1743476038 +0000	commit: T
+cf156550749ec49c3b7f1989ef206dba88373f57 6c44b2c8efda474020a0d020d05a90cf753f97b8 Jared Limon <jared.limon@bosonic.digital> 1743618150 +0000	commit: Deleted Files
+6c44b2c8efda474020a0d020d05a90cf753f97b8 cd3ebce86c6298f561a001fc62397d8f76884708 Jared Limon <jared.limon@bosonic.digital> 1743618272 +0000	commit: Deleted
+cd3ebce86c6298f561a001fc62397d8f76884708 c8eea695a797a305b40d62f46107fbc4cd2b1d29 Jared Limon <jared.limon@bosonic.digital> 1743618317 +0000	commit: Test
+c8eea695a797a305b40d62f46107fbc4cd2b1d29 f7ed0efea40b05519d7fc00101a4cf13181e38e3 Jared Limon <jared.limon@bosonic.digital> 1743618413 +0000	commit: Deleted
+f7ed0efea40b05519d7fc00101a4cf13181e38e3 e7b9af92f0a010a47626e992ded92cf6916cab61 Jared Limon <jared.limon@bosonic.digital> 1743619626 +0000	commit: Update
+e7b9af92f0a010a47626e992ded92cf6916cab61 79a0c4dc584e303b67ef28857d2327de30566708 Jared Limon <jared.limon@bosonic.digital> 1743639300 +0000	commit: All
+79a0c4dc584e303b67ef28857d2327de30566708 7895781fc1cbc3f84953c4723af499cf632a79d8 Jared Limon <jared.limon@bosonic.digital> 1743640100 +0000	commit: All
+7895781fc1cbc3f84953c4723af499cf632a79d8 4909d721c8f85aec063663273ea53c0a0fae0868 Jared Limon <jared.limon@bosonic.digital> 1743640117 +0000	commit: All
+4909d721c8f85aec063663273ea53c0a0fae0868 4bc63145bd3ee177fbf7169c218f7c6434141b80 Jared Limon <jared.limon@bosonic.digital> 1743643798 +0000	commit: Files
+4bc63145bd3ee177fbf7169c218f7c6434141b80 c2dd8aed4ddf4939a86dbb87c7193937258e529a Jared Limon <jared.limon@bosonic.digital> 1743643877 +0000	commit: All
+c2dd8aed4ddf4939a86dbb87c7193937258e529a 421f6910591835417bbeb8d8817b8e55b14299b5 Jared Limon <jared.limon@bosonic.digital> 1743650344 +0000	commit: All
+421f6910591835417bbeb8d8817b8e55b14299b5 d907568b86970de4eb88ecf291163001ff611561 Jared Limon <jared.limon@bosonic.digital> 1743656775 +0000	commit: All
+d907568b86970de4eb88ecf291163001ff611561 ebfc48d81ce5f7ed5b657b9390918406497901e6 Jared Limon <jared.limon@bosonic.digital> 1743656787 +0000	commit: All
+ebfc48d81ce5f7ed5b657b9390918406497901e6 8005e3f315dc8524e843e280db582caa11325af3 Jared Limon <jared.limon@bosonic.digital> 1743657147 +0000	commit: Save
+8005e3f315dc8524e843e280db582caa11325af3 11751208df01801f5e3d1776f0e26bdcfd5f09cf Jared Limon <jared.limon@bosonic.digital> 1743657184 +0000	commit: All
+11751208df01801f5e3d1776f0e26bdcfd5f09cf 63817ae2e1a35cea2594ee463960d564b0206d33 Jared Limon <jared.limon@bosonic.digital> 1743657364 +0000	commit: All
+63817ae2e1a35cea2594ee463960d564b0206d33 c489a29e81dcb332ac9a1d15437efc7b0f140627 Jared Limon <jared.limon@bosonic.digital> 1743657849 +0000	commit: All
+c489a29e81dcb332ac9a1d15437efc7b0f140627 7bb7e64ad568c221898e1d5f15de5379e51010e2 Jared Limon <jared.limon@bosonic.digital> 1743657906 +0000	commit: All
+7bb7e64ad568c221898e1d5f15de5379e51010e2 1a0f3379c3ab935b7f92d548c963ca4f28b6120f Jared Limon <jared.limon@bosonic.digital> 1743660409 +0000	commit: Test
+1a0f3379c3ab935b7f92d548c963ca4f28b6120f efdb699e757992316830823be7eb95d6afb46ace Jared Limon <jared.limon@bosonic.digital> 1743663195 +0000	commit: All
+efdb699e757992316830823be7eb95d6afb46ace a1749cc4c52a926c7014f665702fbc20fdc85436 Jared Limon <jared.limon@bosonic.digital> 1743663201 +0000	commit: All
+a1749cc4c52a926c7014f665702fbc20fdc85436 b765fd7e2dd7f387165d13991585010e9f82dbb8 Jared Limon <jared.limon@bosonic.digital> 1743663461 +0000	commit: All
+b765fd7e2dd7f387165d13991585010e9f82dbb8 1554cce8f6be90880b825bc9c6f8d16f7bfeb019 Jared Limon <jared.limon@bosonic.digital> 1743663540 +0000	commit: All
+1554cce8f6be90880b825bc9c6f8d16f7bfeb019 044aa96ec7493154437ebe1c0ae3eb7c164ebeaf Jared Limon <jared.limon@bosonic.digital> 1743663719 +0000	commit: All
+044aa96ec7493154437ebe1c0ae3eb7c164ebeaf 0fec31168241c4b032f3fe709250ab4b8d4eb49e Jared Limon <jared.limon@bosonic.digital> 1743664577 +0000	commit: All
+0fec31168241c4b032f3fe709250ab4b8d4eb49e c12c1983f32c3c726ee58e5fc86c65325c4610d5 Jared Limon <jared.limon@bosonic.digital> 1743664968 +0000	commit: All
+c12c1983f32c3c726ee58e5fc86c65325c4610d5 701552b23d0c23580706da522e38564509afe130 Jared Limon <jared.limon@bosonic.digital> 1743665379 +0000	commit: A
+701552b23d0c23580706da522e38564509afe130 be718ae8829cd4bd5c2f3756217372e3f937d842 Jared Limon <jared.limon@bosonic.digital> 1743666921 +0000	commit: a
+be718ae8829cd4bd5c2f3756217372e3f937d842 b3b9097679f401d3891dbc36581f37276eb2f94c Jared Limon <jared.limon@bosonic.digital> 1743667636 +0000	commit: All
+b3b9097679f401d3891dbc36581f37276eb2f94c 7891143ad53a7dd3ae8347ceda0dd98073038540 Jared Limon <jared.limon@bosonic.digital> 1743713282 +0000	commit: All
+7891143ad53a7dd3ae8347ceda0dd98073038540 a389e26c95b1308a246e948b367e919f0124a693 Jared Limon <jared.limon@bosonic.digital> 1743784169 +0000	commit: Commit
+a389e26c95b1308a246e948b367e919f0124a693 55c9400baa14f042b3a9907c6b922ac6091c82ac Jared Limon <jared.limon@bosonic.digital> 1743784448 +0000	commit: All
+55c9400baa14f042b3a9907c6b922ac6091c82ac 13e2bb016c90c6afc2a8c0e9f09370dac96f34ba Jared Limon <jared.limon@bosonic.digital> 1743805596 +0000	commit: All
+13e2bb016c90c6afc2a8c0e9f09370dac96f34ba eba181eb0bdafeace2b05b0c62a5b4ea15c71669 Jared Limon <jared.limon@bosonic.digital> 1743991014 +0000	commit: All
+eba181eb0bdafeace2b05b0c62a5b4ea15c71669 bfcfaab73769e5048ee948db783d2040ddc6225f Jared Limon <jared.limon@bosonic.digital> 1743993139 +0000	commit: All
+bfcfaab73769e5048ee948db783d2040ddc6225f 391f795e1c45ab494a527e1e535f82d663d9ac03 Jared Limon <jared.limon@bosonic.digital> 1743993606 +0000	commit: All
+391f795e1c45ab494a527e1e535f82d663d9ac03 9920f1169b27ba1bf6a56e2e6d26f09624f6c889 Jared Limon <jared.limon@bosonic.digital> 1743994637 +0000	commit: All
+9920f1169b27ba1bf6a56e2e6d26f09624f6c889 8124d781700311c77593ff0ac74ec9cd11f71a1c Jared Limon <jared.limon@bosonic.digital> 1743995249 +0000	commit: All
+8124d781700311c77593ff0ac74ec9cd11f71a1c e6292e20810b164d38fb3faa171676a8f28a2a3a Jared Limon <jared.limon@bosonic.digital> 1743997575 +0000	commit: All
+e6292e20810b164d38fb3faa171676a8f28a2a3a 1e7cbd4f3eeccd5e669316b0e292123e91531df6 Jared Limon <jared.limon@bosonic.digital> 1743997641 +0000	commit: All
+1e7cbd4f3eeccd5e669316b0e292123e91531df6 27d55f0e3dab1b8609d8530ec3815c676ba96619 Jared Limon <jared.limon@bosonic.digital> 1743998061 +0000	commit: All
+27d55f0e3dab1b8609d8530ec3815c676ba96619 c98eb51f774131066e4838349bcb6bda69fd5401 Jared Limon <jared.limon@bosonic.digital> 1744027387 +0000	commit: All
+c98eb51f774131066e4838349bcb6bda69fd5401 813e9a37486765de34d7a6f8093ac9388d6fd96d Jared Limon <jared.limon@bosonic.digital> 1744077331 +0000	commit: all
+813e9a37486765de34d7a6f8093ac9388d6fd96d c44b1b07c7d68c74a8e5c6770b976a78e567011a Jared Limon <jared.limon@bosonic.digital> 1744077499 +0000	commit: All
+c44b1b07c7d68c74a8e5c6770b976a78e567011a f0c39c2299878a29d442bee96a2ac668de32fe6f Jared Limon <jared.limon@bosonic.digital> 1744078242 +0000	commit: All
+f0c39c2299878a29d442bee96a2ac668de32fe6f d7930ada4402b377855e7d02e1825d9f5fb1dbf0 Jared Limon <jared.limon@bosonic.digital> 1744082257 +0000	commit: All
+d7930ada4402b377855e7d02e1825d9f5fb1dbf0 5bb9dea042f38fa2091af6d68403966bc6b15a00 Jared Limon <jared.limon@bosonic.digital> 1744083086 +0000	commit: ALL
+5bb9dea042f38fa2091af6d68403966bc6b15a00 a5ec694c880e296c8b1680e054398e6b6bfb5ba8 Jared Limon <jared.limon@bosonic.digital> 1744084101 +0000	commit: Daemon
+a5ec694c880e296c8b1680e054398e6b6bfb5ba8 551ba70a0f13ad8b4c1dc831c0d91f190e4305bc Jared Limon <jared.limon@bosonic.digital> 1744085604 +0000	commit: All
+551ba70a0f13ad8b4c1dc831c0d91f190e4305bc 6f6d774071d9e9508f10fff5e0b0960d370baef7 Jared Limon <jared.limon@bosonic.digital> 1744086301 +0000	commit: All
+6f6d774071d9e9508f10fff5e0b0960d370baef7 8df808096547cb0fd5dae7fa7cda989a8252392d Jared Limon <jared.limon@bosonic.digital> 1744086479 +0000	commit: Corrections
+8df808096547cb0fd5dae7fa7cda989a8252392d a8a78be559b50b387471a8a36453aa91fdf19106 Jared Limon <jared.limon@bosonic.digital> 1744086656 +0000	commit: All
+a8a78be559b50b387471a8a36453aa91fdf19106 0bc004a23ddcf5d47c6656d9b277b0d66cddede5 Jared Limon <jared.limon@bosonic.digital> 1744089656 +0000	commit: All
+0bc004a23ddcf5d47c6656d9b277b0d66cddede5 366c7fabbf97ae21cfa04c4b3794ea62a6b4e22b Jared Limon <jared.limon@bosonic.digital> 1744089821 +0000	commit: sved
+366c7fabbf97ae21cfa04c4b3794ea62a6b4e22b f6013ec3544031d9c2b88d889badec2ff61ab8d8 Jared Limon <jared.limon@bosonic.digital> 1744089857 +0000	commit: All
+f6013ec3544031d9c2b88d889badec2ff61ab8d8 d6f3ed3649fb54fbe5cad50ca31ed8fb259f7cd7 Jared Limon <jared.limon@bosonic.digital> 1744090028 +0000	commit: Alll
+d6f3ed3649fb54fbe5cad50ca31ed8fb259f7cd7 fcc0aee23c15e883b06e10be6a0d6159c7a0592c Jared Limon <jared.limon@bosonic.digital> 1744090730 +0000	commit: All
+fcc0aee23c15e883b06e10be6a0d6159c7a0592c 6d6476094995903f0fa17b347491574367af301e Jared Limon <jared.limon@bosonic.digital> 1744091940 +0000	commit: All
+6d6476094995903f0fa17b347491574367af301e 1fd83a9925c5fe548dde05723c788d33084d8d50 Jared Limon <jared.limon@bosonic.digital> 1744092489 +0000	commit: All
+1fd83a9925c5fe548dde05723c788d33084d8d50 287e4995c0d9c60743681e21bc75252d85386f83 Jared Limon <jared.limon@bosonic.digital> 1744092637 +0000	commit: All
+287e4995c0d9c60743681e21bc75252d85386f83 ed3088e709d0457e586f51476a97d15031b5da75 Jared Limon <jared.limon@bosonic.digital> 1744092819 +0000	commit: All
+ed3088e709d0457e586f51476a97d15031b5da75 661c3f5730ba1f948f2667e2cf1aecf8b5c1bc3b Jared Limon <jared.limon@bosonic.digital> 1744093229 +0000	commit: All
+661c3f5730ba1f948f2667e2cf1aecf8b5c1bc3b b952e809d663a7cef869fa69d1c420151aa1d907 Jared Limon <jared.limon@bosonic.digital> 1744093454 +0000	commit: as
+b952e809d663a7cef869fa69d1c420151aa1d907 297ec27da4e1cc38903da7e82fc007f71a3664d2 Jared Limon <jared.limon@bosonic.digital> 1744093520 +0000	commit: All
+297ec27da4e1cc38903da7e82fc007f71a3664d2 2281d0dc7910c4d6203dfcb7622a1b833c1eb5b3 Jared Limon <jared.limon@bosonic.digital> 1744093646 +0000	commit: All
+2281d0dc7910c4d6203dfcb7622a1b833c1eb5b3 b255fe2f4512fcb190540122a62bd90b6dfb63b6 Jared Limon <jared.limon@bosonic.digital> 1744122225 +0000	commit: All

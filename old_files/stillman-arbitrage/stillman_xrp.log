@@ -1,0 +1,152 @@
+2025-03-31 16:07:08,880 - stillman-xrp - INFO - Starting XRP Price Monitor...
+2025-03-31 16:07:08,881 - stillman-xrp - INFO - Monitoring pair: XRP/USD
+2025-03-31 16:07:08,881 - stillman-xrp - INFO - Discount source price: $0.59
+2025-03-31 16:07:08,881 - stillman-xrp - INFO - Minimum profit threshold: 2.00%
+2025-03-31 16:07:08,933 - websocket - DEBUG - --- request header ---
+2025-03-31 16:07:08,933 - websocket - DEBUG - GET /v1/stream HTTP/1.1
+Upgrade: websocket
+Host: sandbox-api.stillmandigital.com
+Origin: https://sandbox-api.stillmandigital.com
+Sec-WebSocket-Key: XRqhhBUHmcy7k9wuYHASDQ==
+Sec-WebSocket-Version: 13
+Connection: Upgrade
+api-key: FBUKA51HWPDK9WGEXMFRBU7E
+api-signature: e65fc34e53ba07609e8b28907bb02995068d2a21501f7ecd3498427e2da7f43c
+api-timestamp: 1743437228
+
+
+2025-03-31 16:07:08,933 - websocket - DEBUG - -----------------------
+2025-03-31 16:07:08,933 - websocket - DEBUG - --- response header ---
+2025-03-31 16:07:09,261 - websocket - DEBUG - HTTP/1.1 401 Unauthorized
+2025-03-31 16:07:09,261 - websocket - DEBUG - Date: Mon, 31 Mar 2025 16:07:09 GMT
+2025-03-31 16:07:09,261 - websocket - DEBUG - Content-Type: application/json
+2025-03-31 16:07:09,261 - websocket - DEBUG - Content-Length: 74
+2025-03-31 16:07:09,261 - websocket - DEBUG - Connection: keep-alive
+2025-03-31 16:07:09,261 - websocket - DEBUG - access-control-allow-origin: *
+2025-03-31 16:07:09,262 - websocket - DEBUG - x-xss-protection: 1; mode=block
+2025-03-31 16:07:09,262 - websocket - DEBUG - cache-control: no-cache, no-store, max-age=0, must-revalidate
+2025-03-31 16:07:09,262 - websocket - DEBUG - pragma: no-cache
+2025-03-31 16:07:09,262 - websocket - DEBUG - expires: 0
+2025-03-31 16:07:09,262 - websocket - DEBUG - x-frame-options: DENY
+2025-03-31 16:07:09,262 - websocket - DEBUG - cf-cache-status: DYNAMIC
+2025-03-31 16:07:09,263 - websocket - DEBUG - Report-To: {"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=V%2BfRNdBXnJHknO6qs1%2FfzCBb%2BfRfYZqmpOUPFbe9HkKm6hY6%2FZqg0utjd9ILEA6oNEtOMoDBipHNOZQgC9HBVXR3KTFXIIQsYy2XpA0kIW4YVei8AZCKCd9r7T9MWO2h1A0IUFPTyD%2BFeWUgteeGbdTu"}],"group":"cf-nel","max_age":604800}
+2025-03-31 16:07:09,263 - websocket - DEBUG - NEL: {"success_fraction":0,"report_to":"cf-nel","max_age":604800}
+2025-03-31 16:07:09,263 - websocket - DEBUG - Content-Security-Policy: upgrade-insecure-requests
+2025-03-31 16:07:09,263 - websocket - DEBUG - Strict-Transport-Security: max-age=7776000
+2025-03-31 16:07:09,263 - websocket - DEBUG - X-Content-Type-Options: nosniff
+2025-03-31 16:07:09,264 - websocket - DEBUG - X-Frame-Origins: DENY
+2025-03-31 16:07:09,264 - websocket - DEBUG - Server: cloudflare
+2025-03-31 16:07:09,264 - websocket - DEBUG - CF-RAY: 92911918da9e6a55-EWR
+2025-03-31 16:07:09,264 - websocket - DEBUG - alt-svc: h3=":443"; ma=86400
+2025-03-31 16:07:09,264 - websocket - DEBUG - server-timing: cfL4;desc="?proto=TCP&rtt=7309&min_rtt=7285&rtt_var=2067&sent=4&recv=7&lost=0&retrans=0&sent_bytes=2848&recv_bytes=990&delivery_rate=396984&cwnd=32&unsent_bytes=0&cid=abf437083b05c348&ts=333&x=0"
+2025-03-31 16:07:09,264 - websocket - DEBUG - -----------------------
+2025-03-31 16:07:09,265 - stillman-xrp - ERROR - WebSocket error: Handshake status 401 Unauthorized
+2025-03-31 16:07:09,265 - stillman-xrp - WARNING - Connection closed: None - None
+2025-03-31 16:20:34,015 - stillman-xrp - INFO - Starting XRP Price Monitor...
+2025-03-31 16:20:34,015 - stillman-xrp - INFO - Monitoring pair: XRP/USD
+2025-03-31 16:20:34,015 - stillman-xrp - INFO - Discount source price: $0.59
+2025-03-31 16:20:34,015 - stillman-xrp - INFO - Minimum profit threshold: 2.00%
+2025-03-31 16:20:34,042 - websocket - DEBUG - --- request header ---
+2025-03-31 16:20:34,042 - websocket - DEBUG - GET /v1/stream HTTP/1.1
+Upgrade: websocket
+Host: sandbox-api.stillmandigital.com
+Origin: https://sandbox-api.stillmandigital.com
+Sec-WebSocket-Key: lsdry0+Wp3XJmAa5ycHlcw==
+Sec-WebSocket-Version: 13
+Connection: Upgrade
+api-key: FBUKA51HWPDK9WGEXMFRBU7E
+api-signature: e2259268ea000442f68ac24b2d0b6698f29c3600c905be02ac65de053e526bbe
+api-timestamp: 1743438034
+
+
+2025-03-31 16:20:34,042 - websocket - DEBUG - -----------------------
+2025-03-31 16:20:34,042 - websocket - DEBUG - --- response header ---
+2025-03-31 16:20:34,368 - websocket - DEBUG - HTTP/1.1 401 Unauthorized
+2025-03-31 16:20:34,368 - websocket - DEBUG - Date: Mon, 31 Mar 2025 16:20:34 GMT
+2025-03-31 16:20:34,368 - websocket - DEBUG - Content-Type: application/json
+2025-03-31 16:20:34,368 - websocket - DEBUG - Content-Length: 74
+2025-03-31 16:20:34,368 - websocket - DEBUG - Connection: keep-alive
+2025-03-31 16:20:34,368 - websocket - DEBUG - access-control-allow-origin: *
+2025-03-31 16:20:34,368 - websocket - DEBUG - x-xss-protection: 1; mode=block
+2025-03-31 16:20:34,368 - websocket - DEBUG - cache-control: no-cache, no-store, max-age=0, must-revalidate
+2025-03-31 16:20:34,368 - websocket - DEBUG - pragma: no-cache
+2025-03-31 16:20:34,369 - websocket - DEBUG - expires: 0
+2025-03-31 16:20:34,369 - websocket - DEBUG - x-frame-options: DENY
+2025-03-31 16:20:34,369 - websocket - DEBUG - cf-cache-status: DYNAMIC
+2025-03-31 16:20:34,369 - websocket - DEBUG - Report-To: {"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=CurZiSrITU0bQ7uh2ukf15zrJsOCTXvZm02%2BfJa1Pl3uS4JWRukok%2BAMTHpNjUL2DwzTRa%2BBS7mkkXIeIoY5uq72h8ubPxnLEVhEypJpEk2T7PbNucpUU7oC9HeoAhSya2tXtVEGCigVhV42rnXL1ty%2F"}],"group":"cf-nel","max_age":604800}
+2025-03-31 16:20:34,369 - websocket - DEBUG - NEL: {"success_fraction":0,"report_to":"cf-nel","max_age":604800}
+2025-03-31 16:20:34,369 - websocket - DEBUG - Content-Security-Policy: upgrade-insecure-requests
+2025-03-31 16:20:34,370 - websocket - DEBUG - Strict-Transport-Security: max-age=7776000
+2025-03-31 16:20:34,370 - websocket - DEBUG - X-Content-Type-Options: nosniff
+2025-03-31 16:20:34,370 - websocket - DEBUG - X-Frame-Origins: DENY
+2025-03-31 16:20:34,370 - websocket - DEBUG - Server: cloudflare
+2025-03-31 16:20:34,370 - websocket - DEBUG - CF-RAY: 92912cc0cff63b3c-IAD
+2025-03-31 16:20:34,370 - websocket - DEBUG - alt-svc: h3=":443"; ma=86400
+2025-03-31 16:20:34,370 - websocket - DEBUG - server-timing: cfL4;desc="?proto=TCP&rtt=1289&min_rtt=1265&rtt_var=374&sent=4&recv=7&lost=0&retrans=0&sent_bytes=2848&recv_bytes=990&delivery_rate=2273155&cwnd=251&unsent_bytes=0&cid=973869ae70f0f6d6&ts=332&x=0"
+2025-03-31 16:20:34,370 - websocket - DEBUG - -----------------------
+2025-03-31 16:20:34,371 - stillman-xrp - ERROR - WebSocket error: Handshake status 401 Unauthorized
+2025-03-31 16:20:34,371 - stillman-xrp - WARNING - Connection closed: None - None
+2025-03-31 16:23:42,008 - stillman-xrp - DEBUG - Public Key: FBUKA51HWPDK9WGEXMFRBU7E
+2025-03-31 16:23:42,008 - stillman-xrp - DEBUG - Private Key (first 5 chars): IYZ5R...
+2025-03-31 16:23:42,008 - stillman-xrp - DEBUG - String to sign: GET/v1/stream1743438222
+2025-03-31 16:23:42,008 - stillman-xrp - DEBUG - Generated signature: ea00dba44b5d7b66b8c699d3f3d0d263d7de9aaf8364eeeabcaa8637a34926f2
+2025-03-31 16:23:42,008 - stillman-xrp - DEBUG - Timestamp: 1743438222
+2025-03-31 16:23:42,008 - stillman-xrp - INFO - === CONNECTION TEST ===
+2025-03-31 16:23:42,008 - stillman-xrp - INFO - API URL: wss://sandbox-api.stillmandigital.com/v1/stream
+2025-03-31 16:23:42,008 - stillman-xrp - INFO - Public Key: FBUKA51HWPDK9WGEXMFRBU7E
+2025-03-31 16:23:42,008 - stillman-xrp - INFO - Private Key Length: 48 characters
+2025-03-31 16:23:42,008 - stillman-xrp - INFO - Timestamp: 1743438222
+2025-03-31 16:23:42,009 - stillman-xrp - INFO - Signature: ea00dba44b5d7b66b8c699d3f3d0d263d7de9aaf8364eeeabcaa8637a34926f2
+2025-03-31 16:23:42,009 - stillman-xrp - INFO - === END TEST ===
+2025-03-31 16:23:42,009 - stillman-xrp - INFO - Starting XRP Price Monitor...
+2025-03-31 16:23:42,009 - stillman-xrp - INFO - Monitoring pair: XRP/USD
+2025-03-31 16:23:42,009 - stillman-xrp - INFO - Discount source price: $0.59
+2025-03-31 16:23:42,009 - stillman-xrp - INFO - Minimum profit threshold: 2.00%
+2025-03-31 16:23:42,009 - stillman-xrp - DEBUG - Public Key: FBUKA51HWPDK9WGEXMFRBU7E
+2025-03-31 16:23:42,009 - stillman-xrp - DEBUG - Private Key (first 5 chars): IYZ5R...
+2025-03-31 16:23:42,009 - stillman-xrp - DEBUG - String to sign: GET/v1/stream1743438222
+2025-03-31 16:23:42,009 - stillman-xrp - DEBUG - Generated signature: ea00dba44b5d7b66b8c699d3f3d0d263d7de9aaf8364eeeabcaa8637a34926f2
+2025-03-31 16:23:42,009 - stillman-xrp - DEBUG - Timestamp: 1743438222
+2025-03-31 16:23:42,009 - stillman-xrp - DEBUG - Using headers: ['api-key: FBUKA51HWPDK9WGEXMFRBU7E', 'api-signature: ea00dba44b5d7b66b8c699d3f3d0d263d7de9aaf8364eeeabcaa8637a34926f2', 'api-timestamp: 1743438222']
+2025-03-31 16:23:42,009 - stillman-xrp - DEBUG - Connecting to URL: wss://sandbox-api.stillmandigital.com/v1/stream
+2025-03-31 16:23:42,090 - websocket - DEBUG - --- request header ---
+2025-03-31 16:23:42,090 - websocket - DEBUG - GET /v1/stream HTTP/1.1
+Upgrade: websocket
+Host: sandbox-api.stillmandigital.com
+Origin: https://sandbox-api.stillmandigital.com
+Sec-WebSocket-Key: zPUN+Kq4zFez4WpHUF2HVw==
+Sec-WebSocket-Version: 13
+Connection: Upgrade
+api-key: FBUKA51HWPDK9WGEXMFRBU7E
+api-signature: ea00dba44b5d7b66b8c699d3f3d0d263d7de9aaf8364eeeabcaa8637a34926f2
+api-timestamp: 1743438222
+
+
+2025-03-31 16:23:42,090 - websocket - DEBUG - -----------------------
+2025-03-31 16:23:42,090 - websocket - DEBUG - --- response header ---
+2025-03-31 16:23:42,398 - websocket - DEBUG - HTTP/1.1 401 Unauthorized
+2025-03-31 16:23:42,398 - websocket - DEBUG - Date: Mon, 31 Mar 2025 16:23:42 GMT
+2025-03-31 16:23:42,398 - websocket - DEBUG - Content-Type: application/json
+2025-03-31 16:23:42,398 - websocket - DEBUG - Content-Length: 74
+2025-03-31 16:23:42,398 - websocket - DEBUG - Connection: keep-alive
+2025-03-31 16:23:42,398 - websocket - DEBUG - access-control-allow-origin: *
+2025-03-31 16:23:42,398 - websocket - DEBUG - x-xss-protection: 1; mode=block
+2025-03-31 16:23:42,398 - websocket - DEBUG - cache-control: no-cache, no-store, max-age=0, must-revalidate
+2025-03-31 16:23:42,399 - websocket - DEBUG - pragma: no-cache
+2025-03-31 16:23:42,399 - websocket - DEBUG - expires: 0
+2025-03-31 16:23:42,399 - websocket - DEBUG - x-frame-options: DENY
+2025-03-31 16:23:42,399 - websocket - DEBUG - cf-cache-status: DYNAMIC
+2025-03-31 16:23:42,399 - websocket - DEBUG - Report-To: {"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=%2FWYAktzSbNmQJE%2B1rN0SVicq%2F0YMJjPYRV3n8XztJvXyS%2FjmF8Ay7F4L6hoj%2Ba0F0lMg%2F4BYmC6FcfAr4kfyCaVai8VYl1nbJuN%2FIvQQgR4V8REHuoUC94JUCemDsygwt%2FThRvsHLBE7pUpQGw%2FUCOE7"}],"group":"cf-nel","max_age":604800}
+2025-03-31 16:23:42,399 - websocket - DEBUG - NEL: {"success_fraction":0,"report_to":"cf-nel","max_age":604800}
+2025-03-31 16:23:42,400 - websocket - DEBUG - Content-Security-Policy: upgrade-insecure-requests
+2025-03-31 16:23:42,400 - websocket - DEBUG - Strict-Transport-Security: max-age=7776000
+2025-03-31 16:23:42,400 - websocket - DEBUG - X-Content-Type-Options: nosniff
+2025-03-31 16:23:42,400 - websocket - DEBUG - X-Frame-Origins: DENY
+2025-03-31 16:23:42,400 - websocket - DEBUG - Server: cloudflare
+2025-03-31 16:23:42,400 - websocket - DEBUG - CF-RAY: 929131581c634381-EWR
+2025-03-31 16:23:42,400 - websocket - DEBUG - alt-svc: h3=":443"; ma=86400
+2025-03-31 16:23:42,401 - websocket - DEBUG - server-timing: cfL4;desc="?proto=TCP&rtt=6392&min_rtt=6093&rtt_var=1980&sent=4&recv=7&lost=0&retrans=0&sent_bytes=2849&recv_bytes=990&delivery_rate=474754&cwnd=32&unsent_bytes=0&cid=0822b7fe347b4f32&ts=313&x=0"
+2025-03-31 16:23:42,401 - websocket - DEBUG - -----------------------
+2025-03-31 16:23:42,401 - stillman-xrp - ERROR - WebSocket error: Handshake status 401 Unauthorized
+2025-03-31 16:23:42,401 - stillman-xrp - ERROR - Status code: 401
+2025-03-31 16:23:42,401 - stillman-xrp - WARNING - Connection closed: None - None

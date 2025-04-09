@@ -1,0 +1,256 @@
+2025-04-03 03:06:54,995 - INFO - Trade Execution Processor initialized with config.json
+2025-04-03 03:06:54,995 - INFO - Found 6 input files from the last 7 days
+2025-04-03 03:06:54,995 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_29.csv
+2025-04-03 03:06:55,009 - INFO - Processed 3563 rows from /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_29.csv
+2025-04-03 03:06:55,009 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_30.csv
+2025-04-03 03:06:55,022 - INFO - Processed 4569 rows from /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_30.csv
+2025-04-03 03:06:55,023 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_31.csv
+2025-04-03 03:06:55,182 - INFO - Processed 71002 rows from /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_31.csv
+2025-04-03 03:06:55,182 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_01.csv
+2025-04-03 03:06:55,214 - INFO - Processed 14196 rows from /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_01.csv
+2025-04-03 03:06:55,215 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_02.csv
+2025-04-03 03:06:55,342 - INFO - Processed 59552 rows from /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_02.csv
+2025-04-03 03:06:55,343 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_03.csv
+2025-04-03 03:06:55,354 - INFO - Processed 3590 rows from /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_03.csv
+2025-04-03 03:06:55,416 - INFO - Combined data has 156472 rows before filtering
+2025-04-03 03:06:55,529 - INFO - Filtered to 40186 rows after Symbol filter
+2025-04-03 03:06:55,533 - INFO - Filtered to 17047 rows after Side filter
+2025-04-03 03:06:55,539 - INFO - Filtered to top 3 rate pairs per symbol, 3 rows remain
+2025-04-03 03:06:55,540 - INFO - After filtering: 3 rows remain
+2025-04-03 03:06:55,540 - INFO - No duplicate IDs found
+2025-04-03 03:06:55,540 - INFO - After removing duplicates: 3 rows remain
+2025-04-03 03:06:55,542 - INFO - Saved filtered data to ./data/reports/trade_execution_report_20250403.csv
+2025-04-03 05:13:18,766 - INFO - Trade Execution Processor initialized with config.json
+2025-04-03 05:13:18,766 - INFO - Found 6 input files
+2025-04-03 05:13:18,766 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_29.csv
+2025-04-03 05:13:18,785 - INFO - Processed 3563 rows from xrp_trades_2025_03_29.csv
+2025-04-03 05:13:18,785 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_30.csv
+2025-04-03 05:13:18,802 - INFO - Processed 4569 rows from xrp_trades_2025_03_30.csv
+2025-04-03 05:13:18,802 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_31.csv
+2025-04-03 05:13:19,013 - INFO - Processed 71002 rows from xrp_trades_2025_03_31.csv
+2025-04-03 05:13:19,013 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_01.csv
+2025-04-03 05:13:19,058 - INFO - Processed 14196 rows from xrp_trades_2025_04_01.csv
+2025-04-03 05:13:19,058 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_02.csv
+2025-04-03 05:13:19,238 - INFO - Processed 59552 rows from xrp_trades_2025_04_02.csv
+2025-04-03 05:13:19,239 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_03.csv
+2025-04-03 05:13:19,254 - INFO - Processed 3590 rows from xrp_trades_2025_04_03.csv
+2025-04-03 05:13:19,554 - INFO - Combined data has 156472 rows before filtering
+2025-04-03 05:13:19,988 - INFO - Symbol filter: 156472 -> 57661 rows
+2025-04-03 05:13:19,994 - INFO - Side filter: 57661 rows after filtering
+2025-04-03 05:13:19,996 - INFO - Final filtered dataframe: 57661 rows with columns: ID, DateTime, Symbol, Quantity, Rate, Side, XRPUSD_BestBid, XRPUSD_BestAsk, XRPEUR_BestBid, XRPEUR_BestAsk, EURUSD_BestBid, EURUSD_BestAsk
+2025-04-03 05:13:19,997 - INFO - After filtering: 57661 rows remain
+2025-04-03 05:13:19,999 - INFO - No duplicate IDs found
+2025-04-03 05:13:19,999 - INFO - After removing duplicates: 57661 rows remain
+2025-04-03 05:13:20,609 - INFO - Saved filtered data to /opt/otcxn/tradingview-repo-automation/xrp_03_executions/data/reports/combined_trades_20250403.csv
+2025-04-03 05:16:34,526 - INFO - Trade Execution Processor initialized with config.json
+2025-04-03 05:16:34,526 - INFO - Found 6 input files
+2025-04-03 05:16:34,526 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_29.csv
+2025-04-03 05:16:34,542 - INFO - Processed 3563 rows from xrp_trades_2025_03_29.csv
+2025-04-03 05:16:34,543 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_30.csv
+2025-04-03 05:16:34,558 - INFO - Processed 4569 rows from xrp_trades_2025_03_30.csv
+2025-04-03 05:16:34,558 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_31.csv
+2025-04-03 05:16:34,994 - INFO - Processed 71002 rows from xrp_trades_2025_03_31.csv
+2025-04-03 05:16:34,994 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_01.csv
+2025-04-03 05:16:35,033 - INFO - Processed 14196 rows from xrp_trades_2025_04_01.csv
+2025-04-03 05:16:35,033 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_02.csv
+2025-04-03 05:16:35,212 - INFO - Processed 59552 rows from xrp_trades_2025_04_02.csv
+2025-04-03 05:16:35,212 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_03.csv
+2025-04-03 05:16:35,225 - INFO - Processed 3590 rows from xrp_trades_2025_04_03.csv
+2025-04-03 05:16:35,499 - INFO - Combined data has 156472 rows before filtering
+2025-04-03 05:16:35,759 - INFO - Symbol filter: 156472 -> 40186 rows
+2025-04-03 05:16:35,778 - INFO - Side filter: 40186 rows after filtering
+2025-04-03 05:16:35,778 - WARNING - Missing columns in data: EURUSD_BestBid, EURUSD_BestAsk
+2025-04-03 05:16:35,794 - INFO - Final filtered dataframe: 40186 rows with columns: ID, DateTime, Symbol, Quantity, Rate, Side, XRPUSD_BestBid, XRPUSD_BestAsk, XRPEUR_BestBid, XRPEUR_BestAsk, EURUSD_BestBid, EURUSD_BestAsk
+2025-04-03 05:16:35,795 - INFO - After filtering: 40186 rows remain
+2025-04-03 05:16:35,796 - INFO - No duplicate IDs found
+2025-04-03 05:16:35,796 - INFO - After removing duplicates: 40186 rows remain
+2025-04-03 05:16:36,183 - INFO - Saved filtered data to /opt/otcxn/tradingview-repo-automation/xrp_03_executions/data/reports/combined_trades_20250403.csv
+2025-04-03 05:23:48,422 - INFO - Trade Execution Processor initialized with config.json
+2025-04-03 05:23:48,423 - INFO - Found 6 input files
+2025-04-03 05:23:48,423 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_29.csv
+2025-04-03 05:23:48,439 - INFO - Processed 3563 rows from xrp_trades_2025_03_29.csv
+2025-04-03 05:23:48,439 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_30.csv
+2025-04-03 05:23:48,453 - INFO - Processed 4569 rows from xrp_trades_2025_03_30.csv
+2025-04-03 05:23:48,453 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_31.csv
+2025-04-03 05:23:48,636 - INFO - Processed 71002 rows from xrp_trades_2025_03_31.csv
+2025-04-03 05:23:48,636 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_01.csv
+2025-04-03 05:23:48,678 - INFO - Processed 14196 rows from xrp_trades_2025_04_01.csv
+2025-04-03 05:23:48,678 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_02.csv
+2025-04-03 05:23:48,855 - INFO - Processed 59552 rows from xrp_trades_2025_04_02.csv
+2025-04-03 05:23:48,855 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_03.csv
+2025-04-03 05:23:48,867 - INFO - Processed 3590 rows from xrp_trades_2025_04_03.csv
+2025-04-03 05:23:49,017 - INFO - Combined data has 156472 rows before filtering
+2025-04-03 05:23:49,301 - INFO - Symbol filter: 156472 -> 40186 rows
+2025-04-03 05:23:49,312 - INFO - Side filter: 40186 rows after filtering
+2025-04-03 05:23:49,312 - WARNING - Missing columns in data: EURUSD_BestBid, EURUSD_BestAsk
+2025-04-03 05:23:49,470 - INFO - Final filtered dataframe: 40186 rows with columns: ID, DateTime, Symbol, Quantity, Rate, Side, XRPUSD_BestBid, XRPUSD_BestAsk, XRPEUR_BestBid, XRPEUR_BestAsk, EURUSD_BestBid, EURUSD_BestAsk
+2025-04-03 05:23:49,470 - INFO - After filtering: 40186 rows remain
+2025-04-03 05:23:49,471 - INFO - No duplicate IDs found
+2025-04-03 05:23:49,471 - INFO - After removing duplicates: 40186 rows remain
+2025-04-03 05:23:49,843 - INFO - Saved filtered data to /opt/otcxn/tradingview-repo-automation/xrp_03_executions/data/reports/combined_trades_20250403.csv
+2025-04-03 05:25:49,120 - INFO - Trade Execution Processor initialized with config.json
+2025-04-03 05:25:49,120 - INFO - Found 6 input files
+2025-04-03 05:25:49,120 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_29.csv
+2025-04-03 05:25:49,137 - INFO - Processed 3563 rows from xrp_trades_2025_03_29.csv
+2025-04-03 05:25:49,137 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_30.csv
+2025-04-03 05:25:49,151 - INFO - Processed 4569 rows from xrp_trades_2025_03_30.csv
+2025-04-03 05:25:49,152 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_31.csv
+2025-04-03 05:25:49,321 - INFO - Processed 71002 rows from xrp_trades_2025_03_31.csv
+2025-04-03 05:25:49,321 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_01.csv
+2025-04-03 05:25:49,358 - INFO - Processed 14196 rows from xrp_trades_2025_04_01.csv
+2025-04-03 05:25:49,358 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_02.csv
+2025-04-03 05:25:49,548 - INFO - Processed 59552 rows from xrp_trades_2025_04_02.csv
+2025-04-03 05:25:49,548 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_03.csv
+2025-04-03 05:25:49,565 - INFO - Processed 3590 rows from xrp_trades_2025_04_03.csv
+2025-04-03 05:25:50,101 - INFO - Combined data has 156472 rows before filtering
+2025-04-03 05:25:50,331 - INFO - Symbol filter: 156472 -> 40186 rows
+2025-04-03 05:25:50,382 - INFO - Side filter: 40186 rows after filtering
+2025-04-03 05:25:50,382 - WARNING - Missing columns in data: USDEUR_BestBid, USDEUR_BestAsk
+2025-04-03 05:25:50,387 - INFO - Final filtered dataframe: 40186 rows with columns: ID, DateTime, Symbol, Quantity, Rate, Side, XRPUSD_BestBid, XRPUSD_BestAsk, XRPEUR_BestBid, XRPEUR_BestAsk, USDEUR_BestBid, USDEUR_BestAsk
+2025-04-03 05:25:50,387 - INFO - After filtering: 40186 rows remain
+2025-04-03 05:25:50,388 - INFO - No duplicate IDs found
+2025-04-03 05:25:50,388 - INFO - After removing duplicates: 40186 rows remain
+2025-04-03 05:25:50,761 - INFO - Saved filtered data to /opt/otcxn/tradingview-repo-automation/xrp_03_executions/data/reports/combined_trades_20250403.csv
+2025-04-04 16:28:44,913 - INFO - Trade Execution Processor initialized with config.json
+2025-04-04 16:28:44,913 - INFO - Found 7 input files
+2025-04-04 16:28:44,913 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_29.csv
+2025-04-04 16:28:44,930 - INFO - Processed 3563 rows from xrp_trades_2025_03_29.csv
+2025-04-04 16:28:44,930 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_30.csv
+2025-04-04 16:28:44,947 - INFO - Processed 4569 rows from xrp_trades_2025_03_30.csv
+2025-04-04 16:28:44,947 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_31.csv
+2025-04-04 16:28:45,144 - INFO - Processed 71002 rows from xrp_trades_2025_03_31.csv
+2025-04-04 16:28:45,144 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_01.csv
+2025-04-04 16:28:45,208 - INFO - Processed 14196 rows from xrp_trades_2025_04_01.csv
+2025-04-04 16:28:45,208 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_02.csv
+2025-04-04 16:28:45,413 - INFO - Processed 59552 rows from xrp_trades_2025_04_02.csv
+2025-04-04 16:28:45,413 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_03.csv
+2025-04-04 16:28:45,436 - INFO - Processed 7462 rows from xrp_trades_2025_04_03.csv
+2025-04-04 16:28:45,436 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_04.csv
+2025-04-04 16:28:45,515 - INFO - Processed 23119 rows from xrp_trades_2025_04_04.csv
+2025-04-04 16:28:45,691 - INFO - Combined data has 183463 rows before filtering
+2025-04-04 16:28:46,003 - INFO - Symbol filter: 183463 -> 45526 rows
+2025-04-04 16:28:46,018 - INFO - Side filter: 45526 rows after filtering
+2025-04-04 16:28:46,018 - WARNING - Missing columns in data: USDEUR_BestBid, USDEUR_BestAsk
+2025-04-04 16:28:46,026 - INFO - Final filtered dataframe: 45526 rows with columns: ID, DateTime, Symbol, Quantity, Rate, Side, XRPUSD_BestBid, XRPUSD_BestAsk, XRPEUR_BestBid, XRPEUR_BestAsk, USDEUR_BestBid, USDEUR_BestAsk
+2025-04-04 16:28:46,026 - INFO - After filtering: 45526 rows remain
+2025-04-04 16:28:46,027 - INFO - No duplicate IDs found
+2025-04-04 16:28:46,027 - INFO - After removing duplicates: 45526 rows remain
+2025-04-04 16:28:46,514 - INFO - Saved filtered data to /opt/otcxn/tradingview-repo-automation/xrp_03_executions/data/reports/combined_trades_20250404.csv
+2025-04-04 16:30:05,385 - INFO - Trade Execution Processor initialized with config.json
+2025-04-04 16:30:05,386 - INFO - Found 7 input files
+2025-04-04 16:30:05,386 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_29.csv
+2025-04-04 16:30:05,408 - INFO - Processed 3563 rows from xrp_trades_2025_03_29.csv
+2025-04-04 16:30:05,408 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_30.csv
+2025-04-04 16:30:05,425 - INFO - Processed 4569 rows from xrp_trades_2025_03_30.csv
+2025-04-04 16:30:05,425 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_31.csv
+2025-04-04 16:30:05,629 - INFO - Processed 71002 rows from xrp_trades_2025_03_31.csv
+2025-04-04 16:30:05,629 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_01.csv
+2025-04-04 16:30:05,668 - INFO - Processed 14196 rows from xrp_trades_2025_04_01.csv
+2025-04-04 16:30:05,668 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_02.csv
+2025-04-04 16:30:05,908 - INFO - Processed 59552 rows from xrp_trades_2025_04_02.csv
+2025-04-04 16:30:05,908 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_03.csv
+2025-04-04 16:30:05,936 - INFO - Processed 7462 rows from xrp_trades_2025_04_03.csv
+2025-04-04 16:30:05,936 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_04.csv
+2025-04-04 16:30:06,025 - INFO - Processed 23164 rows from xrp_trades_2025_04_04.csv
+2025-04-04 16:30:06,682 - INFO - Combined data has 183508 rows before filtering
+2025-04-04 16:30:07,096 - INFO - Symbol filter: 183508 -> 45531 rows
+2025-04-04 16:30:07,100 - INFO - Side filter: 19941 rows after filtering
+2025-04-04 16:30:07,100 - WARNING - Missing columns in data: USDEUR_BestBid, USDEUR_BestAsk
+2025-04-04 16:30:07,104 - INFO - Final filtered dataframe: 19941 rows with columns: ID, DateTime, Symbol, Quantity, Rate, Side, XRPUSD_BestBid, XRPUSD_BestAsk, XRPEUR_BestBid, XRPEUR_BestAsk, USDEUR_BestBid, USDEUR_BestAsk
+2025-04-04 16:30:07,104 - INFO - After filtering: 19941 rows remain
+2025-04-04 16:30:07,105 - INFO - No duplicate IDs found
+2025-04-04 16:30:07,105 - INFO - After removing duplicates: 19941 rows remain
+2025-04-04 16:30:07,315 - INFO - Saved filtered data to /opt/otcxn/tradingview-repo-automation/xrp_03_executions/data/reports/combined_trades_20250404.csv
+2025-04-07 02:53:52,099 - INFO - Trade Execution Processor initialized with config.json
+2025-04-07 02:53:52,100 - INFO - Found 10 input files
+2025-04-07 02:53:52,100 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_29.csv
+2025-04-07 02:53:52,118 - INFO - Processed 3563 rows from xrp_trades_2025_03_29.csv
+2025-04-07 02:53:52,118 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_30.csv
+2025-04-07 02:53:52,135 - INFO - Processed 4569 rows from xrp_trades_2025_03_30.csv
+2025-04-07 02:53:52,135 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_31.csv
+2025-04-07 02:53:52,438 - INFO - Processed 71002 rows from xrp_trades_2025_03_31.csv
+2025-04-07 02:53:52,438 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_01.csv
+2025-04-07 02:53:52,484 - INFO - Processed 14196 rows from xrp_trades_2025_04_01.csv
+2025-04-07 02:53:52,485 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_02.csv
+2025-04-07 02:53:52,702 - INFO - Processed 59552 rows from xrp_trades_2025_04_02.csv
+2025-04-07 02:53:52,702 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_03.csv
+2025-04-07 02:53:52,727 - INFO - Processed 7462 rows from xrp_trades_2025_04_03.csv
+2025-04-07 02:53:52,727 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_04.csv
+2025-04-07 02:53:53,062 - INFO - Processed 27256 rows from xrp_trades_2025_04_04.csv
+2025-04-07 02:53:53,062 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_05.csv
+2025-04-07 02:53:53,089 - INFO - Processed 8255 rows from xrp_trades_2025_04_05.csv
+2025-04-07 02:53:53,089 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_06.csv
+2025-04-07 02:53:53,105 - INFO - Processed 4146 rows from xrp_trades_2025_04_06.csv
+2025-04-07 02:53:53,106 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_07.csv
+2025-04-07 02:53:53,119 - INFO - Processed 2954 rows from xrp_trades_2025_04_07.csv
+2025-04-07 02:53:53,354 - INFO - Combined data has 202955 rows before filtering
+2025-04-07 02:53:53,716 - INFO - Symbol filter: 202955 -> 49231 rows
+2025-04-07 02:53:53,722 - INFO - Side filter: 21758 rows after filtering
+2025-04-07 02:53:53,722 - WARNING - Missing columns in data: USDEUR_BestBid, USDEUR_BestAsk
+2025-04-07 02:53:53,727 - INFO - Final filtered dataframe: 21758 rows with columns: ID, DateTime, Symbol, Quantity, Rate, Side, XRPUSD_BestBid, XRPUSD_BestAsk, XRPEUR_BestBid, XRPEUR_BestAsk, USDEUR_BestBid, USDEUR_BestAsk
+2025-04-07 02:53:53,728 - INFO - After filtering: 21758 rows remain
+2025-04-07 02:53:53,729 - INFO - No duplicate IDs found
+2025-04-07 02:53:53,729 - INFO - After removing duplicates: 21758 rows remain
+2025-04-07 02:53:53,967 - INFO - Saved filtered data to /opt/otcxn/tradingview-repo-automation/xrp_03_executions/data/reports/combined_trades_20250407.csv
+2025-04-07 12:10:31,072 - INFO - Trade Execution Processor initialized with config.json
+2025-04-07 12:10:31,072 - INFO - Found 10 input files
+2025-04-07 12:10:31,073 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_29.csv
+2025-04-07 12:10:31,089 - INFO - Processed 3563 rows from xrp_trades_2025_03_29.csv
+2025-04-07 12:10:31,089 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_30.csv
+2025-04-07 12:10:31,104 - INFO - Processed 4569 rows from xrp_trades_2025_03_30.csv
+2025-04-07 12:10:31,104 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_31.csv
+2025-04-07 12:10:31,304 - INFO - Processed 71002 rows from xrp_trades_2025_03_31.csv
+2025-04-07 12:10:31,304 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_01.csv
+2025-04-07 12:10:31,345 - INFO - Processed 14196 rows from xrp_trades_2025_04_01.csv
+2025-04-07 12:10:31,345 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_02.csv
+2025-04-07 12:10:31,499 - INFO - Processed 59552 rows from xrp_trades_2025_04_02.csv
+2025-04-07 12:10:31,499 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_03.csv
+2025-04-07 12:10:31,520 - INFO - Processed 7462 rows from xrp_trades_2025_04_03.csv
+2025-04-07 12:10:31,520 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_04.csv
+2025-04-07 12:10:31,614 - INFO - Processed 27256 rows from xrp_trades_2025_04_04.csv
+2025-04-07 12:10:31,614 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_05.csv
+2025-04-07 12:10:31,644 - INFO - Processed 8255 rows from xrp_trades_2025_04_05.csv
+2025-04-07 12:10:31,644 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_06.csv
+2025-04-07 12:10:31,658 - INFO - Processed 4146 rows from xrp_trades_2025_04_06.csv
+2025-04-07 12:10:31,658 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_07.csv
+2025-04-07 12:10:31,679 - INFO - Processed 6318 rows from xrp_trades_2025_04_07.csv
+2025-04-07 12:10:31,869 - INFO - Combined data has 206319 rows before filtering
+2025-04-07 12:10:32,400 - INFO - Symbol filter: 206319 -> 50235 rows
+2025-04-07 12:10:32,404 - INFO - Side filter: 22244 rows after filtering
+2025-04-07 12:10:32,404 - WARNING - Missing columns in data: USDEUR_BestBid, USDEUR_BestAsk
+2025-04-07 12:10:32,408 - INFO - Final filtered dataframe: 22244 rows with columns: ID, DateTime, Symbol, Quantity, Rate, Side, XRPUSD_BestBid, XRPUSD_BestAsk, XRPEUR_BestBid, XRPEUR_BestAsk, USDEUR_BestBid, USDEUR_BestAsk
+2025-04-07 12:10:32,409 - INFO - After filtering: 22244 rows remain
+2025-04-07 12:10:32,409 - INFO - No duplicate IDs found
+2025-04-07 12:10:32,409 - INFO - After removing duplicates: 22244 rows remain
+2025-04-07 12:10:32,633 - INFO - Saved filtered data to /opt/otcxn/tradingview-repo-automation/xrp_03_executions/data/reports/combined_trades.csv
+2025-04-08 01:01:11,434 - INFO - Trade Execution Processor initialized with config.json
+2025-04-08 01:01:11,434 - INFO - Found 10 input files
+2025-04-08 01:01:11,435 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_29.csv
+2025-04-08 01:01:11,456 - INFO - Processed 3563 rows from xrp_trades_2025_03_29.csv
+2025-04-08 01:01:11,456 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_30.csv
+2025-04-08 01:01:11,475 - INFO - Processed 4569 rows from xrp_trades_2025_03_30.csv
+2025-04-08 01:01:11,475 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_31.csv
+2025-04-08 01:01:11,761 - INFO - Processed 71002 rows from xrp_trades_2025_03_31.csv
+2025-04-08 01:01:11,761 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_01.csv
+2025-04-08 01:01:11,808 - INFO - Processed 14196 rows from xrp_trades_2025_04_01.csv
+2025-04-08 01:01:11,808 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_02.csv
+2025-04-08 01:01:12,019 - INFO - Processed 59552 rows from xrp_trades_2025_04_02.csv
+2025-04-08 01:01:12,019 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_03.csv
+2025-04-08 01:01:12,044 - INFO - Processed 7462 rows from xrp_trades_2025_04_03.csv
+2025-04-08 01:01:12,044 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_04.csv
+2025-04-08 01:01:12,143 - INFO - Processed 27256 rows from xrp_trades_2025_04_04.csv
+2025-04-08 01:01:12,143 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_05.csv
+2025-04-08 01:01:12,175 - INFO - Processed 8255 rows from xrp_trades_2025_04_05.csv
+2025-04-08 01:01:12,175 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_06.csv
+2025-04-08 01:01:12,190 - INFO - Processed 4146 rows from xrp_trades_2025_04_06.csv
+2025-04-08 01:01:12,190 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_07.csv
+2025-04-08 01:01:12,385 - INFO - Processed 53321 rows from xrp_trades_2025_04_07.csv
+2025-04-08 01:01:12,674 - INFO - Combined data has 253322 rows before filtering
+2025-04-08 01:01:14,086 - INFO - Symbol filter: 253322 -> 61812 rows
+2025-04-08 01:01:14,090 - INFO - Side filter: 28592 rows after filtering
+2025-04-08 01:01:14,090 - WARNING - Missing columns in data: USDEUR_BestBid, USDEUR_BestAsk
+2025-04-08 01:01:14,096 - INFO - Final filtered dataframe: 28592 rows with columns: ID, DateTime, Symbol, Quantity, Rate, Side, XRPUSD_BestBid, XRPUSD_BestAsk, XRPEUR_BestBid, XRPEUR_BestAsk, USDEUR_BestBid, USDEUR_BestAsk
+2025-04-08 01:01:14,096 - INFO - After filtering: 28592 rows remain
+2025-04-08 01:01:14,098 - INFO - No duplicate IDs found
+2025-04-08 01:01:14,098 - INFO - After removing duplicates: 28592 rows remain
+2025-04-08 01:01:14,389 - INFO - Saved filtered data to /opt/otcxn/tradingview-repo-automation/xrp_03_executions/data/reports/combined_trades.csv

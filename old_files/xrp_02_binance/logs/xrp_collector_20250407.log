@@ -1,0 +1,81 @@
+2025-04-07 02:51:38,388 - INFO - Starting XRP data collection process...
+2025-04-07 02:51:38,517 - INFO - Found 4 days with missing data: [datetime.date(2025, 4, 7), datetime.date(2025, 4, 6), datetime.date(2025, 4, 5), datetime.date(2025, 4, 4)]
+2025-04-07 02:51:38,518 - INFO - Processing data for 2025-04-07...
+2025-04-07 02:51:38,518 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04-07.zip
+2025-04-07 02:51:39,026 - INFO - Daily data file not found (404), trying monthly data...
+2025-04-07 02:51:39,027 - INFO - Attempting to download monthly data from: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip
+2025-04-07 02:51:39,512 - WARNING - Error retrieving monthly data: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip. Retrying (1/3)...
+2025-04-07 02:51:42,981 - WARNING - Error retrieving monthly data: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip. Retrying (2/3)...
+2025-04-07 02:51:46,477 - ERROR - Maximum retries reached for monthly data. Error: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip
+2025-04-07 02:51:46,477 - WARNING - No data retrieved for 2025-04-07
+2025-04-07 02:51:47,477 - INFO - Processing data for 2025-04-06...
+2025-04-07 02:51:47,478 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04-06.zip
+2025-04-07 02:51:47,948 - INFO - Daily data file not found (404), trying monthly data...
+2025-04-07 02:51:47,948 - INFO - Attempting to download monthly data from: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip
+2025-04-07 02:51:48,430 - WARNING - Error retrieving monthly data: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip. Retrying (1/3)...
+2025-04-07 02:51:51,920 - WARNING - Error retrieving monthly data: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip. Retrying (2/3)...
+2025-04-07 02:51:55,405 - ERROR - Maximum retries reached for monthly data. Error: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip
+2025-04-07 02:51:55,405 - WARNING - No data retrieved for 2025-04-06
+2025-04-07 02:51:56,406 - INFO - Processing data for 2025-04-05...
+2025-04-07 02:51:56,406 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04-05.zip
+2025-04-07 02:51:57,046 - INFO - Downloaded daily data successfully for 2025-04-05
+2025-04-07 02:51:57,089 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250405.csv
+2025-04-07 02:51:57,113 - INFO - Read existing combined file with 10080 rows
+2025-04-07 02:51:57,117 - INFO - Combined dataframe has 11520 rows before deduplication
+2025-04-07 02:51:57,272 - INFO - Saved combined file with 11520 total rows
+2025-04-07 02:51:57,273 - INFO - Successfully processed 1440 records for 2025-04-05
+2025-04-07 02:51:58,274 - INFO - Processing data for 2025-04-04...
+2025-04-07 02:51:58,274 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04-04.zip
+2025-04-07 02:51:58,940 - INFO - Downloaded daily data successfully for 2025-04-04
+2025-04-07 02:51:58,961 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250404.csv
+2025-04-07 02:51:58,982 - INFO - Read existing combined file with 11520 rows
+2025-04-07 02:51:58,984 - INFO - Combined dataframe has 12960 rows before deduplication
+2025-04-07 02:51:59,107 - INFO - Saved combined file with 12960 total rows
+2025-04-07 02:51:59,108 - INFO - Successfully processed 1440 records for 2025-04-04
+2025-04-07 02:52:00,109 - INFO - Data collection summary: 2 dates successful, 2 dates failed
+2025-04-07 02:52:00,133 - INFO - Combined file date counts:
+2025-04-07 02:52:00,133 - INFO -   2025-03-28: 1440 records
+2025-04-07 02:52:00,133 - INFO -   2025-03-29: 1440 records
+2025-04-07 02:52:00,133 - INFO -   2025-03-30: 1440 records
+2025-04-07 02:52:00,133 - INFO -   2025-03-31: 1440 records
+2025-04-07 02:52:00,133 - INFO -   2025-04-01: 1440 records
+2025-04-07 02:52:00,133 - INFO -   2025-04-02: 1440 records
+2025-04-07 02:52:00,133 - INFO -   2025-04-03: 1440 records
+2025-04-07 02:52:00,134 - INFO -   2025-04-04: 1440 records
+2025-04-07 02:52:00,134 - INFO -   2025-04-05: 1440 records
+2025-04-07 02:52:00,134 - INFO - Combined file contains data from 2025-03-28 00:00:00 to 2025-04-05 23:59:00
+2025-04-07 02:52:00,134 - INFO - Total records in combined file: 12960
+2025-04-07 02:52:00,134 - INFO - Data collection process completed!
+2025-04-07 12:07:30,224 - INFO - Starting XRP data collection process...
+2025-04-07 12:07:30,380 - INFO - Found 2 days with missing data: [datetime.date(2025, 4, 7), datetime.date(2025, 4, 6)]
+2025-04-07 12:07:30,380 - INFO - Processing data for 2025-04-07...
+2025-04-07 12:07:30,380 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04-07.zip
+2025-04-07 12:07:30,872 - INFO - Daily data file not found (404), trying monthly data...
+2025-04-07 12:07:30,872 - INFO - Attempting to download monthly data from: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip
+2025-04-07 12:07:31,058 - WARNING - Error retrieving monthly data: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip. Retrying (1/3)...
+2025-04-07 12:07:34,235 - WARNING - Error retrieving monthly data: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip. Retrying (2/3)...
+2025-04-07 12:07:37,722 - ERROR - Maximum retries reached for monthly data. Error: 404 Client Error: Not Found for url: https://data.binance.vision/data/spot/monthly/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04.zip
+2025-04-07 12:07:37,722 - WARNING - No data retrieved for 2025-04-07
+2025-04-07 12:07:38,723 - INFO - Processing data for 2025-04-06...
+2025-04-07 12:07:38,723 - INFO - Attempting to download daily data from: https://data.binance.vision/data/spot/daily/klines/XRPUSDT/1m/XRPUSDT-1m-2025-04-06.zip
+2025-04-07 12:07:39,358 - INFO - Downloaded daily data successfully for 2025-04-06
+2025-04-07 12:07:39,385 - INFO - Daily data saved to ./data/xrp_binance/xrp_binance_minute_20250406.csv
+2025-04-07 12:07:39,404 - INFO - Read existing combined file with 12960 rows
+2025-04-07 12:07:39,407 - INFO - Combined dataframe has 14400 rows before deduplication
+2025-04-07 12:07:39,559 - INFO - Saved combined file with 14400 total rows
+2025-04-07 12:07:39,559 - INFO - Successfully processed 1440 records for 2025-04-06
+2025-04-07 12:07:40,559 - INFO - Data collection summary: 1 dates successful, 1 dates failed
+2025-04-07 12:07:40,583 - INFO - Combined file date counts:
+2025-04-07 12:07:40,583 - INFO -   2025-03-28: 1440 records
+2025-04-07 12:07:40,583 - INFO -   2025-03-29: 1440 records
+2025-04-07 12:07:40,583 - INFO -   2025-03-30: 1440 records
+2025-04-07 12:07:40,583 - INFO -   2025-03-31: 1440 records
+2025-04-07 12:07:40,583 - INFO -   2025-04-01: 1440 records
+2025-04-07 12:07:40,583 - INFO -   2025-04-02: 1440 records
+2025-04-07 12:07:40,583 - INFO -   2025-04-03: 1440 records
+2025-04-07 12:07:40,583 - INFO -   2025-04-04: 1440 records
+2025-04-07 12:07:40,583 - INFO -   2025-04-05: 1440 records
+2025-04-07 12:07:40,583 - INFO -   2025-04-06: 1440 records
+2025-04-07 12:07:40,584 - INFO - Combined file contains data from 2025-03-28 00:00:00 to 2025-04-06 23:59:00
+2025-04-07 12:07:40,584 - INFO - Total records in combined file: 14400
+2025-04-07 12:07:40,584 - INFO - Data collection process completed!
