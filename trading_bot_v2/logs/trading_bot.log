@@ -40799,3 +40799,2004 @@
 2025-04-09 06:19:41,247 - config_manager - INFO - Loaded credentials for account default
 2025-04-09 06:19:41,247 - config_manager - INFO - Loaded credentials for account TM6
 2025-04-09 06:19:41,247 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:20:11,929 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:20:11,951 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:20:11,952 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:20:11,952 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:20:11,952 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:20:11,952 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:20:11,952 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:20:11,953 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:20:11,953 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:20:11,953 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:20:12,582 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:20:12,602 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:20:12,603 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:20:12,603 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:20:12,603 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:20:12,603 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:20:12,604 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:20:12,604 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:20:12,604 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:20:12,604 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:20:13,246 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:20:13,333 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:20:13,333 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:20:13,333 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:20:13,334 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:20:13,334 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:20:13,334 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:20:13,334 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:20:13,334 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:20:13,334 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:20:44,002 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:20:44,022 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:20:44,022 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:20:44,022 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:20:44,023 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:20:44,023 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:20:44,023 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:20:44,023 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:20:44,023 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:20:44,023 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:20:44,664 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:20:44,681 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:20:44,682 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:20:44,682 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:20:44,682 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:20:44,682 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:20:44,682 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:20:44,683 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:20:44,683 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:20:44,683 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:20:45,316 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:20:45,357 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:20:45,357 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:20:45,357 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:20:45,358 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:20:45,358 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:20:45,358 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:20:45,358 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:20:45,358 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:20:45,358 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:21:16,017 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:21:16,038 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:21:16,039 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:21:16,039 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:21:16,039 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:21:16,039 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:21:16,039 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:21:16,039 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:21:16,039 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:21:16,040 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:21:16,718 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:21:16,734 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:21:16,735 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:21:16,735 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:21:16,735 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:21:16,735 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:21:16,735 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:21:16,735 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:21:16,735 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:21:16,736 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:21:17,375 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:21:17,426 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:21:17,427 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:21:17,427 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:21:17,427 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:21:17,427 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:21:17,427 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:21:17,427 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:21:17,427 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:21:17,427 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:21:48,096 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:21:48,115 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:21:48,116 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:21:48,116 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:21:48,116 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:21:48,116 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:21:48,116 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:21:48,117 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:21:48,117 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:21:48,117 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:21:48,736 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:21:48,764 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:21:48,764 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:21:48,764 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:21:48,764 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:21:48,764 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:21:48,765 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:21:48,765 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:21:48,765 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:21:48,765 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:21:49,400 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:21:49,436 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:21:49,436 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:21:49,436 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:21:49,436 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:21:49,437 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:21:49,437 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:21:49,437 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:21:49,437 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:21:49,437 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:22:20,350 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:22:20,371 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:22:20,371 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:22:20,372 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:22:20,372 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:22:20,372 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:22:20,372 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:22:20,372 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:22:20,372 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:22:20,372 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:22:21,006 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:22:21,034 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:22:21,034 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:22:21,034 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:22:21,035 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:22:21,035 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:22:21,035 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:22:21,035 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:22:21,035 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:22:21,035 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:22:21,666 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:22:21,696 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:22:21,696 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:22:21,696 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:22:21,696 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:22:21,697 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:22:21,697 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:22:21,697 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:22:21,697 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:22:21,697 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:22:52,359 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:22:52,375 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:22:52,376 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:22:52,376 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:22:52,376 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:22:52,376 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:22:52,376 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:22:52,377 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:22:52,377 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:22:52,377 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:22:53,015 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:22:53,032 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:22:53,033 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:22:53,033 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:22:53,033 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:22:53,033 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:22:53,033 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:22:53,033 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:22:53,033 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:22:53,033 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:22:53,719 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:22:53,747 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:22:53,747 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:22:53,748 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:22:53,748 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:22:53,748 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:22:53,748 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:22:53,748 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:22:53,748 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:22:53,748 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:23:24,403 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:23:24,419 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:23:24,419 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:23:24,420 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:23:24,420 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:23:24,420 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:23:24,420 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:23:24,420 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:23:24,420 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:23:24,420 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:23:25,035 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:23:25,070 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:23:25,071 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:23:25,071 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:23:25,071 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:23:25,071 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:23:25,071 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:23:25,072 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:23:25,072 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:23:25,072 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:23:25,689 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:23:25,727 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:23:25,728 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:23:25,728 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:23:25,728 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:23:25,728 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:23:25,728 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:23:25,728 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:23:25,728 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:23:25,728 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:23:56,394 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:23:56,426 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:23:56,427 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:23:56,427 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:23:56,427 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:23:56,427 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:23:56,427 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:23:56,427 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:23:56,428 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:23:56,428 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:23:57,045 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:23:57,062 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:23:57,063 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:23:57,063 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:23:57,063 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:23:57,063 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:23:57,063 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:23:57,063 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:23:57,063 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:23:57,064 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:23:57,704 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:23:57,724 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:23:57,724 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:23:57,724 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:23:57,725 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:23:57,725 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:23:57,725 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:23:57,725 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:23:57,725 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:23:57,725 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:24:28,358 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:24:28,425 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:24:28,425 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:24:28,425 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:24:28,426 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:24:28,426 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:24:28,426 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:24:28,426 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:24:28,426 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:24:28,426 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:24:29,055 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:24:29,077 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:24:29,077 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:24:29,077 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:24:29,078 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:24:29,078 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:24:29,078 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:24:29,078 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:24:29,078 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:24:29,078 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:24:29,736 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:24:29,757 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:24:29,758 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:24:29,758 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:24:29,758 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:24:29,758 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:24:29,759 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:24:29,759 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:24:29,759 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:24:29,759 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:25:00,407 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:25:00,540 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:25:00,540 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:25:00,540 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:25:00,540 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:25:00,541 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:25:00,541 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:25:00,541 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:25:00,541 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:25:00,541 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:25:01,162 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:25:01,221 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:25:01,221 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:25:01,221 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:25:01,222 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:25:01,222 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:25:01,222 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:25:01,222 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:25:01,222 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:25:01,222 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:25:01,850 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:25:01,907 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:25:01,908 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:25:01,908 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:25:01,908 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:25:01,908 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:25:01,908 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:25:01,908 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:25:01,908 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:25:01,908 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:25:32,583 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:25:32,601 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:25:32,601 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:25:32,602 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:25:32,602 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:25:32,602 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:25:32,602 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:25:32,602 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:25:32,602 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:25:32,602 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:25:33,233 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:25:33,253 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:25:33,254 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:25:33,254 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:25:33,254 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:25:33,254 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:25:33,254 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:25:33,254 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:25:33,255 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:25:33,255 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:25:33,889 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:25:33,910 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:25:33,911 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:25:33,911 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:25:33,911 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:25:33,911 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:25:33,911 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:25:33,911 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:25:33,912 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:25:33,912 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:26:04,565 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:26:04,635 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:26:04,635 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:26:04,635 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:26:04,636 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:26:04,636 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:26:04,636 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:26:04,636 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:26:04,636 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:26:04,636 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:26:05,267 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:26:05,285 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:26:05,285 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:26:05,285 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:26:05,285 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:26:05,286 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:26:05,286 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:26:05,286 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:26:05,286 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:26:05,286 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:26:05,907 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:26:05,923 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:26:05,924 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:26:05,924 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:26:05,924 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:26:05,924 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:26:05,924 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:26:05,924 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:26:05,925 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:26:05,925 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:26:36,575 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:26:36,596 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:26:36,596 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:26:36,596 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:26:36,596 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:26:36,596 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:26:36,597 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:26:36,597 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:26:36,597 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:26:36,597 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:26:37,215 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:26:37,233 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:26:37,234 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:26:37,234 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:26:37,234 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:26:37,234 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:26:37,234 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:26:37,235 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:26:37,235 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:26:37,235 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:26:37,862 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:26:37,905 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:26:37,906 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:26:37,906 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:26:37,906 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:26:37,906 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:26:37,906 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:26:37,906 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:26:37,907 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:26:37,907 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:27:08,595 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:27:08,617 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:27:08,617 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:27:08,617 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:27:08,618 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:27:08,618 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:27:08,618 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:27:08,618 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:27:08,618 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:27:08,618 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:27:09,344 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:27:09,397 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:27:09,397 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:27:09,398 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:27:09,398 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:27:09,398 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:27:09,398 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:27:09,398 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:27:09,398 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:27:09,398 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:27:10,066 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:27:10,089 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:27:10,090 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:27:10,090 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:27:10,090 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:27:10,090 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:27:10,090 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:27:10,091 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:27:10,091 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:27:10,091 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:27:22,268 - system - INFO - [1744180042.2686617] Processing webhook data: {
+  "timeFrame": "1m",
+  "symbol": "BTC/USDC",
+  "message": "Trend Sell!",
+  "price": "76852.94"
+}
+2025-04-09 06:27:22,269 - system - INFO - Received valid trading signal: {
+  "timeFrame": "1m",
+  "symbol": "BTC/USDC",
+  "message": "Trend Sell!",
+  "price": "76852.94",
+  "account": "TM6"
+}
+2025-04-09 06:27:22,269 - system - INFO - [TM6] Checking for partially filled orders to cancel for BTC/USDC
+2025-04-09 06:27:22,269 - system - INFO - [TM6] Would cancel any partially filled BID orders for BTC/USDC
+2025-04-09 06:27:22,923 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:27:22,945 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:27:24,113 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:27:24,129 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:27:24,130 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:27:24,130 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:27:24,130 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:27:24,130 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:27:24,776 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:27:24,777 - system - INFO - Getting repo details for BTC/USDC110
+2025-04-09 06:27:24,796 - system - WARNING - No open repo found for BTC/USDC110
+2025-04-09 06:27:24,796 - system - WARNING - [TM6] Repo status mismatch for BTC/USDC: WebSocket=True, API=False
+2025-04-09 06:27:24,796 - system - INFO - Manually set repo status for BTC/USDC: False
+2025-04-09 06:27:24,796 - system - INFO - [TM6] Position analysis for BTC/USDC: position=0.0, is_long=False, no_position=True, has_repo=False, strict_limit=0.002
+2025-04-09 06:27:24,797 - system - INFO - [TM6] Sell signal with no position: opening repo and short position
+2025-04-09 06:27:24,797 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:27:24,797 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:27:24,797 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:27:24,797 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:27:24,797 - system - INFO - [1744180042.2686617][TM6] Executing step 1: open_repo
+2025-04-09 06:27:25,424 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:27:25,424 - system - INFO - Getting repo details for BTC/USDC110
+2025-04-09 06:27:25,445 - system - WARNING - No open repo found for BTC/USDC110
+2025-04-09 06:27:25,445 - system - INFO - [1744180042.2686617][TM6] Using API key authentication for repo operation
+2025-04-09 06:27:25,445 - system - INFO - Placing repo order - Symbol: BTC/USDC110, Quantity: 0.001, Rate: 10.0%
+2025-04-09 06:27:26,073 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:27:26,074 - system - INFO - Getting repo details for BTC/USDC110
+2025-04-09 06:27:26,111 - system - WARNING - No open repo found for BTC/USDC110
+2025-04-09 06:27:26,444 - system - INFO - Repo order placed successfully with API key auth
+2025-04-09 06:27:26,447 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:27:26] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:27:26,449 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:27:26] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:27:26,459 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:27:26] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:27:26,461 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:27:26] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:27:26,538 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:27:26] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:27:26,541 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:27:26] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:27:26,722 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:27:26] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:27:26,723 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:27:26] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:27:26,735 - system - INFO - Repo activated for BTC/USDC
+2025-04-09 06:27:26,737 - system - INFO - Repo activated for BTC/USDC
+2025-04-09 06:27:26,741 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:27:26] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:27:26,742 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:27:26] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:27:26,768 - system - INFO - Repo activated for BTC/USDC
+2025-04-09 06:27:26,770 - system - INFO - Repo activated for BTC/USDC
+2025-04-09 06:27:26,775 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:27:26] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:27:26,776 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:27:26] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:27:28,079 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:27:28,100 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:27:28,101 - system - INFO - [1744180042.2686617][TM6] Executing step 2: open_short
+2025-04-09 06:27:28,101 - trading_utils - INFO - Placing Order - Symbol: BTC/USDC, Side: ASK, Price: 76852.94, Quantity: 0.001
+2025-04-09 06:27:28,237 - trading_utils - INFO - Order placed successfully: Status 200
+2025-04-09 06:27:29,935 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:27:29,953 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:27:31,627 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:27:31,642 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:27:31,642 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:27:31,642 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:27:31,642 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:27:31,642 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:27:31,643 - system - INFO - [1744180042.2686617][TM6] Trade sequence executed successfully: [
+  {
+    "step": "open_repo",
+    "response": {
+      "id": "WEB:5v3jcje8ai5o-20250409062726_0",
+      "eventId": "93471e63-b0fd-4672-98c7-789e79318d4c",
+      "traderId": "tv-algo-1@bosonic.digital",
+      "clientDealCode": "TM6",
+      "cntPartyTraderId": "",
+      "custodianId": "SAFETRUST",
+      "userId": "tv-algo-1@bosonic.digital",
+      "clOrdId": "WEB:5v3jcje8ai5o-20250409062726",
+      "orderType": "LIMIT",
+      "side": "BID",
+      "symbol": "BTC/USDC110",
+      "currency": "BTC",
+      "currency2": "USDC110",
+      "price": 10.0,
+      "limitPx": 0.0,
+      "orderQty": 0.001,
+      "discretion": 0.0,
+      "tradeQty": 0.0,
+      "tif": "GTC",
+      "pegOffset": 0.0,
+      "dark": false,
+      "avgPrice": false,
+      "leavesQty": 0.0,
+      "cumQty": 0.0,
+      "asset2Qty": 0.0,
+      "avgPx": 0.0,
+      "ordStatus": "NEW",
+      "selfCross": false,
+      "timestamp": 1744180046147,
+      "tradeId": "0"
+    }
+  },
+  {
+    "step": "open_short",
+    "response": {
+      "id": "ORD_20250409_062728_91EOKX_0",
+      "eventId": "156e1bc3-0769-4577-9f3d-127e01148f02",
+      "traderId": "tv-algo-1@bosonic.digital",
+      "clientDealCode": "TM6",
+      "cntPartyTraderId": "",
+      "custodianId": "SAFETRUST",
+      "userId": "tv-algo-1@bosonic.digital",
+      "clOrdId": "ORD_20250409_062728_91EOKX",
+      "orderType": "LIMIT",
+      "side": "ASK",
+      "symbol": "BTC/USDC",
+      "currency": "BTC",
+      "currency2": "USDC",
+      "price": 73010.29,
+      "limitPx": 0.0,
+      "orderQty": 0.001,
+      "discretion": 0.0,
+      "tradeQty": 0.0,
+      "tif": "GTC",
+      "pegOffset": 0.0,
+      "dark": false,
+      "avgPrice": false,
+      "leavesQty": 0.0,
+      "cumQty": 0.0,
+      "asset2Qty": 0.0,
+      "avgPx": 0.0,
+      "ordStatus": "NEW",
+      "selfCross": false,
+      "timestamp": 1744180048135,
+      "tradeId": "0",
+      "fees": [
+        {
+          "address": "1KMAfMKuE9PBemzJXWEPt6ZDWvUTiHGwG",
+          "value": 0
+        }
+      ],
+      "cumFee": 0
+    }
+  }
+]
+2025-04-09 06:27:31,643 - system - INFO - [1744180042.2686617][TM6] Final position after trade: 0.0
+2025-04-09 06:27:31,643 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:27:31] "POST /webhook HTTP/1.1" 200 -
+2025-04-09 06:27:40,772 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:27:40,792 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:27:40,792 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:27:40,793 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:27:40,793 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:27:40,793 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:27:40,793 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:27:40,793 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:27:40,793 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:27:40,793 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:27:41,447 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:27:41,464 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:27:41,464 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:27:41,464 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:27:41,464 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:27:41,464 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:27:41,465 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:27:41,465 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:27:41,465 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:27:41,465 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:27:42,107 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:27:42,137 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:27:42,137 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:27:42,137 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:27:42,137 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:27:42,137 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:27:42,138 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:27:42,138 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:27:42,138 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:27:42,138 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:28:12,786 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:28:12,813 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:28:12,813 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:28:12,814 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:28:12,814 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:28:12,814 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:28:12,814 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:28:12,814 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:28:12,814 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:28:12,814 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:28:13,452 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:28:13,468 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:28:13,469 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:28:13,469 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:28:13,469 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:28:13,469 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:28:13,469 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:28:13,469 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:28:13,469 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:28:13,470 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:28:14,096 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:28:14,126 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:28:14,127 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:28:14,127 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:28:14,127 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:28:14,127 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:28:14,127 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:28:14,127 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:28:14,127 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:28:14,127 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:28:44,806 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:28:44,825 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:28:44,825 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:28:44,825 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:28:44,825 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:28:44,825 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:28:44,826 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:28:44,826 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:28:44,826 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:28:44,826 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:28:45,461 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:28:45,479 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:28:45,479 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:28:45,479 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:28:45,479 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:28:45,479 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:28:45,480 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:28:45,480 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:28:45,480 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:28:45,480 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:28:46,104 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:28:46,123 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:28:46,124 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:28:46,124 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:28:46,124 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:28:46,124 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:28:46,124 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:28:46,125 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:28:46,125 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:28:46,125 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:29:16,799 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:29:16,817 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:29:16,817 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:29:16,817 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:29:16,817 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:29:16,817 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:29:16,818 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:29:16,818 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:29:16,818 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:29:16,818 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:29:17,452 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:29:17,471 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:29:17,472 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:29:17,472 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:29:17,472 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:29:17,472 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:29:17,472 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:29:17,472 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:29:17,472 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:29:17,472 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:29:18,128 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:29:18,144 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:29:18,145 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:29:18,145 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:29:18,145 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:29:18,145 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:29:18,146 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:29:18,146 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:29:18,146 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:29:18,146 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:29:48,812 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:29:48,844 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:29:48,845 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:29:48,845 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:29:48,845 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:29:48,845 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:29:48,845 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:29:48,845 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:29:48,845 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:29:48,845 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:29:49,473 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:29:49,490 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:29:49,490 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:29:49,490 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:29:49,490 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:29:49,490 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:29:49,491 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:29:49,491 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:29:49,491 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:29:49,491 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:29:50,116 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:29:50,138 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:29:50,139 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:29:50,139 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:29:50,139 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:29:50,139 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:29:50,139 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:29:50,139 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:29:50,140 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:29:50,140 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:29:53,423 - system - INFO - [1744180193.4230354] Processing webhook data: {
+  "timeFrame": "1m",
+  "symbol": "BTC/USDC",
+  "message": "Trend Sell!",
+  "price": "76848.97"
+}
+2025-04-09 06:29:53,423 - system - WARNING - Rejected repeated Trend Sell! signal for BTC/USDC on 1m (account: TM6)
+2025-04-09 06:29:53,423 - system - ERROR - [1744180193.4230354] Validation error: Duplicate signal rejected: Trend Sell!
+2025-04-09 06:29:53,423 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:29:53] "[31m[1mPOST /webhook HTTP/1.1[0m" 400 -
+2025-04-09 06:30:11,036 - system - INFO - [1744180211.0366309] Processing webhook data: {
+  "timeFrame": "1m",
+  "symbol": "BTC/USDC",
+  "message": "Trend Sell!",
+  "price": "76846.01"
+}
+2025-04-09 06:30:11,037 - system - WARNING - Rejected repeated Trend Sell! signal for BTC/USDC on 1m (account: TM6)
+2025-04-09 06:30:11,037 - system - ERROR - [1744180211.0366309] Validation error: Duplicate signal rejected: Trend Sell!
+2025-04-09 06:30:11,037 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:30:11] "[31m[1mPOST /webhook HTTP/1.1[0m" 400 -
+2025-04-09 06:30:20,835 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:30:20,857 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:30:20,858 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:30:20,858 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:30:20,858 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:30:20,858 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:30:20,859 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:30:20,859 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:30:20,859 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:30:20,859 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:30:21,507 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:30:21,524 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:30:21,524 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:30:21,525 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:30:21,525 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:30:21,525 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:30:21,525 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:30:21,525 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:30:21,525 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:30:21,525 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:30:22,142 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:30:22,181 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:30:22,182 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:30:22,182 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:30:22,182 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:30:22,182 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:30:22,182 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:30:22,182 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:30:22,182 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:30:22,182 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:30:52,848 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:30:52,866 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:30:52,867 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:30:52,867 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:30:52,867 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:30:52,867 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:30:52,867 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:30:52,867 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:30:52,868 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:30:52,868 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:30:53,511 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:30:53,529 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:30:53,529 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:30:53,530 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:30:53,530 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:30:53,530 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:30:53,530 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:30:53,530 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:30:53,530 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:30:53,530 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:30:54,162 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:30:54,185 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:30:54,185 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:30:54,186 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:30:54,186 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:30:54,186 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:30:54,186 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:30:54,186 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:30:54,186 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:30:54,186 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:31:24,867 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:31:24,886 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:31:24,887 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:31:24,887 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:31:24,887 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:31:24,887 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:31:24,887 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:31:24,887 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:31:24,888 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:31:24,888 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:31:25,513 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:31:25,529 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:31:25,530 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:31:25,530 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:31:25,530 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:31:25,530 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:31:25,530 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:31:25,531 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:31:25,531 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:31:25,531 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:31:26,168 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:31:26,194 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:31:26,194 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:31:26,194 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:31:26,194 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:31:26,195 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:31:26,195 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:31:26,195 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:31:26,195 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:31:26,195 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:31:40,664 - system - INFO - [1744180300.6647596] Processing webhook data: {
+  "timeFrame": "1m",
+  "symbol": "ETH/USDC",
+  "message": "Trend Sell!",
+  "price": "1461.55"
+}
+2025-04-09 06:31:40,665 - system - INFO - Received valid trading signal: {
+  "timeFrame": "1m",
+  "symbol": "ETH/USDC",
+  "message": "Trend Sell!",
+  "price": "1461.55",
+  "account": "TM6"
+}
+2025-04-09 06:31:40,665 - system - INFO - [TM6] Checking for partially filled orders to cancel for ETH/USDC
+2025-04-09 06:31:40,665 - system - INFO - [TM6] Would cancel any partially filled BID orders for ETH/USDC
+2025-04-09 06:31:41,307 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:31:41,324 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:31:42,473 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:31:42,491 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:31:42,491 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:31:42,491 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:31:42,491 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:31:42,491 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:31:43,137 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:31:43,137 - system - INFO - Getting repo details for ETH/USDC110
+2025-04-09 06:31:43,160 - system - WARNING - No open repo found for ETH/USDC110
+2025-04-09 06:31:43,160 - system - WARNING - [TM6] Repo status mismatch for ETH/USDC: WebSocket=True, API=False
+2025-04-09 06:31:43,160 - system - INFO - Manually set repo status for ETH/USDC: False
+2025-04-09 06:31:43,160 - system - INFO - [TM6] Position analysis for ETH/USDC: position=0.0, is_long=False, no_position=True, has_repo=False, strict_limit=0.02
+2025-04-09 06:31:43,161 - system - INFO - [TM6] Sell signal with no position: opening repo and short position
+2025-04-09 06:31:43,161 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:31:43,161 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:31:43,161 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:31:43,161 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:31:43,161 - system - INFO - [1744180300.6647596][TM6] Executing step 1: open_repo
+2025-04-09 06:31:43,812 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:31:43,812 - system - INFO - Getting repo details for ETH/USDC110
+2025-04-09 06:31:43,830 - system - WARNING - No open repo found for ETH/USDC110
+2025-04-09 06:31:43,830 - system - INFO - [1744180300.6647596][TM6] Using API key authentication for repo operation
+2025-04-09 06:31:43,830 - system - INFO - Placing repo order - Symbol: ETH/USDC110, Quantity: 0.01, Rate: 10.0%
+2025-04-09 06:31:44,464 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:31:44,464 - system - INFO - Getting repo details for ETH/USDC110
+2025-04-09 06:31:44,482 - system - WARNING - No open repo found for ETH/USDC110
+2025-04-09 06:31:44,764 - system - INFO - Repo order placed successfully with API key auth
+2025-04-09 06:31:44,770 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:31:44] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:31:44,772 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:31:44] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:31:44,777 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:31:44] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:31:44,779 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:31:44] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:31:44,801 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:31:44] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:31:44,803 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:31:44] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:31:44,902 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:31:44] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:31:44,903 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:31:44] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:31:44,908 - system - INFO - Repo activated for ETH/USDC
+2025-04-09 06:31:44,910 - system - INFO - Repo activated for ETH/USDC
+2025-04-09 06:31:44,914 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:31:44] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:31:44,915 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:31:44] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:31:44,932 - system - INFO - Repo activated for ETH/USDC
+2025-04-09 06:31:44,933 - system - INFO - Repo activated for ETH/USDC
+2025-04-09 06:31:44,937 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:31:44] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:31:44,939 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:31:44] "[33mPOST /webhook/repo HTTP/1.1[0m" 404 -
+2025-04-09 06:31:46,420 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:31:46,436 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:31:46,436 - system - INFO - [1744180300.6647596][TM6] Executing step 2: open_short
+2025-04-09 06:31:46,436 - trading_utils - INFO - Placing Order - Symbol: ETH/USDC, Side: ASK, Price: 1461.55, Quantity: 0.01
+2025-04-09 06:31:46,563 - trading_utils - INFO - Order placed successfully: Status 200
+2025-04-09 06:31:48,201 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:31:48,242 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:31:49,889 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:31:49,909 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:31:49,909 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:31:49,909 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:31:49,909 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:31:49,909 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:31:49,910 - system - INFO - [1744180300.6647596][TM6] Trade sequence executed successfully: [
+  {
+    "step": "open_repo",
+    "response": {
+      "id": "WEB:wivlo16hmoys-20250409063144_0",
+      "eventId": "c944a86f-e9a4-46b3-bd1d-1a763a730628",
+      "traderId": "tv-algo-1@bosonic.digital",
+      "clientDealCode": "TM6",
+      "cntPartyTraderId": "",
+      "custodianId": "SAFETRUST",
+      "userId": "tv-algo-1@bosonic.digital",
+      "clOrdId": "WEB:wivlo16hmoys-20250409063144",
+      "orderType": "LIMIT",
+      "side": "BID",
+      "symbol": "ETH/USDC110",
+      "currency": "ETH",
+      "currency2": "USDC110",
+      "price": 10.0,
+      "limitPx": 0.0,
+      "orderQty": 0.01,
+      "discretion": 0.0,
+      "tradeQty": 0.0,
+      "tif": "GTC",
+      "pegOffset": 0.0,
+      "dark": false,
+      "avgPrice": false,
+      "leavesQty": 0.0,
+      "cumQty": 0.0,
+      "asset2Qty": 0.0,
+      "avgPx": 0.0,
+      "ordStatus": "NEW",
+      "selfCross": false,
+      "timestamp": 1744180304508,
+      "tradeId": "0"
+    }
+  },
+  {
+    "step": "open_short",
+    "response": {
+      "id": "ORD_20250409_063146_D92380_0",
+      "eventId": "017708a2-f5c7-4d7a-b789-48b04b127ea6",
+      "traderId": "tv-algo-1@bosonic.digital",
+      "clientDealCode": "TM6",
+      "cntPartyTraderId": "",
+      "custodianId": "SAFETRUST",
+      "userId": "tv-algo-1@bosonic.digital",
+      "clOrdId": "ORD_20250409_063146_D92380",
+      "orderType": "LIMIT",
+      "side": "ASK",
+      "symbol": "ETH/USDC",
+      "currency": "ETH",
+      "currency2": "USDC",
+      "price": 1388.47,
+      "limitPx": 0.0,
+      "orderQty": 0.01,
+      "discretion": 0.0,
+      "tradeQty": 0.0,
+      "tif": "GTC",
+      "pegOffset": 0.0,
+      "dark": false,
+      "avgPrice": false,
+      "leavesQty": 0.0,
+      "cumQty": 0.0,
+      "asset2Qty": 0.0,
+      "avgPx": 0.0,
+      "ordStatus": "NEW",
+      "selfCross": false,
+      "timestamp": 1744180306473,
+      "tradeId": "0",
+      "fees": [
+        {
+          "address": "1KMAfMKuE9PBemzJXWEPt6ZDWvUTiHGwG",
+          "value": 0
+        }
+      ],
+      "cumFee": 0
+    }
+  }
+]
+2025-04-09 06:31:49,910 - system - INFO - [1744180300.6647596][TM6] Final position after trade: 0.0
+2025-04-09 06:31:49,910 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:31:49] "POST /webhook HTTP/1.1" 200 -
+2025-04-09 06:31:56,858 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:31:56,875 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:31:56,875 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:31:56,875 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:31:56,875 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:31:56,875 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:31:56,876 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:31:56,876 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:31:56,876 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:31:56,876 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:31:57,516 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:31:57,534 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:31:57,534 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:31:57,534 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:31:57,535 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:31:57,535 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:31:57,535 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:31:57,535 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:31:57,535 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:31:57,535 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:31:58,175 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:31:58,204 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:31:58,205 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:31:58,205 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:31:58,205 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:31:58,205 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:31:58,205 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:31:58,205 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:31:58,205 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:31:58,206 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:32:28,871 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:32:28,913 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:32:28,913 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:32:28,914 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:32:28,914 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:32:28,914 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:32:28,914 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:32:28,914 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:32:28,914 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:32:28,914 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:32:29,534 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:32:29,555 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:32:29,556 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:32:29,556 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:32:29,556 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:32:29,556 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:32:29,556 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:32:29,557 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:32:29,557 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:32:29,557 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:32:30,210 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:32:30,259 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:32:30,259 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:32:30,260 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:32:30,260 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:32:30,260 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:32:30,260 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:32:30,260 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:32:30,260 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:32:30,260 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:33:00,924 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:33:00,940 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:33:00,941 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:33:00,941 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:33:00,941 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:33:00,941 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:33:00,941 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:33:00,942 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:33:00,942 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:33:00,942 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:33:01,567 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:33:01,585 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:33:01,586 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:33:01,586 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:33:01,586 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:33:01,586 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:33:01,586 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:33:01,586 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:33:01,586 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:33:01,586 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:33:02,219 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:33:02,253 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:33:02,254 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:33:02,254 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:33:02,254 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:33:02,254 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:33:02,254 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:33:02,254 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:33:02,254 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:33:02,254 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:33:32,916 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:33:32,935 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:33:32,936 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:33:32,936 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:33:32,936 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:33:32,936 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:33:32,936 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:33:32,936 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:33:32,936 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:33:32,936 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:33:33,624 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:33:33,645 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:33:33,646 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:33:33,646 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:33:33,646 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:33:33,646 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:33:33,646 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:33:33,646 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:33:33,647 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:33:33,647 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:33:34,265 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:33:34,284 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:33:34,284 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:33:34,284 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:33:34,284 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:33:34,285 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:33:34,285 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:33:34,285 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:33:34,285 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:33:34,285 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:34:04,931 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:34:04,950 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:34:04,950 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:34:04,951 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:34:04,951 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:34:04,951 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:34:04,951 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:34:04,951 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:34:04,951 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:34:04,951 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:34:05,585 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:34:05,612 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:34:05,613 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:34:05,613 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:34:05,613 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:34:05,613 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:34:05,614 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:34:05,614 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:34:05,614 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:34:05,614 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:34:06,257 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:34:06,284 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:34:06,285 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:34:06,285 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:34:06,285 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:34:06,285 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:34:06,285 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:34:06,285 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:34:06,285 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:34:06,285 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:34:36,944 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:34:36,967 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:34:36,968 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:34:36,968 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:34:36,968 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:34:36,968 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:34:36,968 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:34:36,968 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:34:36,969 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:34:36,969 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:34:37,597 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:34:37,623 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:34:37,624 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:34:37,624 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:34:37,624 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:34:37,624 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:34:37,624 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:34:37,625 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:34:37,625 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:34:37,625 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:34:38,254 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:34:38,272 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:34:38,273 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:34:38,273 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:34:38,273 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:34:38,273 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:34:38,274 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:34:38,274 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:34:38,274 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:34:38,274 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:35:08,956 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:35:08,973 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:35:08,974 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:35:08,974 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:35:08,974 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:35:08,974 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:35:08,974 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:35:08,975 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:35:08,975 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:35:08,975 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:35:09,608 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:35:09,637 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:35:09,638 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:35:09,638 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:35:09,638 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:35:09,638 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:35:09,638 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:35:09,638 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:35:09,638 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:35:09,639 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:35:10,334 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:35:10,397 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:35:10,398 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:35:10,398 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:35:10,398 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:35:10,398 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:35:10,398 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:35:10,398 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:35:10,398 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:35:10,398 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:35:41,129 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:35:41,150 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:35:41,151 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:35:41,151 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:35:41,151 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:35:41,151 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:35:41,152 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:35:41,152 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:35:41,152 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:35:41,152 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:35:41,781 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:35:41,799 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:35:41,800 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:35:41,800 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:35:41,800 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:35:41,800 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:35:41,800 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:35:41,801 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:35:41,801 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:35:41,801 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:35:42,413 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:35:42,449 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:35:42,450 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:35:42,450 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:35:42,450 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:35:42,450 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:35:42,450 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:35:42,450 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:35:42,450 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:35:42,450 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:36:05,363 - system - INFO - [1744180565.3632615] Processing webhook data: {
+  "timeFrame": "1m",
+  "symbol": "ETH/USDC",
+  "message": "Trend Sell!",
+  "price": "1461.49"
+}
+2025-04-09 06:36:05,363 - system - WARNING - Rejected repeated Trend Sell! signal for ETH/USDC on 1m (account: TM6)
+2025-04-09 06:36:05,363 - system - ERROR - [1744180565.3632615] Validation error: Duplicate signal rejected: Trend Sell!
+2025-04-09 06:36:05,364 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:36:05] "[31m[1mPOST /webhook HTTP/1.1[0m" 400 -
+2025-04-09 06:36:13,125 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:36:13,151 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:36:13,152 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:36:13,152 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:36:13,152 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:36:13,152 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:36:13,153 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:36:13,153 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:36:13,153 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:36:13,153 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:36:13,839 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:36:13,868 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:36:13,868 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:36:13,868 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:36:13,868 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:36:13,869 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:36:13,869 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:36:13,869 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:36:13,869 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:36:13,869 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:36:14,499 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:36:14,528 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:36:14,528 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:36:14,528 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:36:14,528 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:36:14,529 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:36:14,529 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:36:14,529 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:36:14,529 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:36:14,529 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:36:45,171 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:36:45,192 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:36:45,193 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:36:45,193 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:36:45,193 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:36:45,193 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:36:45,193 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:36:45,193 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:36:45,193 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:36:45,194 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:36:45,842 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:36:45,864 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:36:45,865 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:36:45,865 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:36:45,865 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:36:45,865 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:36:45,865 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:36:45,866 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:36:45,866 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:36:45,866 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:36:46,542 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:36:46,576 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:36:46,577 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:36:46,577 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:36:46,577 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:36:46,577 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:36:46,577 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:36:46,577 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:36:46,578 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:36:46,578 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:37:17,247 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:37:17,265 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:37:17,265 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:37:17,265 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:37:17,266 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:37:17,266 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:37:17,266 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:37:17,266 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:37:17,266 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:37:17,266 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:37:17,945 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:37:17,965 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:37:17,965 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:37:17,965 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:37:17,965 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:37:17,966 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:37:17,966 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:37:17,966 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:37:17,966 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:37:17,966 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:37:18,621 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:37:18,644 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:37:18,645 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:37:18,645 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:37:18,645 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:37:18,645 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:37:18,645 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:37:18,645 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:37:18,646 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:37:18,646 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:37:49,336 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:37:49,366 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:37:49,367 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:37:49,367 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:37:49,367 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:37:49,367 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:37:49,368 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:37:49,368 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:37:49,368 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:37:49,368 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:37:50,004 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:37:50,022 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:37:50,022 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:37:50,022 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:37:50,023 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:37:50,023 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:37:50,023 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:37:50,023 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:37:50,023 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:37:50,023 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:37:50,661 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:37:50,682 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:37:50,683 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:37:50,683 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:37:50,683 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:37:50,683 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:37:50,683 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:37:50,683 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:37:50,683 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:37:50,683 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:38:21,406 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:38:21,425 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:38:21,426 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:38:21,426 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:38:21,426 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:38:21,426 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:38:21,426 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:38:21,426 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:38:21,426 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:38:21,426 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:38:22,111 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:38:22,131 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:38:22,131 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:38:22,132 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:38:22,132 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:38:22,132 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:38:22,132 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:38:22,132 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:38:22,132 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:38:22,132 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:38:22,780 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:38:22,801 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:38:22,802 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:38:22,802 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:38:22,802 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:38:22,802 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:38:22,802 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:38:22,802 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:38:22,802 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:38:22,802 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:38:53,473 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:38:53,492 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:38:53,493 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:38:53,493 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:38:53,493 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:38:53,493 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:38:53,494 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:38:53,494 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:38:53,494 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:38:53,494 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:38:54,133 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:38:54,151 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:38:54,152 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:38:54,152 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:38:54,152 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:38:54,152 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:38:54,152 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:38:54,152 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:38:54,153 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:38:54,153 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:38:54,822 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:38:54,845 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:38:54,846 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:38:54,846 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:38:54,846 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:38:54,846 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:38:54,846 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:38:54,847 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:38:54,847 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:38:54,847 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:39:25,554 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:39:25,599 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:39:25,600 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:39:25,600 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:39:25,600 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:39:25,600 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:39:25,601 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:39:25,601 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:39:25,601 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:39:25,601 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:39:26,253 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:39:26,270 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:39:26,271 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:39:26,271 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:39:26,271 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:39:26,271 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:39:26,271 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:39:26,271 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:39:26,271 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:39:26,271 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:39:26,914 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:39:26,934 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:39:26,935 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:39:26,935 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:39:26,935 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:39:26,935 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:39:26,935 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:39:26,935 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:39:26,935 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:39:26,936 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:39:57,633 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:39:57,653 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:39:57,654 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:39:57,654 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:39:57,654 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:39:57,654 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:39:57,654 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:39:57,654 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:39:57,655 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:39:57,655 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:39:58,303 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:39:58,326 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:39:58,327 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:39:58,327 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:39:58,327 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:39:58,327 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:39:58,327 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:39:58,328 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:39:58,328 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:39:58,328 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:39:58,954 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:39:58,977 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:39:58,977 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:39:58,977 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:39:58,977 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:39:58,977 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:39:58,978 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:39:58,978 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:39:58,978 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:39:58,978 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:40:29,711 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:40:29,733 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:40:29,734 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:40:29,734 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:40:29,734 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:40:29,734 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:40:29,735 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:40:29,735 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:40:29,735 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:40:29,735 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:40:30,418 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:40:30,436 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:40:30,437 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:40:30,437 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:40:30,437 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:40:30,437 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:40:30,438 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:40:30,438 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:40:30,438 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:40:30,438 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:40:31,091 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:40:31,121 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:40:31,122 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:40:31,122 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:40:31,122 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:40:31,123 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:40:31,123 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:40:31,123 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:40:31,123 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:40:31,123 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:41:01,768 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:41:01,852 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:41:01,853 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:41:01,853 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:41:01,853 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:41:01,853 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:41:01,853 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:41:01,853 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:41:01,853 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:41:01,853 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:41:02,538 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:41:02,568 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:41:02,569 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:41:02,569 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:41:02,569 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:41:02,569 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:41:02,569 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:41:02,569 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:41:02,569 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:41:02,570 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:41:03,232 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:41:03,249 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:41:03,250 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:41:03,250 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:41:03,250 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:41:03,250 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:41:03,250 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:41:03,250 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:41:03,251 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:41:03,251 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:41:33,946 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:41:33,964 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:41:33,965 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:41:33,965 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:41:33,965 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:41:33,965 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:41:33,965 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:41:33,965 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:41:33,966 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:41:33,966 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:41:34,631 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:41:34,649 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:41:34,650 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:41:34,650 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:41:34,650 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:41:34,650 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:41:34,650 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:41:34,650 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:41:34,650 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:41:34,651 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:41:35,295 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:41:35,324 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:41:35,325 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:41:35,325 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:41:35,325 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:41:35,325 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:41:35,326 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:41:35,326 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:41:35,326 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:41:35,326 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:42:06,006 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:42:06,026 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:42:06,027 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:42:06,028 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:42:06,028 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:42:06,028 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:42:06,028 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:42:06,028 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:42:06,028 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:42:06,028 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:42:06,729 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:42:06,746 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:42:06,746 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:42:06,746 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:42:06,746 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:42:06,747 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:42:06,747 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:42:06,747 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:42:06,747 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:42:06,747 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:42:07,393 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:42:07,421 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:42:07,421 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:42:07,421 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:42:07,421 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:42:07,422 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:42:07,422 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:42:07,422 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:42:07,422 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:42:07,422 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:42:38,167 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:42:38,186 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:42:38,186 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:42:38,187 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:42:38,187 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:42:38,187 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:42:38,187 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:42:38,187 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:42:38,187 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:42:38,187 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:42:38,821 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:42:38,839 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:42:38,840 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:42:38,840 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:42:38,840 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:42:38,840 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:42:38,841 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:42:38,841 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:42:38,841 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:42:38,841 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:42:39,469 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:42:39,490 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:42:39,490 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:42:39,490 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:42:39,491 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:42:39,491 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:42:39,491 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:42:39,491 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:42:39,491 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:42:39,491 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:43:10,230 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:43:10,248 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:43:10,249 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:43:10,249 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:43:10,249 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:43:10,249 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:43:10,249 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:43:10,249 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:43:10,249 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:43:10,249 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:43:10,898 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:43:10,918 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:43:10,918 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:43:10,918 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:43:10,919 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:43:10,919 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:43:10,919 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:43:10,919 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:43:10,919 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:43:10,919 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:43:11,585 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:43:11,607 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:43:11,608 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:43:11,608 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:43:11,608 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:43:11,608 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:43:11,608 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:43:11,608 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:43:11,609 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:43:11,609 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:43:42,264 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:43:42,283 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:43:42,283 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:43:42,283 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:43:42,284 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:43:42,284 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:43:42,284 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:43:42,284 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:43:42,284 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:43:42,284 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:43:42,969 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:43:42,992 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:43:42,993 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:43:42,993 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:43:42,993 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:43:42,993 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:43:42,993 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:43:42,993 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:43:42,994 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:43:42,994 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:43:43,707 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:43:43,735 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:43:43,736 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:43:43,736 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:43:43,736 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:43:43,736 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:43:43,736 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:43:43,737 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:43:43,737 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:43:43,737 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:43:57,873 - system - INFO - [1744181037.8734531] Processing webhook data: {
+  "timeFrame": "1m",
+  "symbol": "BTC/USDC",
+  "message": "Trend Buy!",
+  "price": "77086.95"
+}
+2025-04-09 06:43:57,873 - system - INFO - Received valid trading signal: {
+  "timeFrame": "1m",
+  "symbol": "BTC/USDC",
+  "message": "Trend Buy!",
+  "price": "77086.95",
+  "account": "TM6"
+}
+2025-04-09 06:43:57,873 - system - INFO - [TM6] Checking for partially filled orders to cancel for BTC/USDC
+2025-04-09 06:43:57,874 - system - INFO - [TM6] Would cancel any partially filled ASK orders for BTC/USDC
+2025-04-09 06:43:58,516 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:43:58,536 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:43:59,692 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:43:59,711 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:43:59,712 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:43:59,712 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:43:59,712 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:43:59,713 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:44:00,394 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:44:00,395 - system - INFO - Getting repo details for BTC/USDC110
+2025-04-09 06:44:00,424 - system - INFO - [TM6] Position analysis for BTC/USDC: position=0.0, is_long=False, no_position=True, has_repo=True, strict_limit=0.002
+2025-04-09 06:44:00,424 - system - WARNING - [TM6] Double buy would exceed limit. Adapting the strategy.
+2025-04-09 06:44:00,424 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:44:00,424 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:44:00,424 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:44:00,425 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:44:00,425 - system - INFO - [1744181037.8734531][TM6] Executing step 1: open_long
+2025-04-09 06:44:00,425 - trading_utils - INFO - Placing Order - Symbol: BTC/USDC, Side: BID, Price: 77086.95, Quantity: 0.001
+2025-04-09 06:44:00,569 - trading_utils - INFO - Order placed successfully: Status 200
+2025-04-09 06:44:02,228 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:44:02,247 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:44:02,248 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:44:02,248 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:44:02,248 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:44:02,248 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:44:02,248 - system - INFO - [1744181037.8734531][TM6] Executing step 2: close_repo
+2025-04-09 06:44:02,248 - system - INFO - [1744181037.8734531][TM6] Executing step 2: close_repo
+2025-04-09 06:44:02,894 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:44:02,895 - system - INFO - Getting repo details for BTC/USDC110
+2025-04-09 06:44:02,915 - system - INFO - Attempting to close repo for BTC/USDC110
+2025-04-09 06:44:03,557 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:44:03,558 - system - INFO - Getting repo details for BTC/USDC110
+2025-04-09 06:44:03,621 - system - INFO - Successfully closed repo for BTC/USDC110
+2025-04-09 06:44:05,271 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:44:05,291 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:44:06,972 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:44:06,990 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:44:06,991 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:44:06,991 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:44:06,991 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:44:06,991 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:44:06,991 - system - INFO - [1744181037.8734531][TM6] Trade sequence executed successfully: [
+  {
+    "step": "open_long",
+    "response": {
+      "id": "ORD_20250409_064400_K99NRO_0",
+      "eventId": "1601119f-546d-41f2-915b-1f1fae4c3a30",
+      "traderId": "tv-algo-1@bosonic.digital",
+      "clientDealCode": "TM6",
+      "cntPartyTraderId": "",
+      "custodianId": "SAFETRUST",
+      "userId": "tv-algo-1@bosonic.digital",
+      "clOrdId": "ORD_20250409_064400_K99NRO",
+      "orderType": "LIMIT",
+      "side": "BID",
+      "symbol": "BTC/USDC",
+      "currency": "BTC",
+      "currency2": "USDC",
+      "price": 80941.3,
+      "limitPx": 0.0,
+      "orderQty": 0.001,
+      "discretion": 0.0,
+      "tradeQty": 0.0,
+      "tif": "GTC",
+      "pegOffset": 0.0,
+      "dark": false,
+      "avgPrice": false,
+      "leavesQty": 0.0,
+      "cumQty": 0.0,
+      "asset2Qty": 0.0,
+      "avgPx": 0.0,
+      "ordStatus": "NEW",
+      "selfCross": false,
+      "timestamp": 1744181040472,
+      "tradeId": "0",
+      "fees": [
+        {
+          "address": "1KMAfMKuE9PBemzJXWEPt6ZDWvUTiHGwG",
+          "value": 0
+        }
+      ],
+      "cumFee": 0
+    }
+  },
+  {
+    "step": "close_repo",
+    "success": true
+  }
+]
+2025-04-09 06:44:06,991 - system - INFO - [1744181037.8734531][TM6] Final position after trade: 0.0
+2025-04-09 06:44:06,992 - werkzeug - INFO - 127.0.0.1 - - [09/Apr/2025 06:44:06] "POST /webhook HTTP/1.1" 200 -
+2025-04-09 06:44:14,402 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:44:14,419 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:44:14,420 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:44:14,420 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:44:14,420 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:44:14,420 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:44:14,421 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:44:14,421 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:44:14,421 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:44:14,421 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:44:15,072 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:44:15,090 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:44:15,091 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:44:15,091 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:44:15,091 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:44:15,091 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:44:15,091 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:44:15,091 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:44:15,092 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:44:15,092 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:44:15,732 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:44:15,753 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:44:15,753 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:44:15,753 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:44:15,753 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:44:15,753 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:44:15,754 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:44:15,754 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:44:15,754 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:44:15,754 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:44:46,403 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:44:46,420 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:44:46,420 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:44:46,421 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:44:46,421 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:44:46,421 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:44:46,421 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:44:46,421 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:44:46,421 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:44:46,421 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:44:47,081 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:44:47,101 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:44:47,102 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:44:47,102 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:44:47,102 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:44:47,102 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:44:47,102 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:44:47,102 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:44:47,103 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:44:47,103 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:44:47,760 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:44:47,790 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:44:47,790 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:44:47,790 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:44:47,791 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:44:47,791 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:44:47,791 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:44:47,791 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:44:47,791 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:44:47,791 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:45:18,486 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:45:18,505 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:45:18,505 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:45:18,505 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:45:18,505 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:45:18,505 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:45:18,506 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:45:18,506 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:45:18,506 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:45:18,506 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:45:19,139 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:45:19,177 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:45:19,177 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:45:19,177 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:45:19,177 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:45:19,178 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:45:19,178 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:45:19,178 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:45:19,178 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:45:19,178 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:45:19,851 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:45:19,900 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:45:19,900 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:45:19,900 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:45:19,900 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:45:19,901 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:45:19,901 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:45:19,901 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:45:19,901 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:45:19,901 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:45:50,573 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:45:50,613 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:45:50,613 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:45:50,613 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:45:50,614 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:45:50,614 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:45:50,614 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:45:50,614 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:45:50,614 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:45:50,614 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:45:51,275 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:45:51,308 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:45:51,308 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:45:51,309 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:45:51,309 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:45:51,309 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:45:51,309 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:45:51,309 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:45:51,309 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:45:51,309 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:45:51,971 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:45:51,990 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:45:51,990 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:45:51,990 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:45:51,990 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:45:51,991 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:45:51,991 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:45:51,991 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:45:51,991 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:45:51,991 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:46:22,669 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:46:22,697 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:46:22,697 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:46:22,697 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:46:22,697 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:46:22,697 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:46:22,698 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:46:22,698 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:46:22,698 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:46:22,698 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:46:23,337 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:46:23,356 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:46:23,357 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:46:23,357 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:46:23,357 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:46:23,357 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:46:23,358 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:46:23,358 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:46:23,358 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:46:23,358 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:46:23,996 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:46:24,034 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:46:24,034 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:46:24,034 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:46:24,035 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:46:24,035 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:46:24,035 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:46:24,035 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:46:24,035 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:46:24,035 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:46:54,766 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:46:54,783 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:46:54,783 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:46:54,783 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:46:54,783 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:46:54,783 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:46:54,784 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:46:54,784 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:46:54,784 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:46:54,784 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:46:55,448 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:46:55,466 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:46:55,467 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:46:55,467 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:46:55,467 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:46:55,467 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:46:55,467 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:46:55,467 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:46:55,468 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:46:55,468 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:46:56,123 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:46:56,173 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:46:56,174 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:46:56,174 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:46:56,174 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:46:56,174 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:46:56,174 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:46:56,174 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:46:56,174 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:46:56,174 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:47:26,863 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:47:26,882 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:47:26,882 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:47:26,883 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:47:26,883 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:47:26,883 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:47:26,883 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:47:26,883 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:47:26,883 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:47:26,883 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:47:27,584 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:47:27,602 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:47:27,602 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:47:27,603 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:47:27,603 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:47:27,603 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:47:27,603 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:47:27,603 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:47:27,603 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:47:27,604 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:47:28,313 - trading_utils - INFO - Successfully obtained JWT token
+2025-04-09 06:47:28,378 - system - ERROR - Failed to refresh positions: 401
+2025-04-09 06:47:28,378 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:47:28,378 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:47:28,379 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:47:28,379 - config_manager - INFO - Loaded credentials for account TM5
+2025-04-09 06:47:28,379 - config_manager - INFO - Loaded configuration from /opt/otcxn/tradingview-repo-automation/trading_bot_v2/config/config.json
+2025-04-09 06:47:28,379 - config_manager - INFO - Loaded credentials for account default
+2025-04-09 06:47:28,379 - config_manager - INFO - Loaded credentials for account TM6
+2025-04-09 06:47:28,379 - config_manager - INFO - Loaded credentials for account TM5
