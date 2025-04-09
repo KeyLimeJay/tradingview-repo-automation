@@ -1,0 +1,37 @@
+{
+  "data_source": {
+    "path": "/opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data",
+    "file_pattern": "xrp_trades_*.csv"
+  },
+  "output": {
+    "path": "/opt/otcxn/tradingview-repo-automation/xrp_03_executions/data/reports/",
+    "file_name_pattern": "combined_trades.csv",
+    "date_format": "%Y%m%d"
+  },
+  "filters": {
+    "symbols": ["XRPUSD"],
+    "sides": ["Buy"],
+    "top_rates": {
+      "enabled": false
+    },
+    "include_best_prices": true
+  },
+  "columns": {
+    "include": [
+      "ID", "DateTime", "Symbol", "Quantity", "Rate", "Side",
+      "XRPUSD_BestBid", "XRPUSD_BestAsk",
+      "XRPEUR_BestBid", "XRPEUR_BestAsk",
+      "USDEUR_BestBid", "USDEUR_BestAsk"
+    ],
+    "rename": {}
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "/opt/otcxn/tradingview-repo-automation/xrp_03_executions/logs/trade_executions.log"
+  },
+  "scheduling": {
+    "enabled": true,
+    "hour": 2,
+    "minute": 30
+  }
+}

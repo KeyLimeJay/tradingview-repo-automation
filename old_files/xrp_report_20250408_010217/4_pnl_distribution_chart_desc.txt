@@ -1,0 +1,8 @@
+XRP P&L Distribution
+
+This chart shows the distribution of P&L percentages per minute.
+• Minutes with trades: 4212
+• Mean: 0.0094%
+• Median: 0.0141%
+• Profitable minutes: 2481 (58.9%)
+• Range: -0.8788% to 1.1115%

@@ -1,0 +1,22 @@
+2025-04-03 05:11:55,539 - INFO - Trade Execution Processor initialized with config.json
+2025-04-03 05:11:55,540 - INFO - Found 6 input files
+2025-04-03 05:11:55,540 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_29.csv
+2025-04-03 05:11:55,557 - INFO - Processed 3563 rows from xrp_trades_2025_03_29.csv
+2025-04-03 05:11:55,557 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_30.csv
+2025-04-03 05:11:55,572 - INFO - Processed 4569 rows from xrp_trades_2025_03_30.csv
+2025-04-03 05:11:55,572 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_03_31.csv
+2025-04-03 05:11:55,799 - INFO - Processed 71002 rows from xrp_trades_2025_03_31.csv
+2025-04-03 05:11:55,799 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_01.csv
+2025-04-03 05:11:55,838 - INFO - Processed 14196 rows from xrp_trades_2025_04_01.csv
+2025-04-03 05:11:55,838 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_02.csv
+2025-04-03 05:11:56,000 - INFO - Processed 59552 rows from xrp_trades_2025_04_02.csv
+2025-04-03 05:11:56,000 - INFO - Processing file: /opt/otcxn/tradingview-repo-automation/xrp_01_tracker/data/xrp_trades_2025_04_03.csv
+2025-04-03 05:11:56,014 - INFO - Processed 3590 rows from xrp_trades_2025_04_03.csv
+2025-04-03 05:11:56,662 - INFO - Combined data has 156472 rows before filtering
+2025-04-03 05:11:57,169 - INFO - Symbol filter: 156472 -> 57661 rows
+2025-04-03 05:11:57,175 - INFO - Side filter: 57661 rows after filtering
+2025-04-03 05:11:57,177 - INFO - Final filtered dataframe: 57661 rows with columns: ID, DateTime, Symbol, Quantity, Rate, Side, XRPUSD_BestBid, XRPUSD_BestAsk, XRPEUR_BestBid, XRPEUR_BestAsk, EURUSD_BestBid, EURUSD_BestAsk
+2025-04-03 05:11:57,177 - INFO - After filtering: 57661 rows remain
+2025-04-03 05:11:57,179 - INFO - No duplicate IDs found
+2025-04-03 05:11:57,180 - INFO - After removing duplicates: 57661 rows remain
+2025-04-03 05:11:57,764 - INFO - Saved filtered data to /opt/otcxn/tradingview-repo-automation/trade_executions/data/reports/combined_trades_20250403.csv

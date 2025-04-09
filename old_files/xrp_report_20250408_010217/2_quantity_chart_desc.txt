@@ -1,0 +1,5 @@
+XRP Cumulative Quantity
+
+This chart shows the cumulative quantity of XRP traded over time.
+• Total Quantity: 24,117,559.46 XRP
+• Analysis period: 2025-03-29 to 2025-04-06

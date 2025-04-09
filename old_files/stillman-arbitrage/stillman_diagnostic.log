@@ -1,0 +1,36 @@
+2025-03-31 16:34:10,983 - stillman-diagnostic - INFO - === STILLMAN API DIAGNOSTICS ===
+2025-03-31 16:34:10,983 - stillman-diagnostic - INFO - Current time: 2025-03-31 16:34:10.983260
+2025-03-31 16:34:10,983 - stillman-diagnostic - INFO - Unix timestamp: 1743438850
+2025-03-31 16:34:10,983 - stillman-diagnostic - INFO - Checking configuration...
+2025-03-31 16:34:10,983 - stillman-diagnostic - WARNING - Public key length (24) might be incorrect
+2025-03-31 16:34:10,983 - stillman-diagnostic - INFO - publicKey: FBUKA...RBU7E
+2025-03-31 16:34:10,983 - stillman-diagnostic - INFO - privateKey: IYZ5R...VRO62
+2025-03-31 16:34:10,983 - stillman-diagnostic - INFO - wsUrl: wss://sandbox-api.stillmandigital.com/v1/stream
+2025-03-31 16:34:10,983 - stillman-diagnostic - INFO - pair: XRP/USD
+2025-03-31 16:34:10,983 - stillman-diagnostic - INFO - rfqType: ONE_SECOND
+2025-03-31 16:34:10,983 - stillman-diagnostic - INFO - levels: [0.5, 1, 5, 10, 50]
+2025-03-31 16:34:10,983 - stillman-diagnostic - INFO - Alternative signature calculations:
+2025-03-31 16:34:10,983 - stillman-diagnostic - INFO - 1. String: 'GET/v1/stream1743438850' → Signature: 2690dc9ab316a4ee6c75b9974823d7e07e5575fc9d4cab62d54b49f179fdbf89
+2025-03-31 16:34:10,983 - stillman-diagnostic - INFO - 2. String: 'GET /v1/stream1743438850' → Signature: bdc64936295367975585de6f78ac091bb9489bd8bfdad11aecd417d729903f16
+2025-03-31 16:34:10,983 - stillman-diagnostic - INFO - 3. String: '/v1/stream1743438850' → Signature: 90838ce84c443964681424f064451a039e0121e836c2e19c5477549cd85fb361
+2025-03-31 16:34:10,983 - stillman-diagnostic - INFO - 4. String: 'wss://sandbox-api.stillmandigital.com/v1/stream1743438850' → Signature: 9527d27baa43290d25a114ad23fbda125b7340f901d9593e9222d662a3da6639
+2025-03-31 16:34:10,983 - stillman-diagnostic - INFO - 5. String: '1743438850' → Signature: 34305fc434e4a1aec7a222e5e053c779a8d21168c5ca0f54803c7e179423929d
+2025-03-31 16:34:10,983 - stillman-diagnostic - DEBUG - Public Key: FBUKA51HWPDK9WGEXMFRBU7E
+2025-03-31 16:34:10,983 - stillman-diagnostic - DEBUG - Private Key (first 5 chars): IYZ5R...
+2025-03-31 16:34:10,983 - stillman-diagnostic - DEBUG - String to sign: GET/v1/stream1743438850
+2025-03-31 16:34:10,984 - stillman-diagnostic - DEBUG - Generated signature: 2690dc9ab316a4ee6c75b9974823d7e07e5575fc9d4cab62d54b49f179fdbf89
+2025-03-31 16:34:10,984 - stillman-diagnostic - DEBUG - Timestamp: 1743438850
+2025-03-31 16:34:10,984 - stillman-diagnostic - INFO - 
+=== MANUAL TESTING INSTRUCTIONS ===
+2025-03-31 16:34:10,984 - stillman-diagnostic - INFO - You can test the API connection manually using curl:
+2025-03-31 16:34:10,984 - stillman-diagnostic - INFO - 
+curl -v -X GET "https://sandbox-api.stillmandigital.com/v1/ping" \
+  -H "api-key: FBUKA51HWPDK9WGEXMFRBU7E" \
+  -H "api-signature: 2690dc9ab316a4ee6c75b9974823d7e07e5575fc9d4cab62d54b49f179fdbf89" \
+  -H "api-timestamp: 1743438850"
+
+2025-03-31 16:34:10,984 - stillman-diagnostic - INFO - 
+Copy and run this command to test API connectivity.
+2025-03-31 16:34:10,984 - stillman-diagnostic - INFO - The -v flag will show detailed information including response headers and body.
+2025-03-31 16:34:10,984 - stillman-diagnostic - INFO - === END MANUAL TESTING INSTRUCTIONS ===
+2025-03-31 16:34:10,984 - stillman-diagnostic - INFO - Basic diagnostics complete

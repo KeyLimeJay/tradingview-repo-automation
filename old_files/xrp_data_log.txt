@@ -1,0 +1,541 @@
+nohup: ignoring input
+Running data processing job at 2025-04-08 14:25:54
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 14:25:54
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_142554.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 466
+Script started. Will process data every 10 minutes...
+Running data processing job at 2025-04-08 14:35:54
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 14:35:54
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_143554.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 476
+Running data processing job at 2025-04-08 14:45:54
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 14:45:54
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_144554.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 483
+Running data processing job at 2025-04-08 14:55:55
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 14:55:55
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_145555.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 493
+Running data processing job at 2025-04-08 15:05:55
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 15:05:55
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_150555.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 503
+Running data processing job at 2025-04-08 15:15:55
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 15:15:55
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_151555.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 513
+Running data processing job at 2025-04-08 15:25:55
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 15:25:55
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_152555.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 523
+Running data processing job at 2025-04-08 15:35:55
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 15:35:55
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_153555.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 533
+Running data processing job at 2025-04-08 15:45:55
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 15:45:55
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_154555.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 542
+Running data processing job at 2025-04-08 15:55:55
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 15:55:55
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_155555.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 552
+Running data processing job at 2025-04-08 16:05:55
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 16:05:55
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_160555.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 561
+Running data processing job at 2025-04-08 16:15:56
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 16:15:56
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_161556.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 571
+Running data processing job at 2025-04-08 16:25:56
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 16:25:56
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_162556.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 581
+Running data processing job at 2025-04-08 16:35:56
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 16:35:56
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_163556.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 591
+Running data processing job at 2025-04-08 16:45:56
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 16:45:56
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_164556.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 601
+Running data processing job at 2025-04-08 16:55:56
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 16:55:56
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_165556.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 611
+Running data processing job at 2025-04-08 17:05:56
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 17:05:56
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_170556.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 621
+Running data processing job at 2025-04-08 17:15:56
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 17:15:56
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_171556.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 631
+Running data processing job at 2025-04-08 17:25:57
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 17:25:57
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_172557.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 641
+Running data processing job at 2025-04-08 17:35:57
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 17:35:57
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_173557.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 651
+Running data processing job at 2025-04-08 17:45:57
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 17:45:57
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_174557.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 661
+Running data processing job at 2025-04-08 17:55:57
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 17:55:57
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_175557.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 671
+Running data processing job at 2025-04-08 18:05:57
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 18:05:57
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_180557.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 681
+Running data processing job at 2025-04-08 18:15:57
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 18:15:57
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_181557.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 690
+Running data processing job at 2025-04-08 18:25:57
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 18:25:57
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_182557.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 700
+Running data processing job at 2025-04-08 18:35:58
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 18:35:58
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_183558.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 710
+Running data processing job at 2025-04-08 18:45:58
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 18:45:58
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_184558.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 720
+Running data processing job at 2025-04-08 18:55:58
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 18:55:58
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_185558.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 730
+Running data processing job at 2025-04-08 19:05:58
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 19:05:58
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_190558.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 740
+Running data processing job at 2025-04-08 19:15:58
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 19:15:58
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_191558.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 750
+Running data processing job at 2025-04-08 19:25:58
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 19:25:58
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_192558.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 760
+Running data processing job at 2025-04-08 19:35:58
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 19:35:58
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_193558.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 770
+Running data processing job at 2025-04-08 19:45:59
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 19:45:59
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_194559.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 780
+Running data processing job at 2025-04-08 19:55:59
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 19:55:59
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_195559.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 790
+Running data processing job at 2025-04-08 20:05:59
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 20:05:59
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_200559.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 800
+Running data processing job at 2025-04-08 20:15:59
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 20:15:59
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_201559.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 810
+Running data processing job at 2025-04-08 20:25:59
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 20:25:59
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_202559.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 820
+Running data processing job at 2025-04-08 20:35:59
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 20:35:59
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_203559.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 830
+Running data processing job at 2025-04-08 20:46:00
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 20:46:00
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_204600.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 840
+Running data processing job at 2025-04-08 20:56:00
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 20:56:00
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_205600.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 851
+Running data processing job at 2025-04-08 21:06:00
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 21:06:00
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_210600.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 860
+Running data processing job at 2025-04-08 21:16:00
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 21:16:00
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_211600.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 869
+Running data processing job at 2025-04-08 21:26:00
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 21:26:00
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_212600.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 879
+Running data processing job at 2025-04-08 21:36:00
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 21:36:01
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_213601.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 889
+Running data processing job at 2025-04-08 21:46:01
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 21:46:01
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_214601.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 898
+Running data processing job at 2025-04-08 21:56:01
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 21:56:01
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_215601.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 907
+Running data processing job at 2025-04-08 22:06:01
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 22:06:01
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_220601.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 916
+Running data processing job at 2025-04-08 22:16:01
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 22:16:01
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_221601.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 926
+Running data processing job at 2025-04-08 22:26:01
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 22:26:01
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_222601.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 936
+Running data processing job at 2025-04-08 22:36:01
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 22:36:02
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_223602.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 946
+Running data processing job at 2025-04-08 22:46:02
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 22:46:02
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_224602.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 956
+Running data processing job at 2025-04-08 22:56:02
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 22:56:02
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_225602.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 966
+Running data processing job at 2025-04-08 23:06:02
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 23:06:02
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_230602.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 974
+Running data processing job at 2025-04-08 23:16:02
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 23:16:02
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_231602.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 984
+Running data processing job at 2025-04-08 23:26:02
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 23:26:02
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_232602.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 992
+Running data processing job at 2025-04-08 23:36:02
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 23:36:03
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_233603.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 999
+Running data processing job at 2025-04-08 23:46:03
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 23:46:03
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_234603.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1009
+Running data processing job at 2025-04-08 23:56:03
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-08 23:56:03
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250408_235603.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1019
+Running data processing job at 2025-04-09 00:06:03
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 00:06:03
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_000603.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 00:16:03
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 00:16:03
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_001603.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 00:26:03
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 00:26:03
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_002603.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 00:36:03
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 00:36:04
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_003604.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 00:46:04
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 00:46:04
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_004604.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 00:56:04
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 00:56:04
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_005604.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 01:06:04
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 01:06:04
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_010604.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 01:16:04
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 01:16:04
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_011604.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 01:26:04
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 01:26:04
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_012604.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 01:36:05
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 01:36:05
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_013605.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 01:46:05
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 01:46:05
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_014605.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 01:56:05
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 01:56:05
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_015605.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 02:06:05
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 02:06:05
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_020605.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 02:16:05
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 02:16:05
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_021605.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 02:26:05
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 02:26:05
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_022605.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 02:36:06
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 02:36:06
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_023606.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 02:46:06
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 02:46:06
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_024606.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 02:56:06
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 02:56:06
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_025606.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 03:06:06
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 03:06:06
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_030606.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 03:16:06
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 03:16:06
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_031606.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 03:26:06
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 03:26:06
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_032606.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 03:36:07
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 03:36:07
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_033607.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 03:46:07
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 03:46:07
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_034607.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 03:56:07
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 03:56:07
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_035607.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 04:06:07
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 04:06:07
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_040607.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 04:16:07
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 04:16:07
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_041607.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 04:26:07
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 04:26:08
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_042608.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 04:36:08
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 04:36:08
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_043608.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 04:46:08
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 04:46:08
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_044608.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 04:56:08
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 04:56:08
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_045608.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 05:06:08
+Found trades file: /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Found aggregated file: /opt/otcxn/tradingview-repo-automation/XRP_USDT_minute_aggregated.csv
+Processing complete at 2025-04-09 05:06:08
+Output saved to /opt/otcxn/tradingview-repo-automation/joined_xrp_data_20250409_050608.csv and /opt/otcxn/tradingview-repo-automation/joined_xrp_data_latest.csv
+Joined data rows: 1023
+Running data processing job at 2025-04-09 05:16:08
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-09 05:26:08
