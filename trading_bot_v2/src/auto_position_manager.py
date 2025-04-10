@@ -253,6 +253,6 @@ class AutoPositionManager:
         if quantity is None:
             currency = symbol.split('/')[0]
             quantity = self.config_manager.get_currency_setting(
-                account_name, currency, 'auto_short_quantity', 0.001)
+                account_name, currency, 'auto_short_quantity', 0.01)
                 
         return self._execute_auto_short(account_name, symbol, quantity)

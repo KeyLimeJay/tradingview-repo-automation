@@ -1205,3 +1205,137 @@ Listing files in data directory:
 Running data processing job at 2025-04-10 09:06:24
 ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
 Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 09:16:24
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 09:26:24
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 09:36:24
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 09:46:24
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 09:56:24
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 10:06:25
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 10:16:25
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 10:26:25
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 10:36:25
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 10:46:25
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 10:56:25
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 11:06:25
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 11:16:25
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 11:26:25
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 11:36:25
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 11:46:26
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 11:56:26
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 12:06:26
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 12:16:26
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 12:26:26
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 12:36:26
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 12:46:26
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 12:56:26
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 13:06:26
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 13:16:26
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 13:26:26
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 13:36:27
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 13:46:27
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 13:56:27
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 14:06:27
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 14:16:27
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 14:26:27
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 14:36:27
+ERROR: Trades file not found at /opt/otcxn/tradingview-repo-automation/data/xrpusd_trades_2025_04_08.csv
+Current directory: /opt/otcxn/tradingview-repo-automation
+Listing files in data directory:
+Running data processing job at 2025-04-10 14:46:27
