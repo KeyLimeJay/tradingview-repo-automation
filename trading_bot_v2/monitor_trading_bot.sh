@@ -1,3 +1,4 @@
+#monitor_trading_bot.sh
 #!/bin/bash
 
 # Change to the application directory
