@@ -212,3 +212,38 @@ Monitoring will be automatically re-enabled when you run start_trading_bot.sh
 FINAL STATUS: SUCCESS
 MONITORING: Disabled (bot will not restart automatically)
 -----------------------------------------
+Thu Apr 10 16:31:04 UTC 2025: Attempting to stop trading bot...
+Found PID file with PID: 17620
+Process 17620 is running. Attempting to kill...
+Successfully terminated process 17620
+Removed PID file
+No main bot processes found running
+No other trading-related processes found
+Removed bot_running marker file
+-----------------------------------------
+SHUTDOWN VERIFICATION REPORT
+Timestamp: Thu Apr 10 16:31:06 UTC 2025
+Status: SUCCESS
+Details:
+  - Terminated main bot process 17620
+  - No main bot processes were running
+  - No other trading-related processes were running
+  - Removed .bot_running marker file
+NOTE: Other Python processes are still running (may be unrelated):
+root        2160  7.9  0.0 346872 29368 ?        Ss    2022 111504:07 /usr/bin/python2 /usr/bin/supervisord -c /etc/supervisord.conf
+root        2173  1.0  0.0 956648 116128 ?       Ssl   2022 15164:17 /usr/libexec/platform-python -Es /usr/sbin/tuned -l -P
+jlimon    945244  0.4  0.0 8953472 54648 pts/81  Sl+  Apr08  15:02 python xrpusd_buy_minute_aggregator.py
+jlimon   2008094 18.4  0.0 553288 35052 pts/7    Sl+  13:40  31:27 python src/main.py
+mihaelp  2218445  0.0  0.0 251892 11768 ?        Ss   Apr03   4:34 /usr/bin/python3.6 /usr/bin/balances/atomic5.py
+jlimon   2347190  0.0  0.0 252756 11228 ?        S    Apr08   0:05 python3 update_xrp_data.py
+jlimon   2476776  0.1  0.0   4976  3952 ?        S    16:23   0:00 /home/jlimon/.vscode-server/extensions/ms-python.python-2025.4.0-linux-x64/python-env-tools/bin/pet server
+jlimon   2476909  2.6  0.1 13050292 381024 ?     Sl   16:23   0:12 /home/jlimon/.vscode-server/cli/servers/Stable-7c6fdfb0b8f2f675eb0b47f3d95eeca78962565b/server/node /home/jlimon/.vscode-server/extensions/ms-python.vscode-pylance-2025.4.1/dist/server.bundle.js --cancellationReceive=file:bdd642561eed59f547e842f5e7306b90531fcc963b --node-ipc --clientProcessId=2001902
+mihaelp  3470708  0.0  0.0 400424  7124 ?        Ss    2023  76:18 /usr/bin/python3.6 /usr/bin/balances/MDService.py
+-----------------------------------------
+Bot shutdown process completed with status: SUCCESS
+Monitoring has been disabled. Bot will not restart automatically.
+Monitoring will be automatically re-enabled when you run start_trading_bot.sh
+-----------------------------------------
+FINAL STATUS: SUCCESS
+MONITORING: Disabled (bot will not restart automatically)
+-----------------------------------------
