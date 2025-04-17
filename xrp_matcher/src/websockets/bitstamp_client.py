@@ -11,7 +11,12 @@ import uuid
 import datetime
 import websocket
 import logging
-from config.config import BITSTAMP_API_KEY, BITSTAMP_API_SECRET, BITSTAMP_WS_URL
+from config.config import (
+    BITSTAMP_API_KEY, 
+    BITSTAMP_API_SECRET, 
+    BITSTAMP_WS_URL,
+    BITSTAMP_SUBACCOUNT_ID
+)
 
 logger = logging.getLogger('xrp_matcher.bitstamp')
 
@@ -31,6 +36,12 @@ class BitstampClient:
         self.ws = None
         self.ws_thread = None
         self.heartbeat_thread = None
+        
+        # Log if we're using a subaccount
+        if BITSTAMP_SUBACCOUNT_ID:
+            logger.info(f"Using Bitstamp subaccount: {BITSTAMP_SUBACCOUNT_ID}")
+        else:
+            logger.info("Using Bitstamp main account (no subaccount specified)")
     
     def get_auth_headers(self):
         """Generate authentication headers for Bitstamp API."""
@@ -40,13 +51,20 @@ class BitstampClient:
         message = message.encode('utf-8')
         signature = hmac.new(BITSTAMP_API_SECRET.encode('utf-8'), msg=message, digestmod=hashlib.sha256).hexdigest()
         
-        return {
+        # Create base headers
+        headers = {
             "X-Auth": f"BITSTAMP {BITSTAMP_API_KEY}",
             "X-Auth-Signature": signature,
             "X-Auth-Nonce": nonce,
             "X-Auth-Timestamp": timestamp,
             "X-Auth-Version": "v2"
         }
+        
+        # Add subaccount ID if specified
+        if BITSTAMP_SUBACCOUNT_ID:
+            headers["X-Auth-Subaccount-Id"] = BITSTAMP_SUBACCOUNT_ID
+        
+        return headers
     
     def on_message(self, ws, message):
         """Handle incoming WebSocket messages."""
@@ -76,7 +94,8 @@ class BitstampClient:
                         'symbol': 'XRPUSD',
                         'side': 'Buy',
                         'amount': float(trade_data['amount']),
-                        'price': float(trade_data['price'])
+                        'price': float(trade_data['price']),
+                        'subaccount_id': BITSTAMP_SUBACCOUNT_ID if BITSTAMP_SUBACCOUNT_ID else 'main'
                     }
                     
                     # Log and add to queue for processing
@@ -85,7 +104,8 @@ class BitstampClient:
                               f"Symbol: {formatted_trade['symbol']}, "
                               f"Side: {formatted_trade['side']}, "
                               f"Quantity: {formatted_trade['amount']}, "
-                              f"Rate: {formatted_trade['price']}")
+                              f"Rate: {formatted_trade['price']}, "
+                              f"Subaccount: {formatted_trade['subaccount_id']}")
                     
                     self.execution_queue.put(formatted_trade)
         
@@ -119,6 +139,21 @@ class BitstampClient:
         }
         ws.send(json.dumps(subscription))
         logger.info("Subscribed to XRPUSD trades")
+        
+        # For private subaccount data, we need to subscribe to a private channel
+        if BITSTAMP_SUBACCOUNT_ID:
+            # Get authentication token from Bitstamp API
+            # Note: You would need to implement this method to get the token
+            # This is a placeholder - actual implementation depends on your requirements
+            # private_subscription = {
+            #     "event": "bts:subscribe",
+            #     "data": {
+            #         "channel": "private-my_trades_xrpusd",
+            #         "auth": self.get_websocket_token()
+            #     }
+            # }
+            # ws.send(json.dumps(private_subscription))
+            logger.info("Note: For complete subaccount filtering, you may need to subscribe to private channels")
     
     def keep_alive(self):
         """Send periodic heartbeat messages."""

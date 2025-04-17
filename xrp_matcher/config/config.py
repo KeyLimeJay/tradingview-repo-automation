@@ -14,6 +14,7 @@ load_dotenv()
 # Bitstamp API Configuration
 BITSTAMP_API_KEY = os.getenv("BITSTAMP_API_KEY")
 BITSTAMP_API_SECRET = os.getenv("BITSTAMP_API_SECRET")
+BITSTAMP_SUBACCOUNT_ID = os.getenv('BITSTAMP_SUBACCOUNT_ID')
 BITSTAMP_WS_URL = os.getenv("BITSTAMP_WS_URL")
 
 # Bosonic API Configuration
