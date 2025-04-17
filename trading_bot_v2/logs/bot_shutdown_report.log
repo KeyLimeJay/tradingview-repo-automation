@@ -280,3 +280,34 @@ Monitoring will be automatically re-enabled when you run start_trading_bot.sh
 FINAL STATUS: SUCCESS
 MONITORING: Disabled (bot will not restart automatically)
 -----------------------------------------
+Wed Apr 16 13:21:41 UTC 2025: Attempting to stop trading bot...
+Found PID file with PID: 2140723
+Process 2140723 is running. Attempting to kill...
+Successfully terminated process 2140723
+Removed PID file
+No main bot processes found running
+No other trading-related processes found
+Removed bot_running marker file
+-----------------------------------------
+SHUTDOWN VERIFICATION REPORT
+Timestamp: Wed Apr 16 13:21:43 UTC 2025
+Status: SUCCESS
+Details:
+  - Terminated main bot process 2140723
+  - No main bot processes were running
+  - No other trading-related processes were running
+  - Removed .bot_running marker file
+NOTE: Other Python processes are still running (may be unrelated):
+root        2160  8.1  0.0 346872 28788 ?        Ss    2022 115670:07 /usr/bin/python2 /usr/bin/supervisord -c /etc/supervisord.conf
+root        2173  1.0  0.0 958696 121624 ?       Ssl   2022 15247:26 /usr/libexec/platform-python -Es /usr/sbin/tuned -l -P
+jlimon    992238 14.6  0.0 550220 31812 pts/7    Sl+  12:43   5:31 python src/main.py
+mihaelp  1332183  0.0  0.0 250700 10008 ?        Ss   Apr15   0:59 /usr/bin/python3.6 /usr/bin/balances/atomic5.py
+mihaelp  3470708  0.0  0.0 400424  7124 ?        Ss    2023  77:00 /usr/bin/python3.6 /usr/bin/balances/MDService.py
+-----------------------------------------
+Bot shutdown process completed with status: SUCCESS
+Monitoring has been disabled. Bot will not restart automatically.
+Monitoring will be automatically re-enabled when you run start_trading_bot.sh
+-----------------------------------------
+FINAL STATUS: SUCCESS
+MONITORING: Disabled (bot will not restart automatically)
+-----------------------------------------
