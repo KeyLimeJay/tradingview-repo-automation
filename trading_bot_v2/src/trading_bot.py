@@ -197,7 +197,7 @@ class TradingBot:
     def determine_trade_type(self, symbol, side, timeframe='1h', account_name='default'):
         """
         Determines the trade to execute based on current position and signal.
-        Updated with logic for additional short positions and uses configuration settings.
+        Uses simpler logic with fixed unit sizes.
         """
         # Add a short delay to ensure WebSocket data is up-to-date
         time.sleep(0.5)
@@ -218,7 +218,7 @@ class TradingBot:
         base_currency = symbol.split('/')[0]
         repo_symbol = f"{base_currency}/USDC110"
         
-        # Get min quantity from configuration
+        # Get min quantity from configuration (this is our "1 unit")
         min_quantity = self.config_manager.get_currency_setting(
             account_name, base_currency, 'min_quantity', 0.001)
         
@@ -226,26 +226,8 @@ class TradingBot:
         repo_interest = float(self.config_manager.get_trading_setting(
             account_name, 'repo_interest_rate', 10.0))
         
-        # Double-check repo status both locally and via API for this account
+        # Check if repo is open
         has_open_repo = self.verify_repo_status(symbol, account_name)
-        
-        # Get strict position limit from configuration
-        strict_limit = self.get_strict_limit(symbol, account_name)
-        
-        # Determine position status
-        is_long = current_position > 0
-        no_position = current_position == 0
-        
-        self.logger.info(f"[{account_name}] Position analysis for {symbol}: position={current_position}, " +
-                       f"is_long={is_long}, no_position={no_position}, has_repo={has_open_repo}, strict_limit={strict_limit}")
-        
-        # Check if position exceeds limits
-        if current_position >= strict_limit:
-            self.logger.warning(f"[{account_name}] Position {current_position} equals or exceeds strict limit {strict_limit} for {symbol}")
-            # Allow selling to continue to reduce position
-            if side == 'BID':
-                self.logger.warning(f"[{account_name}] Buy signal blocked: Position must be less than {strict_limit}")
-                return {'steps': [], 'position_size': [], 'message': f"Buy skipped: Position {current_position} exceeds limit {strict_limit}"}
         
         # Create repo details dictionary for reuse
         repo_details = {
@@ -254,112 +236,59 @@ class TradingBot:
             'interest_rate': repo_interest
         }
         
-        # SELL SIGNAL LOGIC
-        if side == 'ASK':
-            if no_position:
-                # No position -> Open repo, then open short position (sequential)
-                self.logger.info(f"[{account_name}] Sell signal with no position: opening repo and short position")
+        # Log position status for debugging
+        self.logger.info(f"[{account_name}] Position analysis for {symbol}: position={current_position}, " +
+                       f"has_repo={has_open_repo}")
+        
+        # BUY SIGNAL LOGIC
+        if side == 'BID':
+            if has_open_repo:
+                # BUY with open repo: Buy 2 units, then close repo
+                self.logger.info(f"[{account_name}] Buy signal with open repo: buying 2 units, then closing repo")
                 return {
-                    'steps': ['open_repo', 'open_short'],
-                    'position_size': [min_quantity, min_quantity],
-                    'repo_details': repo_details,
+                    'steps': ['open_long', 'open_long', 'close_repo'],
+                    'position_size': [min_quantity, min_quantity, repo_symbol],
+                    'repo_details': {'symbol': repo_symbol},
                     'sequential': True
                 }
-            elif is_long:
-                # Long position -> Open sell, then open repo, then open sell again (sequential)
-                self.logger.info(f"[{account_name}] Sell signal with long position: opening sell, repo, then sell again")
+            else:
+                # BUY with no repo: Buy 1 unit
+                self.logger.info(f"[{account_name}] Buy signal with no repo: buying 1 unit")
+                return {
+                    'steps': ['open_long'],
+                    'position_size': [min_quantity]
+                }
+        
+        # SELL SIGNAL LOGIC
+        else:  # side == 'ASK'
+            one_unit_threshold = min_quantity  # Using min_quantity as "1 unit" threshold
+            
+            if current_position > one_unit_threshold:
+                # SELL with position > 1 unit: Sell 1 unit, open repo, sell 1 unit
+                self.logger.info(f"[{account_name}] Sell signal with position > 1 unit: selling, opening repo, selling again")
                 return {
                     'steps': ['open_short', 'open_repo', 'open_short'],
                     'position_size': [min_quantity, min_quantity, min_quantity],
                     'repo_details': repo_details,
                     'sequential': True
                 }
-            else:
-                # Should never happen with our constraints
-                self.logger.info(f"[{account_name}] Unexpected state in sell signal - no action taken")
+            elif current_position <= one_unit_threshold and not has_open_repo:
+                # SELL with position < 1 unit and no repo: Open repo, then open short
+                self.logger.info(f"[{account_name}] Sell signal with position < 1 unit and no repo: opening repo, then selling")
                 return {
-                    'steps': [],
-                    'position_size': []
+                    'steps': ['open_repo', 'open_short'],
+                    'position_size': [min_quantity, min_quantity],
+                    'repo_details': repo_details,
+                    'sequential': True
                 }
-        
-        # BUY SIGNAL LOGIC
-        else:  # side == 'BID'
-            # Check if buy would exceed limits
-            if current_position + min_quantity >= strict_limit:
-                self.logger.warning(f"[{account_name}] Buy would push position to or above limit {strict_limit}. Current: {current_position}")
+            else:
+                # SELL with repo already open: Do nothing (in your logic, this would be an alert)
+                self.logger.info(f"[{account_name}] Sell signal with repo already open: no action needed")
                 return {
                     'steps': [],
                     'position_size': [],
-                    'message': f"Buy skipped: Would exceed strict limit of {strict_limit}"
+                    'message': "No action: repo already open for this symbol"
                 }
-                
-            if not has_open_repo:
-                # No repo exists -> Open long position (ONLY ONE)
-                # Check if balance would be >= 2 positions to add short
-                final_position = current_position + min_quantity
-                if final_position >= 2 * min_quantity:
-                    self.logger.info(f"[{account_name}] Buy signal with no repo: opening long position + short (balance would be {final_position})")
-                    return {
-                        'steps': ['open_long', 'open_short'],
-                        'position_size': [min_quantity, min_quantity],
-                        'sequential': True
-                    }
-                else:
-                    self.logger.info(f"[{account_name}] Buy signal with no repo: opening single long position")
-                    return {
-                        'steps': ['open_long'],
-                        'position_size': [min_quantity]
-                    }
-            else:
-                # BUY WITH REPO LOGIC
-                
-                # Check if combined buys would exceed limit
-                if current_position + (min_quantity * 2) >= strict_limit:
-                    self.logger.warning(f"[{account_name}] Double buy would exceed limit. Adapting the strategy.")
-                    if current_position + min_quantity < strict_limit:
-                        # We can do one buy safely
-                        final_position = current_position + min_quantity
-                        if final_position >= 2 * min_quantity:
-                            return {
-                                'steps': ['open_long', 'close_repo', 'open_short'],
-                                'position_size': [min_quantity, repo_symbol, min_quantity],
-                                'repo_details': {'symbol': repo_symbol},
-                                'sequential': True
-                            }
-                        else:
-                            return {
-                                'steps': ['open_long', 'close_repo'],
-                                'position_size': [min_quantity, repo_symbol],
-                                'repo_details': {'symbol': repo_symbol},
-                                'sequential': True
-                            }
-                    else:
-                        # Can't even do one buy, just close repo
-                        return {
-                            'steps': ['close_repo'],
-                            'position_size': [repo_symbol],
-                            'repo_details': {'symbol': repo_symbol}
-                        }
-                else:
-                    # We can safely do both buys with the repo close in between
-                    # Then check if final balance would be >= 2 positions to add short
-                    final_position = current_position + (min_quantity * 2)
-                    if final_position >= 2 * min_quantity:
-                        self.logger.info(f"[{account_name}] Buy with repo: open long, open long again, close repo, open short")
-                        return {
-                            'steps': ['open_long', 'open_long', 'close_repo', 'open_short'],
-                            'position_size': [min_quantity, min_quantity, repo_symbol, min_quantity],
-                            'repo_details': {'symbol': repo_symbol},
-                            'sequential': True
-                        }
-                    else:
-                        self.logger.info(f"[{account_name}] Buy with repo: open long, open long again, close repo")
-                        return {
-                            'steps': ['open_long', 'open_long', 'close_repo'],
-                            'position_size': [min_quantity, min_quantity, repo_symbol],
-                            'repo_details': {'symbol': repo_symbol},
-                            'sequential': True
-                        }
     
     def format_price(self, price, symbol, account_name='default'):
         """Format price according to symbol's decimal precision from configuration."""
@@ -937,4 +866,4 @@ class TradingBot:
 def create_app(config_path=None):
     """Create a new trading bot instance with multi-account support."""
     bot = TradingBot(config_path)
-    return bot   
+    return bot
