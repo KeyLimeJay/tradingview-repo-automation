@@ -1,5 +1,4 @@
 #bitstamp_client.py
-#bitstamp_client.py
 """
 Bitstamp WebSocket client for receiving execution data.
 """

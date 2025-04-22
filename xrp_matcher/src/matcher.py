@@ -47,6 +47,8 @@ class Matcher:
             "Side",                  # Execution Side (Buy)
             "Quantity",              # Original Execution Quantity
             "Rate",                  # Execution Rate
+            "source",                # Source of the trade (own_account or market)
+            "trade_account_id",      # Account ID that made the trade
             "fill_counter",          # Counter for partial fills
             "fill_type",             # "fill" or "partial_fill"
             "fill_quantity",         # Quantity for this specific fill
@@ -81,6 +83,8 @@ class Matcher:
             match['Side'],
             match['Quantity'],
             match['Rate'],
+            match['source'],               # Trade source
+            match['trade_account_id'],     # Account ID
             match['fill_counter'],
             match['fill_type'],
             match['fill_quantity'],
@@ -183,6 +187,8 @@ class Matcher:
                 'Side': execution['side'],
                 'Quantity': execution_quantity,  # Original quantity
                 'Rate': execution['price'],
+                'source': execution.get('source', 'unknown'),  # Trade source
+                'trade_account_id': execution.get('trade_account_id', 'unknown'),  # Account ID
                 'fill_counter': match_counter,
                 'fill_type': fill_type,
                 'fill_quantity': fill_quantity,
