@@ -40,6 +40,7 @@ class BitstampClient:
         self.token_refresh_thread = None
         self.token = None
         self.token_expiry = None
+        self.own_trade_ids = set()  # To track IDs of trades from our account
         
         # Log if we're using a subaccount
         if BITSTAMP_SUBACCOUNT_ID:
@@ -77,20 +78,15 @@ class BitstampClient:
             timestamp = str(int(round(time.time() * 1000)))
             nonce = str(uuid.uuid4())
             
-            # Create the message to sign
-            content_type = 'application/x-www-form-urlencoded'
-            payload_string = ''
-            
+            # Create the message to sign WITHOUT mentioning Content-Type (important)
             message = 'BITSTAMP ' + BITSTAMP_API_KEY + \
                 'POST' + \
                 'www.bitstamp.net' + \
                 '/api/v2/websockets_token/' + \
                 '' + \
-                content_type + \
                 nonce + \
                 timestamp + \
-                'v2' + \
-                payload_string
+                'v2'
             message = message.encode('utf-8')
             
             # Sign the message
@@ -98,25 +94,23 @@ class BitstampClient:
                                 msg=message, 
                                 digestmod=hashlib.sha256).hexdigest()
             
-            # Set up headers
+            # Set up headers WITHOUT Content-Type
             headers = {
                 'X-Auth': 'BITSTAMP ' + BITSTAMP_API_KEY,
                 'X-Auth-Signature': signature,
                 'X-Auth-Nonce': nonce,
                 'X-Auth-Timestamp': timestamp,
-                'X-Auth-Version': 'v2',
-                'Content-Type': content_type
+                'X-Auth-Version': 'v2'
             }
             
             # Add subaccount ID if specified
             if BITSTAMP_SUBACCOUNT_ID:
                 headers["X-Auth-Subaccount-Id"] = BITSTAMP_SUBACCOUNT_ID
             
-            # Make the request to get the token
+            # Make the request to get the token (no data parameter, no Content-Type)
             response = requests.post(
                 'https://www.bitstamp.net/api/v2/websockets_token/',
-                headers=headers,
-                data=payload_string
+                headers=headers
             )
             
             # Check if request was successful
@@ -144,17 +138,15 @@ class BitstampClient:
                 # Check if token needs refreshing
                 if self.token_expiry is None or time.time() > self.token_expiry:
                     self.token = self.get_websocket_token()
-                    if self.token:
-                        # Resubscribe to private channels
-                        if self.ws and self.ws.sock and self.ws.sock.connected:
-                            self.subscribe_to_private_channels()
+                    if self.token and self.ws and self.ws.sock and self.ws.sock.connected:
+                        self.subscribe_to_private_channels()
                 
-                # Sleep for a while (check every 30 seconds)
+                # Sleep for a while before checking again
                 time.sleep(30)
                 
             except Exception as e:
                 logger.error(f"Error refreshing Bitstamp token: {e}")
-                time.sleep(30)  # Wait a bit before trying again
+                time.sleep(30)
     
     def subscribe_to_private_channels(self):
         """Subscribe to private WebSocket channels."""
@@ -162,27 +154,31 @@ class BitstampClient:
             logger.warning("Cannot subscribe to private channels - no token available")
             return
         
-        # Subscribe to private trades channel
-        private_trades_subscription = {
-            "event": "bts:subscribe",
-            "data": {
-                "channel": "private-my_trades_xrpusd",
-                "auth": self.token
+        try:
+            # Subscribe to private trades channel
+            private_trades_subscription = {
+                "event": "bts:subscribe",
+                "data": {
+                    "channel": "private-my_trades_xrpusd",
+                    "auth": self.token
+                }
             }
-        }
-        self.ws.send(json.dumps(private_trades_subscription))
-        logger.info("Subscribed to private XRPUSD trades channel")
-        
-        # Subscribe to self-trades channel (optional)
-        private_live_trades_subscription = {
-            "event": "bts:subscribe",
-            "data": {
-                "channel": "private-live_trades_xrpusd",
-                "auth": self.token
+            self.ws.send(json.dumps(private_trades_subscription))
+            logger.info("Subscribed to private XRPUSD trades channel")
+            
+            # Subscribe to self-trades channel (optional)
+            private_live_trades_subscription = {
+                "event": "bts:subscribe",
+                "data": {
+                    "channel": "private-live_trades_xrpusd",
+                    "auth": self.token
+                }
             }
-        }
-        self.ws.send(json.dumps(private_live_trades_subscription))
-        logger.info("Subscribed to private live XRPUSD trades channel")
+            self.ws.send(json.dumps(private_live_trades_subscription))
+            logger.info("Subscribed to private live XRPUSD trades channel")
+            
+        except Exception as e:
+            logger.error(f"Error subscribing to private channels: {e}")
     
     def on_message(self, ws, message):
         """Handle incoming WebSocket messages."""
@@ -192,6 +188,10 @@ class BitstampClient:
             # Handle private trades from your account
             if 'event' in data and data['event'] == 'trade' and 'channel' in data and 'private-my_trades_xrpusd' in data['channel']:
                 trade_data = data['data']
+                
+                # Store this trade ID for reference
+                if 'id' in trade_data:
+                    self.own_trade_ids.add(trade_data['id'])
                 
                 # Format the data for private trades
                 microsecond_datetime = datetime.datetime.fromtimestamp(
@@ -207,7 +207,7 @@ class BitstampClient:
                     'price': float(trade_data.get('price')),
                     'subaccount_id': BITSTAMP_SUBACCOUNT_ID if BITSTAMP_SUBACCOUNT_ID else 'main',
                     'source': 'own_account',
-                    'trade_account_id': trade_data.get('trade_account_id', 'unknown')
+                    'trade_account_id': trade_data.get('trade_account_id', 'subaccount')
                 }
                 
                 logger.info(f"Own Execution: ID: {formatted_trade['id']}, "
@@ -216,16 +216,14 @@ class BitstampClient:
                           f"Side: {formatted_trade['side']}, "
                           f"Quantity: {formatted_trade['amount']}, "
                           f"Rate: {formatted_trade['price']}, "
-                          f"Account: {formatted_trade['trade_account_id']}")
+                          f"Source: own_account")
                 
                 self.execution_queue.put(formatted_trade)
                 
             # Handle self-trades if needed
             elif 'event' in data and data['event'] == 'self_trade' and 'channel' in data and 'private-live_trades_xrpusd' in data['channel']:
-                trade_data = data['data']
-                
                 # Process self-trade events if needed
-                logger.debug(f"Received self-trade event: {trade_data}")
+                logger.debug(f"Received self-trade event: {data}")
                 
             # Handle public trades
             elif 'event' in data and data['event'] == 'trade' and 'data' in data and data['channel'] == 'live_trades_xrpusd':
@@ -233,6 +231,9 @@ class BitstampClient:
                 
                 # Check if this is a buy trade for XRPUSD
                 if int(trade_data['type']) == 0:  # Buy trade
+                    # Check if this trade is from our account (should match with private channel)
+                    is_own_trade = trade_data['id'] in self.own_trade_ids
+                    source = 'own_account' if is_own_trade else 'market'
                     
                     # Format the data with microsecond precision
                     timestamp = int(trade_data['timestamp'])
@@ -251,19 +252,23 @@ class BitstampClient:
                         'side': 'Buy',
                         'amount': float(trade_data['amount']),
                         'price': float(trade_data['price']),
-                        'subaccount_id': BITSTAMP_SUBACCOUNT_ID if BITSTAMP_SUBACCOUNT_ID else 'main',
-                        'source': 'market',  # Market trade (not from your account)
-                        'trade_account_id': 'other'
+                        'subaccount_id': BITSTAMP_SUBACCOUNT_ID if is_own_trade else 'other',
+                        'source': source,
+                        'trade_account_id': 'subaccount' if is_own_trade else 'other'
                     }
                     
-                    logger.info(f"Market Execution: ID: {formatted_trade['id']}, "
+                    logger.info(f"{'Own' if is_own_trade else 'Market'} Execution: ID: {formatted_trade['id']}, "
                               f"DateTime: {formatted_trade['datetime_str']}, "
                               f"Symbol: {formatted_trade['symbol']}, "
                               f"Side: {formatted_trade['side']}, "
                               f"Quantity: {formatted_trade['amount']}, "
-                              f"Rate: {formatted_trade['price']}")
+                              f"Rate: {formatted_trade['price']}, "
+                              f"Source: {source}")
                     
-                    self.execution_queue.put(formatted_trade)
+                    # Only process market trades if they're not our own
+                    # (Our own trades will come through the private channel)
+                    if not is_own_trade:
+                        self.execution_queue.put(formatted_trade)
         
         except json.JSONDecodeError:
             logger.warning(f"Received invalid JSON message from Bitstamp: {message[:100]}...")
