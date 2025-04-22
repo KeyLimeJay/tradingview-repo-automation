@@ -78,7 +78,8 @@ class BitstampClient:
             timestamp = str(int(round(time.time() * 1000)))
             nonce = str(uuid.uuid4())
             
-            # Create the message to sign WITHOUT mentioning Content-Type (important)
+            # Create the message to sign WITHOUT Content-Type
+            # The message format should be exactly as required by Bitstamp
             message = 'BITSTAMP ' + BITSTAMP_API_KEY + \
                 'POST' + \
                 'www.bitstamp.net' + \
@@ -87,14 +88,15 @@ class BitstampClient:
                 nonce + \
                 timestamp + \
                 'v2'
+            
             message = message.encode('utf-8')
             
             # Sign the message
             signature = hmac.new(BITSTAMP_API_SECRET.encode('utf-8'), 
-                                msg=message, 
-                                digestmod=hashlib.sha256).hexdigest()
+                               msg=message, 
+                               digestmod=hashlib.sha256).hexdigest()
             
-            # Set up headers WITHOUT Content-Type
+            # Set up headers WITHOUT Content-Type header
             headers = {
                 'X-Auth': 'BITSTAMP ' + BITSTAMP_API_KEY,
                 'X-Auth-Signature': signature,
@@ -107,7 +109,7 @@ class BitstampClient:
             if BITSTAMP_SUBACCOUNT_ID:
                 headers["X-Auth-Subaccount-Id"] = BITSTAMP_SUBACCOUNT_ID
             
-            # Make the request to get the token (no data parameter, no Content-Type)
+            # Make the request without Content-Type header and without data parameter
             response = requests.post(
                 'https://www.bitstamp.net/api/v2/websockets_token/',
                 headers=headers
