@@ -1,4 +1,3 @@
-#logging_setup.py
 """
 Logging setup utilities for the XRP Matcher.
 """
@@ -15,4 +14,8 @@ def setup_logging():
             logging.StreamHandler()
         ]
     )
+    
+    # Set WebSocket library's logger to DEBUG
+    logging.getLogger('websocket').setLevel(logging.DEBUG)
+    
     return logging.getLogger('xrp_matcher')

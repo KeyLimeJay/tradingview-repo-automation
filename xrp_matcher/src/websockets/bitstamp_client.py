@@ -1,4 +1,3 @@
-#bitstamp_client.py
 """
 Bitstamp WebSocket client for receiving execution data.
 """
@@ -185,11 +184,25 @@ class BitstampClient:
     def on_message(self, ws, message):
         """Handle incoming WebSocket messages."""
         try:
+            # Log full raw message for debugging
+            logger.debug(f"Raw WebSocket message received: {message}")
+            
             data = json.loads(message)
+            
+            # Log detailed event and channel information
+            logger.debug(f"Event type: {data.get('event')}")
+            logger.debug(f"Channel: {data.get('channel')}")
             
             # Handle private trades from your account
             if 'event' in data and data['event'] == 'trade' and 'channel' in data and 'private-my_trades_xrpusd' in data['channel']:
+                logger.info("Received private trade on private-my_trades_xrpusd channel")
+                logger.info(f"Full trade data: {data}")
+                
                 trade_data = data['data']
+                
+                # Log each field of the trade data
+                for key, value in trade_data.items():
+                    logger.info(f"Trade data field {key}: {value}")
                 
                 # Store this trade ID for reference
                 if 'id' in trade_data:
@@ -221,12 +234,12 @@ class BitstampClient:
                           f"Source: own_account")
                 
                 self.execution_queue.put(formatted_trade)
-                
-            # Handle self-trades if needed
+            
+            # Similar detailed logging for other channel types
             elif 'event' in data and data['event'] == 'self_trade' and 'channel' in data and 'private-live_trades_xrpusd' in data['channel']:
-                # Process self-trade events if needed
-                logger.debug(f"Received self-trade event: {data}")
-                
+                logger.info("Received self-trade event")
+                logger.info(f"Full self-trade data: {data}")
+            
             # Handle public trades
             elif 'event' in data and data['event'] == 'trade' and 'data' in data and data['channel'] == 'live_trades_xrpusd':
                 trade_data = data['data']
@@ -273,9 +286,10 @@ class BitstampClient:
                         self.execution_queue.put(formatted_trade)
         
         except json.JSONDecodeError:
-            logger.warning(f"Received invalid JSON message from Bitstamp: {message[:100]}...")
+            logger.error(f"Failed to decode JSON message: {message[:500]}")
         except Exception as e:
-            logger.error(f"Error processing Bitstamp message: {e}")
+            logger.error(f"Comprehensive error processing Bitstamp message: {e}")
+            logger.error(f"Problematic message: {message[:500]}")
     
     def on_error(self, ws, error):
         """Handle WebSocket errors."""

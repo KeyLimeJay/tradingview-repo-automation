@@ -1,4 +1,3 @@
-#matcher.py
 """
 Matcher module for matching executions with bids.
 """
@@ -147,12 +146,17 @@ class Matcher:
         Returns:
             bool: True if matches were found, False otherwise
         """
+        # Log full execution details for debugging
+        logger.debug(f"Full execution details: {execution}")
+        
         execution_id = execution['id']
         execution_time = execution['datetime']
         execution_quantity = execution['amount']
         remaining_quantity = execution_quantity
         
         logger.info(f"Processing execution ID: {execution_id}, Quantity: {execution_quantity}")
+        logger.debug(f"Execution source: {execution.get('source', 'unknown')}")
+        logger.debug(f"Trade account ID: {execution.get('trade_account_id', 'unknown')}")
         
         match_counter = 1
         matches_found = False
@@ -209,6 +213,10 @@ class Matcher:
             
             match_counter += 1
         
+        # At the method end, log additional details about matches
+        logger.debug(f"Matches found: {matches_found}")
+        logger.debug(f"Remaining quantity after processing: {remaining_quantity}")
+        
         return matches_found
     
     def run(self):
@@ -217,6 +225,10 @@ class Matcher:
         
         try:
             while self.running_event.is_set():
+                # Log queue sizes for debugging
+                logger.debug(f"Bid queue size: {self.bid_queue.qsize()}")
+                logger.debug(f"Execution queue size: {self.execution_queue.qsize()}")
+                
                 # Process any new bids
                 while not self.bid_queue.empty():
                     bid = self.bid_queue.get()
