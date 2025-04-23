@@ -286,10 +286,9 @@ class BitstampClient:
                         self.execution_queue.put(formatted_trade)
         
         except json.JSONDecodeError:
-            logger.error(f"Failed to decode JSON message: {message[:500]}")
+            logger.warning(f"Received invalid JSON message from Bitstamp: {message[:100]}...")
         except Exception as e:
-            logger.error(f"Comprehensive error processing Bitstamp message: {e}")
-            logger.error(f"Problematic message: {message[:500]}")
+            logger.error(f"Error processing Bitstamp message: {e}")
     
     def on_error(self, ws, error):
         """Handle WebSocket errors."""
