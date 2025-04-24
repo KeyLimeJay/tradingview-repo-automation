@@ -1,4 +1,3 @@
-#trading_bot.py
 #!/usr/bin/env python3
 from flask import Flask, request, jsonify
 import json
@@ -197,7 +196,16 @@ class TradingBot:
     def determine_trade_type(self, symbol, side, timeframe='1h', account_name='default'):
         """
         Determines the trade to execute based on current position and signal.
-        Uses simpler logic with fixed unit sizes.
+        Implements proper trading mechanics with correct order of operations.
+        
+        Args:
+            symbol: Trading pair symbol
+            side: Order side (BID for buy, ASK for sell)
+            timeframe: Timeframe of the signal
+            account_name: Account name to use for trading
+            
+        Returns:
+            Dictionary with steps to execute, position sizes, and other details
         """
         # Add a short delay to ensure WebSocket data is up-to-date
         time.sleep(0.5)
@@ -240,19 +248,25 @@ class TradingBot:
         self.logger.info(f"[{account_name}] Position analysis for {symbol}: position={current_position}, " +
                        f"has_repo={has_open_repo}")
         
+        # Define threshold for position comparison
+        one_unit_threshold = min_quantity * 0.5  # Half a unit as threshold for comparison
+        zero_threshold = min_quantity * 0.1      # Near-zero threshold
+        
         # BUY SIGNAL LOGIC
         if side == 'BID':
+            # Case 1: Has open repo (short position)
             if has_open_repo:
-                # BUY with open repo: Buy 2 units, then close repo
-                self.logger.info(f"[{account_name}] Buy signal with open repo: buying 2 units, then closing repo")
+                # BUY with open repo: Buy twice to cover short and go long, then close repo
+                self.logger.info(f"[{account_name}] Buy signal with open repo: buying to cover short, buying to go long, then closing repo")
                 return {
                     'steps': ['open_long', 'open_long', 'close_repo'],
                     'position_size': [min_quantity, min_quantity, repo_symbol],
                     'repo_details': {'symbol': repo_symbol},
                     'sequential': True
                 }
+            # Case 2: No repo, with any position (including zero)
             else:
-                # BUY with no repo: Buy 1 unit
+                # Simple buy: increase position by 1 unit
                 self.logger.info(f"[{account_name}] Buy signal with no repo: buying 1 unit")
                 return {
                     'steps': ['open_long'],
@@ -261,33 +275,46 @@ class TradingBot:
         
         # SELL SIGNAL LOGIC
         else:  # side == 'ASK'
-            one_unit_threshold = min_quantity  # Using min_quantity as "1 unit" threshold
+            # Case 1: Has open repo (already short) - no action needed
+            if has_open_repo:
+                self.logger.info(f"[{account_name}] Sell signal with repo already open: no action needed")
+                return {
+                    'steps': [],
+                    'position_size': [],
+                    'message': "No action: repo already open for this symbol"
+                }
             
-            if current_position > one_unit_threshold:
-                # SELL with position > 1 unit: Sell 1 unit, open repo, sell 1 unit
-                self.logger.info(f"[{account_name}] Sell signal with position > 1 unit: selling, opening repo, selling again")
+            # Case 2: No repo, has position above threshold
+            elif current_position > one_unit_threshold:
+                # Sell existing position, open repo, then sell again
+                self.logger.info(f"[{account_name}] Sell signal with position > threshold: selling existing, opening repo, selling again")
                 return {
                     'steps': ['open_short', 'open_repo', 'open_short'],
                     'position_size': [min_quantity, min_quantity, min_quantity],
                     'repo_details': repo_details,
                     'sequential': True
                 }
-            elif current_position <= one_unit_threshold and not has_open_repo:
-                # SELL with position < 1 unit and no repo: Open repo, then open short
-                self.logger.info(f"[{account_name}] Sell signal with position < 1 unit and no repo: opening repo, then selling")
+            
+            # Case 3: No repo, near-zero position
+            elif current_position <= zero_threshold:
+                # Open repo first, then sell
+                self.logger.info(f"[{account_name}] Sell signal with near-zero position: opening repo first, then selling")
                 return {
                     'steps': ['open_repo', 'open_short'],
                     'position_size': [min_quantity, min_quantity],
                     'repo_details': repo_details,
                     'sequential': True
                 }
+            
+            # Case 4: No repo, small but non-zero position
             else:
-                # SELL with repo already open: Do nothing (in your logic, this would be an alert)
-                self.logger.info(f"[{account_name}] Sell signal with repo already open: no action needed")
+                # Sell existing position, open repo, then sell again
+                self.logger.info(f"[{account_name}] Sell signal with small position: selling existing, opening repo, selling again")
                 return {
-                    'steps': [],
-                    'position_size': [],
-                    'message': "No action: repo already open for this symbol"
+                    'steps': ['open_short', 'open_repo', 'open_short'],
+                    'position_size': [min_quantity, min_quantity, min_quantity],
+                    'repo_details': repo_details,
+                    'sequential': True
                 }
     
     def format_price(self, price, symbol, account_name='default'):
