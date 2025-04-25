@@ -1,0 +1,6 @@
+# Log files
+xrp_matcher/logs/*.log
+trading_bot_v2/logs/*.log*
+old_files/**/logs/*.log*
+*.log
+*.log.*
