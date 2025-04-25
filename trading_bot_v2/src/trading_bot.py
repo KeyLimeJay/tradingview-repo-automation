@@ -1,4 +1,3 @@
-#trading_bot.py
 #!/usr/bin/env python3
 from flask import Flask, request, jsonify
 import json
@@ -6,23 +5,20 @@ import os
 import datetime
 import logging
 from logging.handlers import RotatingFileHandler
-from dotenv import load_dotenv
-from threading import Lock, Thread
 import time
-import threading
+from threading import Lock
 from collections import OrderedDict
 from src.position_websocket import PositionWebsocketClient
 from src.trading_utils import (
     place_order, OrderPlacementError, place_repo_order, 
     close_repo, get_jwt_token, get_repo_details
 )
-import requests
 from src.account_manager import AccountManager
 from src.auto_position_manager import AutoPositionManager
 from src.config_manager import ConfigurationManager
 
 class TradingBot:
-    """Main trading bot implementation supporting multiple accounts."""
+    """Main trading bot implementation with logic based on event sequence table."""
     
     def __init__(self, config_path=None):
         """Initialize the trading bot with configuration."""
@@ -50,6 +46,9 @@ class TradingBot:
         
         self._request_cache = OrderedDict()
         self.trading_pairs = self.config_manager.get_all_trading_pairs()
+        
+        # Event tracking
+        self.event_counter = {}  # symbol -> event_count
         
         # Separate last_signal tracking per account
         self.last_signals = {}  # account_name -> symbol -> {message, timeframe, timestamp}
@@ -96,17 +95,10 @@ class TradingBot:
         self.app.add_url_rule('/webhook', view_func=self.webhook, methods=['POST'])
         self.app.add_url_rule('/positions', view_func=self.get_positions, methods=['GET'])
         self.app.add_url_rule('/health', view_func=self.health_check, methods=['GET'])
-        # New endpoint for manually triggering auto-short
         self.app.add_url_rule('/auto-short', view_func=self.trigger_auto_short, methods=['POST'])
     
-    def get_strict_limit(self, symbol, account_name='default'):
-        """Get the strict position limit for a symbol from configuration."""
-        base_currency = symbol.split('/')[0]
-        return self.config_manager.get_currency_setting(
-            account_name, base_currency, 'strict_limit', 0.001)
-    
     def validate_request_data(self, data):
-        """Validate incoming webhook data from TradingView."""
+        """Validate incoming webhook data."""
         if not isinstance(data, dict):
             raise ValueError(f"Invalid data format. Expected dict, got {type(data)}")
             
@@ -149,37 +141,7 @@ class TradingBot:
             
         # Add account to the data for later use
         data['account'] = account_name
-            
-        # Enhanced duplicate signal detection with time-based threshold
-        current_time = time.time()
-        signal_key = f"{data['symbol']}:{data['message']}:{data['timeFrame']}"
         
-        if signal_key in self._signal_timestamps:
-            last_time = self._signal_timestamps[signal_key]
-            time_diff = current_time - last_time
-            
-            # Check for repeated signals (exact match) by account
-            if account_name not in self.last_signals:
-                self.last_signals[account_name] = {}
-                
-            account_signals = self.last_signals[account_name]
-            
-            if (data['symbol'] in account_signals and 
-                account_signals[data['symbol']].get('message') == data['message'] and
-                account_signals[data['symbol']].get('timeFrame') == data['timeFrame']):
-                self.logger.warning(f"Rejected repeated {data['message']} signal for {data['symbol']} on {data['timeFrame']} (account: {account_name})")
-                raise ValueError(f"Duplicate signal rejected: {data['message']}")
-                
-            # Reject signals that arrive too quickly
-            min_signal_interval = float(self.config_manager.get_global_setting('min_signal_interval', 5.0))
-            if time_diff < min_signal_interval:
-                self.logger.warning(f"Signal arrived too quickly after previous signal: {time_diff:.2f}s < {min_signal_interval}s")
-                raise ValueError(f"Signal throttled: minimum interval is {min_signal_interval}s (received after {time_diff:.2f}s)")
-        
-        # Track this signal's timestamp
-        self._signal_timestamps[signal_key] = current_time
-        
-        self.logger.info(f"Received valid trading signal: {json.dumps(data, indent=2)}")
         return True
     
     def determine_trade_side(self, message):
@@ -194,101 +156,208 @@ class TradingBot:
         """Verify repo status for a specific account."""
         return self.account_manager.verify_repo_status(symbol, account_name)
     
-    def determine_trade_type(self, symbol, side, timeframe='1h', account_name='default'):
-        """
-        Determines the trade to execute based on current position and signal.
-        Uses simpler logic with fixed unit sizes.
-        """
-        # Add a short delay to ensure WebSocket data is up-to-date
-        time.sleep(0.5)
-        
-        # Get the position client for this account
+    def get_current_state(self, symbol, account_name):
+        """Get the current state of balances and repos for the given symbol."""
         position_client = self.account_manager.get_position_client(account_name)
         if not position_client:
             self.logger.error(f"No position client for account: {account_name}")
-            return {'steps': [], 'position_size': [], 'message': f"No position client for account: {account_name}"}
-        
-        # Force a position refresh before making decisions
+            return None
+            
+        # Force a position refresh
         position_client.refresh_positions()
         
-        # Get current position 
-        current_position = position_client.get_truncated_position(symbol)
+        # Get current position
+        balance = position_client.get_truncated_position(symbol)
         
-        # Get trading settings from configuration
+        # Check if repo is open
+        has_repo = self.verify_repo_status(symbol, account_name)
+        
+        # Get repo quantity if repo exists
+        repo_quantity = 0
+        if has_repo:
+            base_currency = symbol.split('/')[0]
+            repo_symbol = f"{base_currency}/USDC110"
+            repo_details = get_repo_details(repo_symbol, self.config_manager, account_name)
+            if repo_details and 'quantity' in repo_details:
+                repo_quantity = repo_details['quantity']
+            else:
+                # If we can't get the exact quantity, use min_quantity as estimate
+                repo_quantity = self.config_manager.get_currency_setting(
+                    account_name, base_currency, 'min_quantity', 0.001)
+        
+        return {
+            'balance': balance,
+            'repo': repo_quantity if has_repo else 0
+        }
+    
+    def determine_trade_sequence(self, symbol, signal_type, account_name):
+        """
+        Determines the trade sequence based on the event table logic.
+        
+        Args:
+            symbol: Trading pair symbol
+            signal_type: 'Buy Signal' or 'Sell Signal'
+            account_name: Account to use for trading
+            
+        Returns:
+            dict: Trade sequence with steps and position sizes
+        """
+        # Get the current state
+        current_state = self.get_current_state(symbol, account_name)
+        if not current_state:
+            return {'steps': [], 'position_size': [], 'message': "Could not determine current state"}
+        
+        current_balance = current_state['balance']
+        current_repo = current_state['repo']
+        
+        # Increment event counter for this symbol
+        if symbol not in self.event_counter:
+            self.event_counter[symbol] = 0
+        self.event_counter[symbol] += 1
+        
+        event_num = self.event_counter[symbol]
+        
+        # Get the unit size for this currency
         base_currency = symbol.split('/')[0]
-        repo_symbol = f"{base_currency}/USDC110"
-        
-        # Get min quantity from configuration (this is our "1 unit")
-        min_quantity = self.config_manager.get_currency_setting(
+        unit_size = self.config_manager.get_currency_setting(
             account_name, base_currency, 'min_quantity', 0.001)
         
         # Get repo interest rate from configuration
         repo_interest = float(self.config_manager.get_trading_setting(
             account_name, 'repo_interest_rate', 10.0))
         
-        # Check if repo is open
-        has_open_repo = self.verify_repo_status(symbol, account_name)
-        
         # Create repo details dictionary for reuse
+        repo_symbol = f"{base_currency}/USDC110"
         repo_details = {
             'symbol': repo_symbol,
-            'quantity': min_quantity,
+            'quantity': unit_size,
             'interest_rate': repo_interest
         }
         
-        # Log position status for debugging
-        self.logger.info(f"[{account_name}] Position analysis for {symbol}: position={current_position}, " +
-                       f"has_repo={has_open_repo}")
+        # Log current state
+        self.logger.info(f"[{account_name}] Current state for {symbol}: Event={event_num}, " +
+                       f"Signal={signal_type}, Balance={current_balance}, Repo={current_repo}")
         
-        # BUY SIGNAL LOGIC
-        if side == 'BID':
-            if has_open_repo:
-                # BUY with open repo: Buy 2 units, then close repo
-                self.logger.info(f"[{account_name}] Buy signal with open repo: buying 2 units, then closing repo")
-                return {
-                    'steps': ['open_long', 'open_long', 'close_repo'],
-                    'position_size': [min_quantity, min_quantity, repo_symbol],
-                    'repo_details': {'symbol': repo_symbol},
-                    'sequential': True
-                }
-            else:
-                # BUY with no repo: Buy 1 unit
-                self.logger.info(f"[{account_name}] Buy signal with no repo: buying 1 unit")
-                return {
-                    'steps': ['open_long'],
-                    'position_size': [min_quantity]
-                }
+        # Based on the table logic:
+        # Event 1, Buy Signal: Buy
+        if event_num == 1 and signal_type == 'Buy Signal':
+            return {
+                'steps': ['open_long'],
+                'position_size': [unit_size],
+                'sequential': True,
+                'starting_balance': current_balance,
+                'starting_repo': current_repo,
+                'expected_ending_balance': current_balance + unit_size,
+                'expected_ending_repo': current_repo
+            }
         
-        # SELL SIGNAL LOGIC
-        else:  # side == 'ASK'
-            one_unit_threshold = min_quantity  # Using min_quantity as "1 unit" threshold
-            
-            if current_position > one_unit_threshold:
-                # SELL with position > 1 unit: Sell 1 unit, open repo, sell 1 unit
-                self.logger.info(f"[{account_name}] Sell signal with position > 1 unit: selling, opening repo, selling again")
-                return {
-                    'steps': ['open_short', 'open_repo', 'open_short'],
-                    'position_size': [min_quantity, min_quantity, min_quantity],
-                    'repo_details': repo_details,
-                    'sequential': True
-                }
-            elif current_position <= one_unit_threshold and not has_open_repo:
-                # SELL with position < 1 unit and no repo: Open repo, then open short
-                self.logger.info(f"[{account_name}] Sell signal with position < 1 unit and no repo: opening repo, then selling")
+        # Event 2, Sell Signal: Open Repo (seq 1), Sell (seq 2)
+        elif event_num == 2 and signal_type == 'Sell Signal':
+            # First sequence
+            if current_balance == 0 and current_repo == 0:
                 return {
                     'steps': ['open_repo', 'open_short'],
-                    'position_size': [min_quantity, min_quantity],
+                    'position_size': [unit_size, unit_size],
                     'repo_details': repo_details,
-                    'sequential': True
+                    'sequential': True,
+                    'starting_balance': current_balance,
+                    'starting_repo': current_repo,
+                    'expected_ending_balance': current_balance,
+                    'expected_ending_repo': unit_size
                 }
+            # If already executed seq 1
             else:
-                # SELL with repo already open: Do nothing (in your logic, this would be an alert)
-                self.logger.info(f"[{account_name}] Sell signal with repo already open: no action needed")
                 return {
-                    'steps': [],
-                    'position_size': [],
-                    'message': "No action: repo already open for this symbol"
+                    'steps': ['open_short'],
+                    'position_size': [unit_size],
+                    'sequential': True,
+                    'starting_balance': current_balance,
+                    'starting_repo': current_repo,
+                    'expected_ending_balance': current_balance,
+                    'expected_ending_repo': current_repo + unit_size
                 }
+        
+        # Event 3, Buy Signal: Buy (seq 1), Close Repo (seq 2), Buy (seq 3)
+        elif event_num == 3 and signal_type == 'Buy Signal':
+            # First sequence
+            if current_balance == 0 and current_repo == unit_size:
+                return {
+                    'steps': ['open_long'],
+                    'position_size': [unit_size],
+                    'sequential': True,
+                    'starting_balance': current_balance,
+                    'starting_repo': current_repo,
+                    'expected_ending_balance': current_balance,
+                    'expected_ending_repo': current_repo
+                }
+            # Second sequence
+            elif current_balance == 0 and current_repo == unit_size:
+                return {
+                    'steps': ['close_repo'],
+                    'position_size': [repo_symbol],
+                    'sequential': True,
+                    'starting_balance': current_balance,
+                    'starting_repo': current_repo,
+                    'expected_ending_balance': current_balance,
+                    'expected_ending_repo': 0
+                }
+            # Third sequence
+            elif current_balance == 0 and current_repo == 0:
+                return {
+                    'steps': ['open_long'],
+                    'position_size': [unit_size],
+                    'sequential': True,
+                    'starting_balance': current_balance,
+                    'starting_repo': current_repo,
+                    'expected_ending_balance': unit_size,
+                    'expected_ending_repo': current_repo
+                }
+        
+        # Event 4, Sell Signal: Sell (seq 1), Open Repo (seq 2), Sell (seq 3)
+        elif event_num == 4 and signal_type == 'Sell Signal':
+            # First sequence
+            if current_balance == unit_size and current_repo == 0:
+                return {
+                    'steps': ['open_short'],
+                    'position_size': [unit_size],
+                    'sequential': True,
+                    'starting_balance': current_balance,
+                    'starting_repo': current_repo,
+                    'expected_ending_balance': 0,
+                    'expected_ending_repo': current_repo
+                }
+            # Second sequence
+            elif current_balance == 0 and current_repo == 0:
+                return {
+                    'steps': ['open_repo'],
+                    'position_size': [unit_size],
+                    'repo_details': repo_details,
+                    'sequential': True,
+                    'starting_balance': current_balance,
+                    'starting_repo': current_repo,
+                    'expected_ending_balance': unit_size,
+                    'expected_ending_repo': unit_size
+                }
+            # Third sequence
+            elif current_balance == unit_size and current_repo == unit_size:
+                return {
+                    'steps': ['open_short'],
+                    'position_size': [unit_size],
+                    'sequential': True,
+                    'starting_balance': current_balance,
+                    'starting_repo': current_repo,
+                    'expected_ending_balance': 0,
+                    'expected_ending_repo': current_repo
+                }
+        
+        # For other cases or when the sequence doesn't match the table
+        self.logger.warning(f"[{account_name}] No matching table logic for event={event_num}, " +
+                           f"signal={signal_type}, balance={current_balance}, repo={current_repo}")
+        return {
+            'steps': [],
+            'position_size': [],
+            'message': f"No table logic for event {event_num} with {signal_type}"
+        }
     
     def format_price(self, price, symbol, account_name='default'):
         """Format price according to symbol's decimal precision from configuration."""
@@ -303,49 +372,6 @@ class TradingBot:
             return round(price_float, price_decimals)
         except (ValueError, TypeError) as e:
             raise ValueError(f"Invalid price value: {price}. Error: {e}")
-    
-    def cancel_partially_filled_orders(self, symbol, reversed_side, account_name='default'):
-        """Cancel any partially filled orders that might be left in the order book."""
-        self.logger.info(f"[{account_name}] Checking for partially filled orders to cancel for {symbol}")
-        # Placeholder for actual implementation
-        self.logger.info(f"[{account_name}] Would cancel any partially filled {reversed_side} orders for {symbol}")
-        return True
-    
-    def verify_position_limits(self, symbol, planned_changes, account_name='default', strict_limit=None):
-        """
-        Verify that planned position changes won't exceed position limits.
-        
-        Args:
-            symbol: Trading pair symbol
-            planned_changes: List of operations and quantities [(operation, quantity), ...]
-            account_name: Account to check positions for
-            strict_limit: Optional override for the strict limit
-            
-        Returns:
-            tuple: (is_safe, message)
-        """
-        position_client = self.account_manager.get_position_client(account_name)
-        if not position_client:
-            return (False, f"No position client for account: {account_name}")
-            
-        current_position = position_client.get_truncated_position(symbol)
-        
-        if strict_limit is None:
-            strict_limit = self.get_strict_limit(symbol, account_name)
-        
-        # Calculate estimated final position
-        estimated_position = current_position
-        for op, qty in planned_changes:
-            if op == 'BID':
-                estimated_position += qty
-            elif op == 'ASK':
-                estimated_position -= qty
-        
-        # Check if estimated position exceeds limit
-        if estimated_position >= strict_limit:
-            return (False, f"Planned operations would result in position {estimated_position}, exceeding limit {strict_limit}")
-        
-        return (True, "Position within limits")
     
     def webhook(self):
         """Handle incoming webhook requests from TradingView."""
@@ -369,7 +395,9 @@ class TradingBot:
             message = data['message']
             timeframe = data['timeFrame']
             account_name = data['account']  # Set during validation
-            side = self.determine_trade_side(message)
+            
+            # Convert message to signal type for table logic
+            signal_type = "Buy Signal" if message == "Trend Buy!" else "Sell Signal"
             
             # Get the position client for this account
             position_client = self.account_manager.get_position_client(account_name)
@@ -386,17 +414,12 @@ class TradingBot:
             # Initialize account signals tracking if not exists
             if account_name not in self.last_signals:
                 self.last_signals[account_name] = {}
-                
-            # Cancel any partially filled orders from previous signals if this is a reversal
-            if (symbol in self.last_signals[account_name] and 
-                self.last_signals[account_name][symbol].get('message') != message):
-                reversed_side = 'ASK' if side == 'BID' else 'BID'
-                self.cancel_partially_filled_orders(symbol, reversed_side, account_name)
             
             # Force position refresh before decision making
             position_client.refresh_positions()
             
-            trade_sequence = self.determine_trade_type(symbol, side, timeframe, account_name)
+            # Get trade sequence based on table logic
+            trade_sequence = self.determine_trade_sequence(symbol, signal_type, account_name)
             
             # Check if trade sequence is empty (e.g., when skipping due to existing position)
             if not trade_sequence['steps']:
@@ -420,29 +443,7 @@ class TradingBot:
             price = self.format_price(data['price'], symbol, account_name)
             position_sizes = trade_sequence['position_size']
             
-            # Build planned changes for verification
-            planned_changes = []
-            for i, step in enumerate(trade_sequence['steps']):
-                if step == 'open_long':
-                    planned_changes.append(('BID', position_sizes[i]))
-                elif step == 'open_short':
-                    planned_changes.append(('ASK', position_sizes[i]))
-            
-            # Verify position limits before executing
-            if planned_changes:
-                is_safe, limit_message = self.verify_position_limits(symbol, planned_changes, account_name)
-                if not is_safe:
-                    self.logger.warning(f"[{request_id}] {limit_message}")
-                    self.last_signals[account_name][symbol] = {
-                        'message': message,
-                        'timeFrame': timeframe,
-                        'timestamp': time.time()
-                    }
-                    return jsonify({"success": False, "error": limit_message}), 400
-            
             # Dictionary to track currency repo operations for this request
-            # This ensures we don't try to open more than one repo for the same currency 
-            # in a single request, even if logic somehow determines we should
             repo_operations = {}
             
             # Check if sequential execution is required
@@ -473,14 +474,6 @@ class TradingBot:
                         # Position verification after execution
                         time.sleep(1)  # Wait for execution to reflect in positions
                         position_client.refresh_positions()
-                        current_position = position_client.get_truncated_position(symbol)
-                        strict_limit = self.get_strict_limit(symbol, account_name)
-                        
-                        if current_position >= strict_limit:
-                            self.logger.warning(f"[{request_id}][{account_name}] Position limit reached after {step}: {current_position} >= {strict_limit}")
-                            if sequential_required and i < len(trade_sequence['steps']) - 1:
-                                self.logger.warning(f"[{request_id}][{account_name}] Skipping remaining steps to avoid exceeding position limits")
-                                break  # Skip remaining steps
                         
                     elif step == 'open_short':
                         response = place_order(
@@ -557,16 +550,7 @@ class TradingBot:
                             self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
                             return jsonify({"success": False, "error": error_msg}), 500
                         
-                        # Check if the response indicates an existing repo was found
-                        if isinstance(response, dict) and response.get('status') == 'skipped' and response.get('reason') == 'repo_exists':
-                            self.logger.warning(f"[{request_id}][{account_name}] Repo already exists for {repo_symbol} (direct API check)")
-                            responses.append({
-                                'step': step, 
-                                'skipped': True, 
-                                'reason': 'Repo already exists (API verification)'
-                            })
-                        else:
-                            responses.append({'step': step, 'response': response})
+                        responses.append({'step': step, 'response': response})
                             
                         # Refresh position data after repo operation
                         time.sleep(1)
@@ -641,18 +625,39 @@ class TradingBot:
             # Final position verification
             time.sleep(1)
             position_client.refresh_positions()
-            final_position = position_client.get_truncated_position(symbol)
+            final_position = self.get_current_state(symbol, account_name)
+            
+            # Compare expected vs actual ending state
+            expected_ending_balance = trade_sequence.get('expected_ending_balance')
+            expected_ending_repo = trade_sequence.get('expected_ending_repo')
+            actual_ending_balance = final_position['balance']
+            actual_ending_repo = final_position['repo']
+            
+            state_match = (expected_ending_balance == actual_ending_balance and 
+                          expected_ending_repo == actual_ending_repo)
+            
+            if not state_match:
+                self.logger.warning(f"[{request_id}][{account_name}] Final state doesn't match expected state:" +
+                                  f" Expected bal={expected_ending_balance}, repo={expected_ending_repo}," +
+                                  f" Actual bal={actual_ending_balance}, repo={actual_ending_repo}")
             
             response_data = {
                 "success": True,
                 "account": account_name,
                 "orders": responses,
                 "message": f"Successfully executed trade sequence: {', '.join(trade_sequence['steps'])}",
-                "final_position": final_position
+                "event": self.event_counter[symbol],
+                "starting_balance": trade_sequence.get('starting_balance'),
+                "starting_repo": trade_sequence.get('starting_repo'),
+                "expected_ending_balance": expected_ending_balance,
+                "expected_ending_repo": expected_ending_repo,
+                "actual_ending_balance": actual_ending_balance,
+                "actual_ending_repo": actual_ending_repo,
+                "state_match": state_match
             }
             
             self.logger.info(f"[{request_id}][{account_name}] Trade sequence executed successfully: {json.dumps(responses, indent=2)}")
-            self.logger.info(f"[{request_id}][{account_name}] Final position after trade: {final_position}")
+            self.logger.info(f"[{request_id}][{account_name}] Final state: balance={actual_ending_balance}, repo={actual_ending_repo}")
             return jsonify(response_data), 200
             
         except Exception as e:
@@ -684,10 +689,11 @@ class TradingBot:
                 # Get positions for all trading pairs for this account
                 account_positions = {}
                 for symbol in trading_pairs:
+                    state = self.get_current_state(symbol, account_name)
                     account_positions[symbol] = {
-                        'raw_quantity': position_client.get_position(symbol),
-                        'truncated_quantity': position_client.get_truncated_position(symbol),
-                        'has_repo': self.verify_repo_status(symbol, account_name)
+                        'balance': state['balance'],
+                        'repo': state['repo'],
+                        'event_counter': self.event_counter.get(symbol, 0)
                     }
                 
                 positions_data['accounts'][account_name] = {
@@ -728,26 +734,20 @@ class TradingBot:
                 
             ws_status = "Connected" if position_client.is_connected() else "Disconnected"
             
-            # Get repo status for each trading pair using improved verification
+            # Get trading pairs for this account
             trading_pairs = self.config_manager.get_account_setting(
                 account_name, 'trading_pairs', [])
             
-            repo_status = {}
-            for symbol in trading_pairs:
-                base_currency = symbol.split('/')[0]
-                repo_symbol = f"{base_currency}/USDC110"
-                repo_status[repo_symbol] = self.verify_repo_status(symbol, account_name)
-            
-            # Add position limit status
+            # Get position status for each trading pair
             position_status = {}
+            event_status = {}
             for symbol in trading_pairs:
-                current_position = position_client.get_truncated_position(symbol)
-                strict_limit = self.get_strict_limit(symbol, account_name)
+                state = self.get_current_state(symbol, account_name)
                 position_status[symbol] = {
-                    "position": current_position,
-                    "limit": strict_limit,
-                    "within_limit": current_position < strict_limit
+                    "balance": state['balance'],
+                    "repo": state['repo']
                 }
+                event_status[symbol] = self.event_counter.get(symbol, 0)
             
             # Add auto-short status
             auto_short_enabled = self.config_manager.get_trading_setting(
@@ -757,8 +757,8 @@ class TradingBot:
             health_data["accounts"][account_name] = {
                 "status": "ok" if ws_status == "Connected" else "warning",
                 "websocket": ws_status,
-                "repo_status": repo_status,
                 "position_status": position_status,
+                "event_status": event_status,
                 "timeframes": self.config_manager.get_account_setting(
                     account_name, 'timeframes', []),
                 "auto_short": {
@@ -814,8 +814,19 @@ class TradingBot:
             self.logger.error(error_msg)
             return jsonify({"success": False, "error": error_msg}), 500
 
+    def reset_event_counter(self, symbol=None):
+        """Reset the event counter for a specific symbol or all symbols."""
+        if symbol:
+            if symbol in self.event_counter:
+                self.event_counter[symbol] = 0
+                self.logger.info(f"Reset event counter for {symbol}")
+        else:
+            self.event_counter = {}
+            self.logger.info("Reset all event counters")
+        return True
+
     def run(self):
-        """Run the trading bot with multi-account support."""
+        """Run the trading bot with event-based table logic."""
         try:
             # Start all WebSocket clients
             self.account_manager.start_all_clients()
@@ -831,7 +842,7 @@ class TradingBot:
             host = self.config_manager.get_global_setting('host', '0.0.0.0')
             debug = self.config_manager.get_global_setting('environment', 'production') == 'development'
             
-            self.logger.info(f"Multi-account trading bot starting on {host}:{port}")
+            self.logger.info(f"Trading bot with table-based logic starting on {host}:{port}")
             self.logger.info(f"Environment: {'Development' if debug else 'Production'}")
             
             # Log information about all accounts
@@ -843,7 +854,6 @@ class TradingBot:
                 credentials = self.config_manager.get_account_credentials(name)
                 self.logger.info(f"  API URL: {credentials.get('api_url')}")
                 self.logger.info(f"  WebSocket URL: {credentials.get('ws_url')}")
-                self.logger.info(f"  Using Custodian: {credentials.get('custodian_id')}")
                 
                 # Log auto-short status
                 auto_short_enabled = self.config_manager.get_trading_setting(
@@ -864,6 +874,10 @@ class TradingBot:
             self.account_manager.stop_all_clients()
 
 def create_app(config_path=None):
-    """Create a new trading bot instance with multi-account support."""
+    """Create a new trading bot instance with table-based logic."""
     bot = TradingBot(config_path)
     return bot
+
+if __name__ == "__main__":
+    bot = create_app()
+    bot.run()
