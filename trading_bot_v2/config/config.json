@@ -39,10 +39,10 @@
             "min_quantity": 0.001,
             "max_quantity": 1.0,
             "price_decimals": 2,
-            "repo_qty": 0.001,
-            "strict_limit": 0.002,
+            "repo_qty": 0.01,
+            "strict_limit": 0.02,
             "truncation_decimals": 3,
-            "auto_short_quantity": 0.001
+            "auto_short_quantity": 0.01
           },
           "ETH": {
             "min_quantity": 0.01,
@@ -51,7 +51,7 @@
             "repo_qty": 0.01,
             "strict_limit": 0.02,
             "truncation_decimals": 2,
-            "auto_short_quantity": 0.01
+            "auto_short_quantity": 0.1
           }
         }
       },
