@@ -4,3 +4,6 @@ trading_bot_v2/logs/*.log*
 old_files/**/logs/*.log*
 *.log
 *.log.*
+xrp_matcher/logs/xrp_matcher.log
+*.log
+*.log.*
