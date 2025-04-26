@@ -298,16 +298,26 @@ def get_jwt_token(account_name=None, config_manager=None):
     """
     # Get credentials from config if provided
     if config_manager and account_name:
+        logger.debug(f"Getting credentials for account: {account_name}")
         credentials = config_manager.get_account_credentials(account_name)
         user = credentials.get('api_username')
         password = credentials.get('api_password')
         code = credentials.get('api_code')
         base_url = credentials.get('api_base_url')
+        
+        logger.debug(f"Credentials obtained for account {account_name}")
     else:
+        # Use environment variables when config not provided
+        logger.debug(f"Using env vars for authentication, account_name={account_name}")
         user = os.getenv("API_USERNAME")
         password = os.getenv("API_PASSWORD")
         code = os.getenv("API_CODE")
         base_url = os.getenv("API_BASE_URL")
+    
+    # Check for missing credentials
+    if not user or not password or not code:
+        logger.error(f"Missing required credentials for account {account_name}")
+        return None
     
     # Check if base_url is None
     if not base_url:
@@ -321,7 +331,7 @@ def get_jwt_token(account_name=None, config_manager=None):
     endpoint = "sso/api/login"
     url = base_url + endpoint
     
-    # Modified payload to include email explicitly
+    # Modified payload to include email explicitly - CRITICAL FIX
     payload = {
         "code": code,
         "password": password,
@@ -339,13 +349,13 @@ def get_jwt_token(account_name=None, config_manager=None):
     
     logger.debug(f"Getting JWT token for {user}")
     logger.debug(f"Auth URL: {url}")
-    logger.debug(f"Auth payload: {json.dumps(payload, indent=2)}")
+    logger.debug(f"Auth payload: {json.dumps({**payload, 'password': '******'})}")
     
     try:
         response = requests.post(url, headers=headers, data=body)
         
         if not response.ok:
-            logger.error(f"Failed to get JWT token: {response.status_code} - {response.text}")
+            logger.error(f"Failed to get JWT token for account {account_name}: {response.status_code} - {response.text}")
             return None
             
         token = response.headers.get("authorization")
@@ -353,11 +363,11 @@ def get_jwt_token(account_name=None, config_manager=None):
             logger.error("No authorization token in response headers")
             return None
             
-        logger.info("Successfully obtained JWT token")
+        logger.info(f"Successfully obtained JWT token for account {account_name}")
         return token
         
     except Exception as e:
-        logger.error(f"Error getting JWT token: {str(e)}")
+        logger.error(f"Error getting JWT token for account {account_name}: {str(e)}")
         return None
 
 def get_repo_details(jwt_token=None, symbol=None, logger=None, 
@@ -398,7 +408,7 @@ def get_repo_details(jwt_token=None, symbol=None, logger=None,
     if not jwt_token:
         jwt_token = get_jwt_token(account_name, config_manager)
         if not jwt_token:
-            log.error("Failed to get JWT token")
+            log.error(f"Failed to get JWT token for account {account_name}")
             return None
     
     # Set headers
@@ -632,7 +642,7 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
     if not jwt_token:
         jwt_token = get_jwt_token(account_name, config_manager)
         if not jwt_token:
-            log.error("Failed to get JWT token")
+            log.error(f"Failed to get JWT token for account {account_name}")
             return False
     
     # Set headers

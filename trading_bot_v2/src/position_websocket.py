@@ -39,6 +39,10 @@ class PositionWebsocketClient:
     async def login(self):
         """Authenticate with the API to get a token for WebSocket connection"""
         try:
+            if not self.base_url:
+                self.logger.error(f"base_url is None for account {self.account_name} - cannot authenticate")
+                return False
+                
             self.session.headers.update({
                 'Content-Type': 'application/json',
                 'Accept': '*/*',
@@ -46,6 +50,7 @@ class PositionWebsocketClient:
                 'Referer': f'{self.base_url}/login?noredir=1'
             })
             
+            # Default credentials from environment
             username = os.getenv("API_USERNAME")
             password = os.getenv("API_PASSWORD")
             code = os.getenv("API_CODE")
@@ -62,11 +67,21 @@ class PositionWebsocketClient:
                 except Exception as e:
                     self.logger.warning(f"Failed to get credentials from config: {e}")
             
+            # Debug information about the credentials being used
+            self.logger.debug(f"Login attempt for account: {self.account_name}")
+            self.logger.debug(f"Username: {username}")
+            
+            # Ensure we have the required fields
+            if not username or not password or not code:
+                self.logger.error(f"Missing required credentials for account {self.account_name}")
+                return False
+            
+            # IMPORTANT: Always include email parameter with same value as username
             login_data = {
                 "username": username,
                 "password": password,
                 "code": code,
-                "email": username,  # Add email parameter using username value
+                "email": username,  # CRITICAL: Add email parameter using username value
                 "redirectTo": f"{self.base_url}/trader"
             }
             
@@ -86,14 +101,14 @@ class PositionWebsocketClient:
                 else:
                     self.auth_token = token
                     
-                self.logger.info("Authentication successful")
+                self.logger.info(f"Authentication successful for account {self.account_name}")
                 return True
             else:
-                self.logger.error(f"Authentication failed: {response.status_code} - {response.text}")
+                self.logger.error(f"Authentication failed for account {self.account_name}: {response.status_code} - {response.text}")
                 return False
-                    
+                
         except Exception as e:
-            self.logger.error(f"Authentication error: {str(e)}")
+            self.logger.error(f"Authentication error for account {self.account_name}: {str(e)}")
             return False
 
     async def connect_websocket(self):
@@ -327,6 +342,16 @@ class PositionWebsocketClient:
             
         self._last_refresh_time = current_time
         
+        # Check if base_url is set
+        if not self.base_url:
+            self.logger.error(f"Cannot refresh positions: base_url is None for account {self.account_name}")
+            return False
+            
+        # Check if account_name is set
+        if not self.account_name:
+            self.logger.error("Cannot refresh positions: account_name is None")
+            return False
+        
         try:
             # Make direct API call to get current positions
             # Import here to avoid circular imports
@@ -337,13 +362,16 @@ class PositionWebsocketClient:
             from src.trading_utils import get_jwt_token
             
             # Pass account_name and config_manager to get_jwt_token
+            self.logger.debug(f"Getting JWT token for position refresh for account {self.account_name}")
             jwt_token = get_jwt_token(account_name=self.account_name, config_manager=self.config_manager)
+            
             if not jwt_token:
                 self.logger.error(f"Failed to get JWT token for position refresh for account {self.account_name}")
                 return False
                 
             # Call balances API
             headers = {"Authorization": jwt_token}
+            self.logger.debug(f"Calling balances API for account {self.account_name}: {self.base_url}/rest/balances")
             response = requests.get(f"{self.base_url}/rest/balances", headers=headers)
             
             if response.ok:
@@ -364,11 +392,11 @@ class PositionWebsocketClient:
                 self.logger.info(f"Positions refreshed from API for account {self.account_name}")
                 return True
             else:
-                self.logger.error(f"Failed to refresh positions: {response.status_code} - {response.text}")
+                self.logger.error(f"Failed to refresh positions for account {self.account_name}: {response.status_code} - {response.text}")
                 return False
                 
         except Exception as e:
-            self.logger.error(f"Error refreshing positions: {str(e)}")
+            self.logger.error(f"Error refreshing positions for account {self.account_name}: {str(e)}")
             return False
 
     def set_repo_status(self, symbol, has_repo):
