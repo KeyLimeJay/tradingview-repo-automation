@@ -41,16 +41,16 @@
             "price_decimals": 2,
             "repo_qty": 0.01,
             "strict_limit": 0.02,
-            "truncation_decimals": 3,
+            "truncation_decimals": 2,
             "auto_short_quantity": 0.01
           },
           "ETH": {
             "min_quantity": 0.01,
             "max_quantity": 10.0,
             "price_decimals": 2,
-            "repo_qty": 0.01,
-            "strict_limit": 0.02,
-            "truncation_decimals": 2,
+            "repo_qty": 0.1,
+            "strict_limit": 0.2,
+            "truncation_decimals": 1,
             "auto_short_quantity": 0.1
           }
         }
@@ -83,7 +83,7 @@
             "price_decimals": 2,
             "repo_qty": 0.01,
             "strict_limit": 0.02,
-            "truncation_decimals": 3,
+            "truncation_decimals": 2,
             "auto_short_quantity": 0.01
           },
           "ETH": {
@@ -92,7 +92,7 @@
             "price_decimals": 2,
             "repo_qty": 0.1,
             "strict_limit": 0.2,
-            "truncation_decimals": 2,
+            "truncation_decimals": 1,
             "auto_short_quantity": 0.1
           }
         }

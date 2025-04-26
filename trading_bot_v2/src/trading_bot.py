@@ -1,4 +1,3 @@
-#trading_bot.py
 #!/usr/bin/env python3
 from flask import Flask, request, jsonify
 import json
@@ -211,6 +210,20 @@ class TradingBot:
         current_balance = current_state['balance']
         current_repo = current_state['repo']
         
+        # Check for repeated signals - only process first occurrence
+        if symbol in self.last_signals.get(account_name, {}):
+            last_signal = self.last_signals[account_name][symbol]
+            last_signal_type = "Buy Signal" if last_signal['message'] == "Trend Buy!" else "Sell Signal"
+            
+            # If this is a repeated signal (same type as last signal), ignore it
+            if last_signal_type == signal_type:
+                self.logger.info(f"[{account_name}] Ignoring repeated {signal_type} for {symbol}")
+                return {
+                    'steps': [],
+                    'position_size': [],
+                    'message': f"Ignoring repeated {signal_type}"
+                }
+        
         # Increment event counter for this symbol
         if symbol not in self.event_counter:
             self.event_counter[symbol] = 0
@@ -239,7 +252,7 @@ class TradingBot:
         self.logger.info(f"[{account_name}] Current state for {symbol}: Event={event_num}, " +
                        f"Signal={signal_type}, Balance={current_balance}, Repo={current_repo}")
         
-        # Based on the table logic:
+        # Loop Pattern 1: Event 1 → 4 → 3 → 4...
         # Event 1, Buy Signal: Buy
         if event_num == 1 and signal_type == 'Buy Signal':
             return {
@@ -252,9 +265,9 @@ class TradingBot:
                 'expected_ending_repo': current_repo
             }
         
-        # Event 2, Sell Signal: Open Repo (seq 1), Sell (seq 2)
+        # Event 2, Sell Signal: Open Repo, Sell
         elif event_num == 2 and signal_type == 'Sell Signal':
-            # First sequence
+            # First part - open repo
             if current_balance == 0 and current_repo == 0:
                 return {
                     'steps': ['open_repo', 'open_short'],
@@ -263,92 +276,37 @@ class TradingBot:
                     'sequential': True,
                     'starting_balance': current_balance,
                     'starting_repo': current_repo,
-                    'expected_ending_balance': current_balance,
+                    'expected_ending_balance': 0,
                     'expected_ending_repo': unit_size
                 }
-            # If already executed seq 1
-            else:
-                return {
-                    'steps': ['open_short'],
-                    'position_size': [unit_size],
-                    'sequential': True,
-                    'starting_balance': current_balance,
-                    'starting_repo': current_repo,
-                    'expected_ending_balance': current_balance,
-                    'expected_ending_repo': current_repo + unit_size
-                }
         
-        # Event 3, Buy Signal: Buy (seq 1), Close Repo (seq 2), Buy (seq 3)
+        # Event 3, Buy Signal: Buy twice, close repo
         elif event_num == 3 and signal_type == 'Buy Signal':
-            # First sequence
+            # Following event 2 or event 4 - balance at 0, repo at unit_size
             if current_balance == 0 and current_repo == unit_size:
                 return {
-                    'steps': ['open_long'],
-                    'position_size': [unit_size],
-                    'sequential': True,
-                    'starting_balance': current_balance,
-                    'starting_repo': current_repo,
-                    'expected_ending_balance': current_balance,
-                    'expected_ending_repo': current_repo
-                }
-            # Second sequence
-            elif current_balance == 0 and current_repo == unit_size:
-                return {
-                    'steps': ['close_repo'],
-                    'position_size': [repo_symbol],
-                    'sequential': True,
-                    'starting_balance': current_balance,
-                    'starting_repo': current_repo,
-                    'expected_ending_balance': current_balance,
-                    'expected_ending_repo': 0
-                }
-            # Third sequence
-            elif current_balance == 0 and current_repo == 0:
-                return {
-                    'steps': ['open_long'],
-                    'position_size': [unit_size],
+                    'steps': ['open_long', 'open_long', 'close_repo'],
+                    'position_size': [unit_size, unit_size, repo_symbol],
                     'sequential': True,
                     'starting_balance': current_balance,
                     'starting_repo': current_repo,
                     'expected_ending_balance': unit_size,
-                    'expected_ending_repo': current_repo
+                    'expected_ending_repo': 0
                 }
         
-        # Event 4, Sell Signal: Sell (seq 1), Open Repo (seq 2), Sell (seq 3)
+        # Event 4, Sell Signal: Sell, Open Repo, Sell
         elif event_num == 4 and signal_type == 'Sell Signal':
-            # First sequence
-            if current_balance == unit_size and current_repo == 0:
+            # Following event 1 or event 3 - balance at 1 or more, repo at 0
+            if current_balance >= unit_size and current_repo == 0:
                 return {
-                    'steps': ['open_short'],
-                    'position_size': [unit_size],
-                    'sequential': True,
-                    'starting_balance': current_balance,
-                    'starting_repo': current_repo,
-                    'expected_ending_balance': 0,
-                    'expected_ending_repo': current_repo
-                }
-            # Second sequence
-            elif current_balance == 0 and current_repo == 0:
-                return {
-                    'steps': ['open_repo'],
-                    'position_size': [unit_size],
+                    'steps': ['open_short', 'open_repo', 'open_short'],
+                    'position_size': [unit_size, unit_size, unit_size],
                     'repo_details': repo_details,
                     'sequential': True,
                     'starting_balance': current_balance,
                     'starting_repo': current_repo,
-                    'expected_ending_balance': unit_size,
-                    'expected_ending_repo': unit_size
-                }
-            # Third sequence
-            elif current_balance == unit_size and current_repo == unit_size:
-                return {
-                    'steps': ['open_short'],
-                    'position_size': [unit_size],
-                    'sequential': True,
-                    'starting_balance': current_balance,
-                    'starting_repo': current_repo,
                     'expected_ending_balance': 0,
-                    'expected_ending_repo': current_repo
+                    'expected_ending_repo': unit_size
                 }
         
         # For other cases or when the sequence doesn't match the table
