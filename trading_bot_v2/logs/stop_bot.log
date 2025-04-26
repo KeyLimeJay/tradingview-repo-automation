@@ -93,3 +93,35 @@ Monitoring will be automatically re-enabled when you run start_trading_bot.sh
 FINAL STATUS: SUCCESS
 MONITORING: Disabled (bot will not restart automatically)
 -----------------------------------------
+Sat Apr 26 03:23:03 UTC 2025: Attempting to stop trading bot...
+Found PID file with PID: 1792523
+Process 1792523 is running. Attempting to kill...
+Successfully terminated process 1792523
+Removed PID file
+No main bot processes found running
+No other trading-related processes found
+Removed bot_running marker file
+-----------------------------------------
+SHUTDOWN VERIFICATION REPORT
+Timestamp: Sat Apr 26 03:23:05 UTC 2025
+Status: SUCCESS
+Details:
+  - Terminated main bot process 1792523
+  - No main bot processes were running
+  - No other trading-related processes were running
+  - Removed .bot_running marker file
+NOTE: Other Python processes are still running (may be unrelated):
+root        2160  8.5  0.0 346424 28252 ?        Rs    2022 121904:36 /usr/bin/python2 /usr/bin/supervisord -c /etc/supervisord.conf
+root        2173  1.0  0.0 961256 124820 ?       Ssl   2022 15381:40 /usr/libexec/platform-python -Es /usr/sbin/tuned -l -P
+mihaelp   396238  0.1  0.0 251560 12408 ?        Ss   Apr25   0:42 /usr/bin/python3.6 /usr/bin/balances/atomic5.py
+jlimon   1681285  0.0  0.0   5304  4268 ?        S    02:17   0:00 /home/jlimon/.vscode-server/extensions/ms-python.python-2025.4.0-linux-x64/python-env-tools/bin/pet server
+jlimon   1681422  0.7  0.1 13109120 442728 ?     Sl   02:17   0:30 /home/jlimon/.vscode-server/cli/servers/Stable-17baf841131aa23349f217ca7c570c76ee87b957/server/node /home/jlimon/.vscode-server/extensions/ms-python.vscode-pylance-2025.4.1/dist/server.bundle.js --cancellationReceive=file:3caa24a758d75b150d85f415cf544d55a4c40e7d8a --node-ipc --clientProcessId=1128546
+mihaelp  3470708  0.0  0.0 400424  7120 ?        Ss    2023  78:08 /usr/bin/python3.6 /usr/bin/balances/MDService.py
+-----------------------------------------
+Bot shutdown process completed with status: SUCCESS
+Monitoring has been disabled. Bot will not restart automatically.
+Monitoring will be automatically re-enabled when you run start_trading_bot.sh
+-----------------------------------------
+FINAL STATUS: SUCCESS
+MONITORING: Disabled (bot will not restart automatically)
+-----------------------------------------
