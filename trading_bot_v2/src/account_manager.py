@@ -23,6 +23,11 @@ class AccountManager:
         self.logger.info("Initializing accounts from configuration")
         account_list = self.config_manager.get_enabled_accounts()
         
+        # Check if timeframe_routing exists, if not create it
+        if not hasattr(self.config_manager, 'timeframe_routing'):
+            self.logger.info("Creating timeframe_routing attribute in config_manager")
+            self.config_manager.timeframe_routing = {}
+        
         for account_data in account_list:
             account_name = account_data.get('name')
             if account_name:
