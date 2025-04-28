@@ -329,14 +329,25 @@ class PositionWebsocketClient:
         self._last_refresh_time = current_time
         
         try:
-            # Use our own auth token if we've already authenticated
+            # Force a re-authentication to get a fresh token - this is the most reliable method
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            try:
+                login_success = loop.run_until_complete(self.login())
+                if not login_success:
+                    self.logger.error("Authentication failed, cannot refresh positions")
+                    return False
+            finally:
+                loop.close()
+            
+            # Use the newly obtained auth token
             if self.auth_token:
-                # Ensure token has the correct format with Bearer prefix
-                auth_header = self.auth_token
-                if not auth_header.startswith('Bearer '):
-                    auth_header = f"Bearer {auth_header}"
+                # Format the token with Bearer prefix if not already present
+                auth_token = self.auth_token
+                if not auth_token.startswith('Bearer '):
+                    auth_token = f"Bearer {auth_token}"
                     
-                headers = {"Authorization": auth_header}
+                headers = {"Authorization": auth_token}
                 
                 # Call balances API
                 response = requests.get(f"{self.base_url}/rest/balances", headers=headers, timeout=30)
@@ -360,48 +371,15 @@ class PositionWebsocketClient:
                     return True
                 else:
                     self.logger.error(f"Failed to refresh positions: {response.status_code} - {response.text}")
-                    
-                    # If we get a 401 unauthorized error, try to re-authenticate
-                    if response.status_code == 401:
-                        self.logger.info("Auth token expired, attempting re-authentication")
-                        
-                        # Run the async login function in the background
-                        loop = asyncio.new_event_loop()
-                        asyncio.set_event_loop(loop)
-                        try:
-                            login_success = loop.run_until_complete(self.login())
-                            if login_success:
-                                self.logger.info("Re-authentication successful, retrying position refresh")
-                                # Call this method again (only once to avoid infinite recursion)
-                                return self.refresh_positions()
-                        finally:
-                            loop.close()
-                    
                     return False
-            
-            # If we don't have a token yet, try to authenticate
             else:
-                self.logger.warning("No auth token available, attempting authentication")
-                
-                # Run the async login function in the background
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
-                try:
-                    login_success = loop.run_until_complete(self.login())
-                    if login_success:
-                        self.logger.info("Authentication successful, retrying position refresh")
-                        # Call this method again (only once to avoid infinite recursion)
-                        return self.refresh_positions()
-                    else:
-                        self.logger.error("Authentication failed, cannot refresh positions")
-                        return False
-                finally:
-                    loop.close()
+                self.logger.error("No auth token available after authentication")
+                return False
                     
         except Exception as e:
             self.logger.error(f"Error refreshing positions: {str(e)}")
             return False
-
+        
     def set_repo_status(self, symbol, has_repo):
         """Manually set repo status for a symbol"""
         base_currency = symbol.split('/')[0] if '/' in symbol else symbol
