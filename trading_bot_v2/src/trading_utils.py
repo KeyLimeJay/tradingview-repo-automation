@@ -323,7 +323,8 @@ def get_jwt_token(account_name=None, config_manager=None):
         "redirectTo": base_url,
         "username": user
     }
-    print(payload)
+    logger.info(f"Payload for JWT token: {payload}")
+
     
     body = json.dumps(payload)
     
@@ -332,7 +333,11 @@ def get_jwt_token(account_name=None, config_manager=None):
         'Accept': '*/*'
     }
     
-    logger.debug(f"Getting JWT token for {user}")
+    logger.info(f"Getting JWT token for {user}")
+    logger.info(f"Request URL: {url}")
+    logger.info(f"Request Body: {body}")
+    logger.info(f"Request Headers: {headers}")
+
     
     try:
         response = requests.post(url, headers=headers, data=body)
