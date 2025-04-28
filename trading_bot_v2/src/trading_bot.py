@@ -11,14 +11,14 @@ from threading import Lock, Thread
 import time
 import threading
 from collections import OrderedDict
-from .position_websocket import PositionWebsocketClient
+from scr.position_websocket import PositionWebsocketClient
 from src.trading_utils import (
     place_order, OrderPlacementError, place_repo_order, 
     close_repo, get_jwt_token, get_repo_details
 )
 import requests
 from src.account_manager import AccountManager
-from src.auto_position_manager import AutoPositionManager
+from trading_bot_v2.src.auto_position_manager import AutoPositionManager
 from src.config_manager import ConfigurationManager
 
 
