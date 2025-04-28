@@ -309,65 +309,105 @@ def get_jwt_token(account_name=None, config_manager=None):
         password = credentials.get('api_password')
         code = credentials.get('api_code')
         base_url = credentials.get('api_base_url')
+        
+        # Save original environment variables to restore later
+        orig_username = os.environ.get('API_USERNAME')
+        orig_password = os.environ.get('API_PASSWORD')
+        orig_code = os.environ.get('API_CODE')
+        orig_base_url = os.environ.get('API_BASE_URL')
+        
+        # Temporarily set environment variables for this request
+        if user: os.environ['API_USERNAME'] = user
+        if password: os.environ['API_PASSWORD'] = password
+        if code: os.environ['API_CODE'] = code
+        if base_url: os.environ['API_BASE_URL'] = base_url
     else:
         user = os.getenv("API_USERNAME")
         password = os.getenv("API_PASSWORD")
         code = os.getenv("API_CODE")
         base_url = os.getenv("API_BASE_URL")
+        # No need to save/restore in this case
+        orig_username = orig_password = orig_code = orig_base_url = None
     
     logger.info(f"Base URL: {base_url}")
     logger.info(f"Username: {user}")
     logger.info(f"Password: {'*****' if password else None}")            
     logger.info(f"Code: {code}")
     
-    # Ensure we have all required credentials
-    if not all([user, password, code, base_url]):
-        logger.error("Missing required credentials for JWT authentication")
-        return None
-    
-    # Ensure base_url ends with a slash
-    if not base_url.endswith('/'):
-        base_url += '/'
-    
-    method = "POST"
-    endpoint = "sso/api/login"
-    url = base_url + endpoint
-    
-    payload = {
-        "code": code,
-        "password": password,
-        "redirectTo": base_url,
-        "username": user,
-        "email": user  # Add email parameter using the same value as username
-    }
-    
-    body = json.dumps(payload)
-    
-    headers = {
-        'Content-Type': 'application/json',
-        'Accept': '*/*'
-    }
-    
-    logger.debug(f"Getting JWT token for {user}")
+    token = None
     
     try:
+        # Ensure we have all required credentials
+        if not all([user, password, code, base_url]):
+            logger.error("Missing required credentials for JWT authentication")
+            return None
+        
+        # Ensure base_url ends with a slash
+        if not base_url.endswith('/'):
+            base_url += '/'
+        
+        method = "POST"
+        endpoint = "sso/api/login"
+        url = base_url + endpoint
+        
+        payload = {
+            "code": code,
+            "password": password,
+            "redirectTo": base_url,
+            "username": user,
+            "email": user  # Add email parameter using the same value as username
+        }
+        
+        body = json.dumps(payload)
+        
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': '*/*'
+        }
+        
+        logger.debug(f"Getting JWT token for {user}")
+        
         response = requests.post(url, headers=headers, data=body, timeout=30)
         
         if not response.ok:
             logger.error(f"Failed to get JWT token: {response.status_code} - {response.text}")
             return None
-            
+                
         token = response.headers.get("authorization")
         if not token:
             logger.error("No authorization token in response headers")
             return None
-            
+                
         logger.info("Successfully obtained JWT token")
-        return token
-        
+    
     except Exception as e:
         logger.error(f"Error getting JWT token: {str(e)}")
         return None
+    
+    finally:
+        # Restore original environment variables if we changed them
+        if config_manager and account_name:
+            if orig_username is not None:
+                os.environ['API_USERNAME'] = orig_username
+            elif 'API_USERNAME' in os.environ:
+                del os.environ['API_USERNAME']
+                
+            if orig_password is not None:
+                os.environ['API_PASSWORD'] = orig_password
+            elif 'API_PASSWORD' in os.environ:
+                del os.environ['API_PASSWORD']
+                
+            if orig_code is not None:
+                os.environ['API_CODE'] = orig_code
+            elif 'API_CODE' in os.environ:
+                del os.environ['API_CODE']
+                
+            if orig_base_url is not None:
+                os.environ['API_BASE_URL'] = orig_base_url
+            elif 'API_BASE_URL' in os.environ:
+                del os.environ['API_BASE_URL']
+    
+    return token
 
 def get_repo_details(jwt_token=None, symbol=None, logger=None, 
                      account_name=None, config_manager=None):

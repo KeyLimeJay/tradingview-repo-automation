@@ -30,15 +30,20 @@ class PositionWebsocketClient:
         self._heartbeat_interval = 30
         self.api_key = api_key
         self.api_secret = api_secret
+        # New instance variables for direct credential access
+        self.api_username = None
+        self.api_password = None
+        self.api_code = None
         self._last_refresh_time = 0
         self._min_refresh_interval = 1  # Minimum seconds between refreshes
         
     async def login(self):
         """Authenticate with the API to get a token for WebSocket connection"""
         try:
-            username = os.getenv("API_USERNAME")
-            password = os.getenv("API_PASSWORD")
-            code = os.getenv("API_CODE")
+            # First try to use credentials passed directly to the client
+            username = getattr(self, 'api_username', None) or os.getenv("API_USERNAME")
+            password = getattr(self, 'api_password', None) or os.getenv("API_PASSWORD")
+            code = getattr(self, 'api_code', None) or os.getenv("API_CODE")
             
             # Check if credentials and base_url are available
             if not all([username, password, code, self.base_url]):

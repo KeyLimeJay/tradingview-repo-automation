@@ -110,12 +110,17 @@ class AccountManager:
             client.base_url = account['api_base_url']
             client.ws_url = account['ws_url']
             
+            # Set additional credentials on the client object directly
+            client.api_username = account['api_username']
+            client.api_password = account['api_password'] 
+            client.api_code = account['api_code']
+            
             # Set environment variables for this client (needed for other utility functions)
-            # Note: In the future, we could consider passing these directly to avoid env vars
-            os.environ[f'POSITION_CLIENT_{name}_API_USERNAME'] = account['api_username']
-            os.environ[f'POSITION_CLIENT_{name}_API_PASSWORD'] = account['api_password']
-            os.environ[f'POSITION_CLIENT_{name}_API_CODE'] = account['api_code']
-            os.environ[f'POSITION_CLIENT_{name}_API_BASE_URL'] = account['api_base_url']
+            # This ensures the proper credentials are set before any authentication calls
+            os.environ[f'API_USERNAME'] = account['api_username']
+            os.environ[f'API_PASSWORD'] = account['api_password']
+            os.environ[f'API_CODE'] = account['api_code']
+            os.environ[f'API_BASE_URL'] = account['api_base_url']
             
             self.position_clients[name] = client
             
