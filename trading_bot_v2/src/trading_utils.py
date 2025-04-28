@@ -311,9 +311,9 @@ def get_jwt_token(account_name=None, config_manager=None):
         base_url = os.getenv("API_BASE_URL")
     logger.info(f"Base URL: {base_url}")
     logger.info(f"Username: {user}")
-    logger.info(f"Password  : {password}")
-    logger.info(f"Code      : {code}")
-    # Validate credentials  
+    logger.info(f"Password: {password}")            
+    logger.info(f"Code: {code}")
+    # Validate credentials
     
     if not base_url.endswith('/'):
         base_url += '/'
@@ -326,10 +326,9 @@ def get_jwt_token(account_name=None, config_manager=None):
         "code": code,
         "password": password,
         "redirectTo": base_url,
-        "username": user
+        "username": user,
+        "email": user  # Add email parameter using the same value as username
     }
-    logger.info(f"Payload for JWT token: {payload}")
-
     
     body = json.dumps(payload)
     
@@ -338,11 +337,7 @@ def get_jwt_token(account_name=None, config_manager=None):
         'Accept': '*/*'
     }
     
-    logger.info(f"Getting JWT token for {user}")
-    logger.info(f"Request URL: {url}")
-    logger.info(f"Request Body: {body}")
-    logger.info(f"Request Headers: {headers}")
-
+    logger.debug(f"Getting JWT token for {user}")
     
     try:
         response = requests.post(url, headers=headers, data=body)
