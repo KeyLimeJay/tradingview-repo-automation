@@ -1,4 +1,3 @@
-#account_manager.py
 #!/usr/bin/env python3
 import os
 import logging
@@ -179,10 +178,20 @@ class AccountManager:
         
         try:
             # Setup for this account
-            os.environ['API_USERNAME'] = account['api_username']
-            os.environ['API_PASSWORD'] = account['api_password']
-            os.environ['API_CODE'] = account['api_code']
-            os.environ['API_BASE_URL'] = account['api_base_url']
+            api_username = account.get('api_username')
+            api_password = account.get('api_password')
+            api_code = account.get('api_code')
+            api_base_url = account.get('api_base_url')
+            
+            # Check if we have valid credentials
+            if not all([api_username, api_password, api_code, api_base_url]):
+                self.logger.error(f"Missing required credentials for account: {account_name}")
+                return ws_repo_status  # Fall back to WebSocket status
+                
+            os.environ['API_USERNAME'] = api_username
+            os.environ['API_PASSWORD'] = api_password
+            os.environ['API_CODE'] = api_code
+            os.environ['API_BASE_URL'] = api_base_url
             
             # Import here to avoid circular imports
             from src.trading_utils import get_jwt_token, get_repo_details

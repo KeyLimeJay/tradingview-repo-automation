@@ -1,4 +1,3 @@
-#position_websocket.py
 #!/usr/bin/env python3
 import asyncio
 import websockets
@@ -36,6 +35,15 @@ class PositionWebsocketClient:
     async def login(self):
         """Authenticate with the API to get a token for WebSocket connection"""
         try:
+            username = os.getenv("API_USERNAME")
+            password = os.getenv("API_PASSWORD")
+            code = os.getenv("API_CODE")
+            
+            # Check if credentials and base_url are available
+            if not all([username, password, code, self.base_url]):
+                self.logger.error("Missing required credentials for authentication")
+                return False
+                
             self.session.headers.update({
                 'Content-Type': 'application/json',
                 'Accept': '*/*',
@@ -44,15 +52,17 @@ class PositionWebsocketClient:
             })
             
             login_data = {
-                "username": os.getenv("API_USERNAME"),
-                "password": os.getenv("API_PASSWORD"),
-                "code": os.getenv("API_CODE"),
-                "redirectTo": f"{self.base_url}/trader"
+                "username": username,
+                "password": password,
+                "code": code,
+                "redirectTo": f"{self.base_url}/trader",
+                "email": username  # Add email parameter using the same value as username
             }
             
             response = self.session.post(
                 f"{self.base_url}/sso/api/login",
-                json=login_data
+                json=login_data,
+                timeout=30
             )
             
             if response.status_code == 200:
@@ -323,7 +333,7 @@ class PositionWebsocketClient:
                 
             # Call balances API
             headers = {"Authorization": jwt_token}
-            response = requests.get(f"{self.base_url}/rest/balances", headers=headers)
+            response = requests.get(f"{self.base_url}/rest/balances", headers=headers, timeout=30)
             
             if response.ok:
                 data = response.json()
@@ -343,7 +353,7 @@ class PositionWebsocketClient:
                 self.logger.info("Positions refreshed from API")
                 return True
             else:
-                self.logger.error(f"Failed to refresh positions: {response.status_code}")
+                self.logger.error(f"Failed to refresh positions: {response.status_code} - {response.text}")
                 return False
                 
         except Exception as e:

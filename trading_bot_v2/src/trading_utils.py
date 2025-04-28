@@ -1,4 +1,3 @@
-#trading_utils.py
 #!/usr/bin/env python3
 import requests
 import hmac
@@ -186,6 +185,11 @@ def place_order(api_key=None, api_secret=None, symbol=None, side=None, price=Non
         max_retries = max_retries or int(os.getenv('MAX_RETRIES', 3))
         retry_delay = int(os.getenv('RETRY_DELAY', 1))
     
+    # Check if credentials are valid
+    if not all([api_key, api_secret, custodian_id, api_url]):
+        logger.error("Missing required credentials for order placement")
+        raise OrderPlacementError("Missing required credentials for order placement")
+    
     # Set up URL
     url = f"{api_url}/rest/orders"
     endpoint = "/rest/orders"
@@ -247,7 +251,7 @@ def place_order(api_key=None, api_secret=None, symbol=None, side=None, price=Non
                 logger.debug(f"Order body: {body}")
                 
                 # Make the API request
-                response = requests.post(url, headers=headers, data=body)
+                response = requests.post(url, headers=headers, data=body, timeout=30)
                 
                 if response.ok:
                     logger.info(f"Order placed successfully: Status {response.status_code}")
@@ -309,12 +313,18 @@ def get_jwt_token(account_name=None, config_manager=None):
         password = os.getenv("API_PASSWORD")
         code = os.getenv("API_CODE")
         base_url = os.getenv("API_BASE_URL")
+    
     logger.info(f"Base URL: {base_url}")
     logger.info(f"Username: {user}")
-    logger.info(f"Password: {password}")            
+    logger.info(f"Password: {'*****' if password else None}")            
     logger.info(f"Code: {code}")
-    # Validate credentials
     
+    # Ensure we have all required credentials
+    if not all([user, password, code, base_url]):
+        logger.error("Missing required credentials for JWT authentication")
+        return None
+    
+    # Ensure base_url ends with a slash
     if not base_url.endswith('/'):
         base_url += '/'
     
@@ -340,7 +350,7 @@ def get_jwt_token(account_name=None, config_manager=None):
     logger.debug(f"Getting JWT token for {user}")
     
     try:
-        response = requests.post(url, headers=headers, data=body)
+        response = requests.post(url, headers=headers, data=body, timeout=30)
         
         if not response.ok:
             logger.error(f"Failed to get JWT token: {response.status_code} - {response.text}")
@@ -386,6 +396,11 @@ def get_repo_details(jwt_token=None, symbol=None, logger=None,
     else:
         base_url = os.getenv("API_BASE_URL")
         username = os.getenv("API_USERNAME")
+        
+    # Ensure required parameters are present
+    if not all([base_url, username, symbol]):
+        log.error("Missing required parameters for repo details lookup")
+        return None
     
     # Get JWT token if not provided
     if not jwt_token:
@@ -401,6 +416,7 @@ def get_repo_details(jwt_token=None, symbol=None, logger=None,
         "User-Agent": "python-requests/2.28.1"
     }
     
+    # Ensure base_url ends with a slash
     if not base_url.endswith('/'):
         base_url += '/'
     
@@ -420,7 +436,8 @@ def get_repo_details(jwt_token=None, symbol=None, logger=None,
         repo_response = requests.post(
             url=url,
             headers=headers,
-            json=payload
+            json=payload,
+            timeout=30
         )
         
         if log:
@@ -505,6 +522,11 @@ def place_repo_order(jwt_token=None, symbol=None, quantity=None, interest_rate=N
         api_url = os.getenv('API_URL')
         interest_rate = interest_rate or float(os.getenv('REPO_INTEREST_RATE', 10.0))
     
+    # Check if credentials are valid
+    if not all([api_key, api_secret, custodian_id, api_url, symbol, quantity]):
+        log.error("Missing required parameters for repo order placement")
+        return None
+    
     # Set up URL
     url = f"{api_url}/rest/orders"
     endpoint = "/rest/orders"
@@ -569,7 +591,7 @@ def place_repo_order(jwt_token=None, symbol=None, quantity=None, interest_rate=N
     
     # Make the API request
     try:
-        response = requests.post(url, headers=headers, data=body)
+        response = requests.post(url, headers=headers, data=body, timeout=30)
         
         if response.ok:
             if log:
@@ -613,6 +635,11 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
         base_url = credentials.get('api_base_url')
     else:
         base_url = os.getenv("API_BASE_URL")
+        
+    # Check if base_url is valid
+    if not base_url:
+        log.error("No base URL available for repo closing")
+        return False
     
     # Get JWT token if not provided
     if not jwt_token:
@@ -654,7 +681,8 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
         # Use GET with URL parameters
         close_response = requests.get(
             url=close_url, 
-            headers=headers
+            headers=headers,
+            timeout=30
         )
         
         if log:
