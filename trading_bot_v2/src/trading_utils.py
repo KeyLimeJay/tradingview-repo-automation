@@ -309,6 +309,11 @@ def get_jwt_token(account_name=None, config_manager=None):
         password = os.getenv("API_PASSWORD")
         code = os.getenv("API_CODE")
         base_url = os.getenv("API_BASE_URL")
+    logger.info(f"Base URL: {base_url}")
+    logger.info(f"Username: {user}")
+    logger.info(f"Password  : {password}")
+    logger.info(f"Code      : {code}")
+    # Validate credentials  
     
     if not base_url.endswith('/'):
         base_url += '/'
