@@ -1,3 +1,4 @@
+#trading_utils.py
 #!/usr/bin/env python3
 import requests
 import hmac
@@ -298,32 +299,17 @@ def get_jwt_token(account_name=None, config_manager=None):
     """
     # Get credentials from config if provided
     if config_manager and account_name:
-        logger.debug(f"Getting credentials for account: {account_name}")
         credentials = config_manager.get_account_credentials(account_name)
         user = credentials.get('api_username')
         password = credentials.get('api_password')
         code = credentials.get('api_code')
         base_url = credentials.get('api_base_url')
-        
-        logger.debug(f"Credentials obtained for account {account_name}")
     else:
-        # Use environment variables when config not provided
-        logger.debug(f"Using env vars for authentication, account_name={account_name}")
         user = os.getenv("API_USERNAME")
         password = os.getenv("API_PASSWORD")
         code = os.getenv("API_CODE")
         base_url = os.getenv("API_BASE_URL")
     
-    # Check for missing credentials
-    if not user or not password or not code:
-        logger.error(f"Missing required credentials for account {account_name}")
-        return None
-    
-    # Check if base_url is None
-    if not base_url:
-        logger.error(f"base_url is None for account {account_name} - check configuration")
-        return None
-        
     if not base_url.endswith('/'):
         base_url += '/'
     
@@ -331,13 +317,11 @@ def get_jwt_token(account_name=None, config_manager=None):
     endpoint = "sso/api/login"
     url = base_url + endpoint
     
-    # Modified payload to include email explicitly - CRITICAL FIX
     payload = {
         "code": code,
         "password": password,
         "redirectTo": base_url,
-        "username": user,
-        "email": user  # Using username value as email since it contains email address
+        "username": user
     }
     
     body = json.dumps(payload)
@@ -348,14 +332,12 @@ def get_jwt_token(account_name=None, config_manager=None):
     }
     
     logger.debug(f"Getting JWT token for {user}")
-    logger.debug(f"Auth URL: {url}")
-    logger.debug(f"Auth payload: {json.dumps({**payload, 'password': '******'})}")
     
     try:
         response = requests.post(url, headers=headers, data=body)
         
         if not response.ok:
-            logger.error(f"Failed to get JWT token for account {account_name}: {response.status_code} - {response.text}")
+            logger.error(f"Failed to get JWT token: {response.status_code} - {response.text}")
             return None
             
         token = response.headers.get("authorization")
@@ -363,11 +345,11 @@ def get_jwt_token(account_name=None, config_manager=None):
             logger.error("No authorization token in response headers")
             return None
             
-        logger.info(f"Successfully obtained JWT token for account {account_name}")
+        logger.info("Successfully obtained JWT token")
         return token
         
     except Exception as e:
-        logger.error(f"Error getting JWT token for account {account_name}: {str(e)}")
+        logger.error(f"Error getting JWT token: {str(e)}")
         return None
 
 def get_repo_details(jwt_token=None, symbol=None, logger=None, 
@@ -399,16 +381,11 @@ def get_repo_details(jwt_token=None, symbol=None, logger=None,
         base_url = os.getenv("API_BASE_URL")
         username = os.getenv("API_USERNAME")
     
-    # Check if base_url is None
-    if not base_url:
-        log.error(f"base_url is None for account {account_name} - check configuration")
-        return None
-    
     # Get JWT token if not provided
     if not jwt_token:
         jwt_token = get_jwt_token(account_name, config_manager)
         if not jwt_token:
-            log.error(f"Failed to get JWT token for account {account_name}")
+            log.error("Failed to get JWT token")
             return None
     
     # Set headers
@@ -459,7 +436,6 @@ def get_repo_details(jwt_token=None, symbol=None, logger=None,
         repo_contract = repo_data["content"][0]
         repo_id = repo_contract.get("id")
         event_id = repo_contract.get("eventId")
-        quantity = repo_contract.get("quantity")
         
         if not repo_id:
             if log:
@@ -471,8 +447,7 @@ def get_repo_details(jwt_token=None, symbol=None, logger=None,
             
         return {
             "id": repo_id,
-            "eventId": event_id,
-            "quantity": quantity
+            "eventId": event_id
         }
         
     except Exception as e:
@@ -633,16 +608,11 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
     else:
         base_url = os.getenv("API_BASE_URL")
     
-    # Check if base_url is None
-    if not base_url:
-        log.error(f"base_url is None for account {account_name} - check configuration")
-        return False
-    
     # Get JWT token if not provided
     if not jwt_token:
         jwt_token = get_jwt_token(account_name, config_manager)
         if not jwt_token:
-            log.error(f"Failed to get JWT token for account {account_name}")
+            log.error("Failed to get JWT token")
             return False
     
     # Set headers

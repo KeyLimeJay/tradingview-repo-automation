@@ -1,3 +1,4 @@
+#position_websocket.py
 #!/usr/bin/env python3
 import asyncio
 import websockets
@@ -12,8 +13,7 @@ import math
 import importlib.util
 
 class PositionWebsocketClient:
-    def __init__(self, api_key=None, api_secret=None, logger=None, auto_reconnect=True, 
-                 reconnect_interval=5, account_name=None, config_manager=None):
+    def __init__(self, api_key=None, api_secret=None, logger=None, auto_reconnect=True, reconnect_interval=5):
         self.base_url = None
         self.ws_url = None
         self.session = requests.Session()
@@ -32,17 +32,10 @@ class PositionWebsocketClient:
         self.api_secret = api_secret
         self._last_refresh_time = 0
         self._min_refresh_interval = 1  # Minimum seconds between refreshes
-        # Store account name and config manager for authentication
-        self.account_name = account_name
-        self.config_manager = config_manager
         
     async def login(self):
         """Authenticate with the API to get a token for WebSocket connection"""
         try:
-            if not self.base_url:
-                self.logger.error(f"base_url is None for account {self.account_name} - cannot authenticate")
-                return False
-                
             self.session.headers.update({
                 'Content-Type': 'application/json',
                 'Accept': '*/*',
@@ -50,43 +43,12 @@ class PositionWebsocketClient:
                 'Referer': f'{self.base_url}/login?noredir=1'
             })
             
-            # Default credentials from environment
-            username = os.getenv("API_USERNAME")
-            password = os.getenv("API_PASSWORD")
-            code = os.getenv("API_CODE")
-            
-            # Try to get credentials from config if available
-            if self.config_manager and self.account_name:
-                try:
-                    credentials = self.config_manager.get_account_credentials(self.account_name)
-                    if credentials:
-                        username = credentials.get('api_username', username)
-                        password = credentials.get('api_password', password)
-                        code = credentials.get('api_code', code)
-                        self.logger.debug(f"Using credentials from config for account: {self.account_name}")
-                except Exception as e:
-                    self.logger.warning(f"Failed to get credentials from config: {e}")
-            
-            # Debug information about the credentials being used
-            self.logger.debug(f"Login attempt for account: {self.account_name}")
-            self.logger.debug(f"Username: {username}")
-            
-            # Ensure we have the required fields
-            if not username or not password or not code:
-                self.logger.error(f"Missing required credentials for account {self.account_name}")
-                return False
-            
-            # IMPORTANT: Always include email parameter with same value as username
             login_data = {
-                "username": username,
-                "password": password,
-                "code": code,
-                "email": username,  # CRITICAL: Add email parameter using username value
+                "username": os.getenv("API_USERNAME"),
+                "password": os.getenv("API_PASSWORD"),
+                "code": os.getenv("API_CODE"),
                 "redirectTo": f"{self.base_url}/trader"
             }
-            
-            self.logger.debug(f"Auth URL: {self.base_url}/sso/api/login")
-            self.logger.debug(f"Auth payload: {json.dumps({**login_data, 'password': '******'})}")
             
             response = self.session.post(
                 f"{self.base_url}/sso/api/login",
@@ -101,14 +63,14 @@ class PositionWebsocketClient:
                 else:
                     self.auth_token = token
                     
-                self.logger.info(f"Authentication successful for account {self.account_name}")
+                self.logger.info("Authentication successful")
                 return True
             else:
-                self.logger.error(f"Authentication failed for account {self.account_name}: {response.status_code} - {response.text}")
+                self.logger.error(f"Authentication failed: {response.status_code} - {response.text}")
                 return False
-                
+                    
         except Exception as e:
-            self.logger.error(f"Authentication error for account {self.account_name}: {str(e)}")
+            self.logger.error(f"Authentication error: {str(e)}")
             return False
 
     async def connect_websocket(self):
@@ -304,9 +266,17 @@ class PositionWebsocketClient:
         # First try to get from config if available
         truncation_decimals = None
         try:
-            if self.config_manager and self.account_name:
-                truncation_decimals = self.config_manager.get_currency_setting(
-                    self.account_name, currency, 'truncation_decimals')
+            # Try to import config_manager module dynamically
+            if importlib.util.find_spec("src.config_manager"):
+                from src.config_manager import ConfigurationManager
+                config_manager = ConfigurationManager()
+                
+                # Try to find which account this client belongs to
+                for account_name, client in self.get_all_position_clients().items():
+                    if client == self:
+                        truncation_decimals = config_manager.get_currency_setting(
+                            account_name, currency, 'truncation_decimals')
+                        break
         except Exception as e:
             self.logger.debug(f"Could not get truncation_decimals from config: {e}")
         
@@ -342,36 +312,17 @@ class PositionWebsocketClient:
             
         self._last_refresh_time = current_time
         
-        # Check if base_url is set
-        if not self.base_url:
-            self.logger.error(f"Cannot refresh positions: base_url is None for account {self.account_name}")
-            return False
-            
-        # Check if account_name is set
-        if not self.account_name:
-            self.logger.error("Cannot refresh positions: account_name is None")
-            return False
-        
         try:
             # Make direct API call to get current positions
-            # Import here to avoid circular imports
-            import sys
-            import os
-            # Add parent directory to path if needed
-            sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
             from src.trading_utils import get_jwt_token
             
-            # Pass account_name and config_manager to get_jwt_token
-            self.logger.debug(f"Getting JWT token for position refresh for account {self.account_name}")
-            jwt_token = get_jwt_token(account_name=self.account_name, config_manager=self.config_manager)
-            
+            jwt_token = get_jwt_token()
             if not jwt_token:
-                self.logger.error(f"Failed to get JWT token for position refresh for account {self.account_name}")
+                self.logger.error("Failed to get JWT token for position refresh")
                 return False
                 
             # Call balances API
             headers = {"Authorization": jwt_token}
-            self.logger.debug(f"Calling balances API for account {self.account_name}: {self.base_url}/rest/balances")
             response = requests.get(f"{self.base_url}/rest/balances", headers=headers)
             
             if response.ok:
@@ -389,14 +340,14 @@ class PositionWebsocketClient:
                 finally:
                     loop.close()
                 
-                self.logger.info(f"Positions refreshed from API for account {self.account_name}")
+                self.logger.info("Positions refreshed from API")
                 return True
             else:
-                self.logger.error(f"Failed to refresh positions for account {self.account_name}: {response.status_code} - {response.text}")
+                self.logger.error(f"Failed to refresh positions: {response.status_code}")
                 return False
                 
         except Exception as e:
-            self.logger.error(f"Error refreshing positions for account {self.account_name}: {str(e)}")
+            self.logger.error(f"Error refreshing positions: {str(e)}")
             return False
 
     def set_repo_status(self, symbol, has_repo):
