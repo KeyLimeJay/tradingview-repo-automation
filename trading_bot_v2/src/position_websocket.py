@@ -30,15 +30,20 @@ class PositionWebsocketClient:
         self._heartbeat_interval = 30
         self.api_key = api_key
         self.api_secret = api_secret
+        # New instance variables for direct credential access
+        self.api_username = None
+        self.api_password = None
+        self.api_code = None
         self._last_refresh_time = 0
         self._min_refresh_interval = 1  # Minimum seconds between refreshes
         
     async def login(self):
         """Authenticate with the API to get a token for WebSocket connection"""
         try:
-            username = os.getenv("API_USERNAME")
-            password = os.getenv("API_PASSWORD")
-            code = os.getenv("API_CODE")
+            # First try to use credentials passed directly to the client
+            username = getattr(self, 'api_username', None) or os.getenv("API_USERNAME")
+            password = getattr(self, 'api_password', None) or os.getenv("API_PASSWORD")
+            code = getattr(self, 'api_code', None) or os.getenv("API_CODE")
             
             # Check if credentials and base_url are available
             if not all([username, password, code, self.base_url]):
@@ -324,39 +329,75 @@ class PositionWebsocketClient:
         self._last_refresh_time = current_time
         
         try:
-            # Make direct API call to get current positions
-            from src.trading_utils import get_jwt_token
+            # Use our own auth token if we've already authenticated
+            if self.auth_token:
+                # Ensure token has the correct format with Bearer prefix
+                auth_header = self.auth_token
+                if not auth_header.startswith('Bearer '):
+                    auth_header = f"Bearer {auth_header}"
+                    
+                headers = {"Authorization": auth_header}
+                
+                # Call balances API
+                response = requests.get(f"{self.base_url}/rest/balances", headers=headers, timeout=30)
+                
+                if response.ok:
+                    data = response.json()
+                    
+                    # Process the balance data
+                    async def process_data():
+                        await self._process_balance_update(data)
+                    
+                    # Run the async function in the background
+                    loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(loop)
+                    try:
+                        loop.run_until_complete(process_data())
+                    finally:
+                        loop.close()
+                    
+                    self.logger.info("Positions refreshed from API")
+                    return True
+                else:
+                    self.logger.error(f"Failed to refresh positions: {response.status_code} - {response.text}")
+                    
+                    # If we get a 401 unauthorized error, try to re-authenticate
+                    if response.status_code == 401:
+                        self.logger.info("Auth token expired, attempting re-authentication")
+                        
+                        # Run the async login function in the background
+                        loop = asyncio.new_event_loop()
+                        asyncio.set_event_loop(loop)
+                        try:
+                            login_success = loop.run_until_complete(self.login())
+                            if login_success:
+                                self.logger.info("Re-authentication successful, retrying position refresh")
+                                # Call this method again (only once to avoid infinite recursion)
+                                return self.refresh_positions()
+                        finally:
+                            loop.close()
+                    
+                    return False
             
-            jwt_token = get_jwt_token()
-            if not jwt_token:
-                self.logger.error("Failed to get JWT token for position refresh")
-                return False
+            # If we don't have a token yet, try to authenticate
+            else:
+                self.logger.warning("No auth token available, attempting authentication")
                 
-            # Call balances API
-            headers = {"Authorization": jwt_token}
-            response = requests.get(f"{self.base_url}/rest/balances", headers=headers, timeout=30)
-            
-            if response.ok:
-                data = response.json()
-                
-                # Process the balance data
-                async def process_data():
-                    await self._process_balance_update(data)
-                
-                # Run the async function in the background
+                # Run the async login function in the background
                 loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(loop)
                 try:
-                    loop.run_until_complete(process_data())
+                    login_success = loop.run_until_complete(self.login())
+                    if login_success:
+                        self.logger.info("Authentication successful, retrying position refresh")
+                        # Call this method again (only once to avoid infinite recursion)
+                        return self.refresh_positions()
+                    else:
+                        self.logger.error("Authentication failed, cannot refresh positions")
+                        return False
                 finally:
                     loop.close()
-                
-                self.logger.info("Positions refreshed from API")
-                return True
-            else:
-                self.logger.error(f"Failed to refresh positions: {response.status_code} - {response.text}")
-                return False
-                
+                    
         except Exception as e:
             self.logger.error(f"Error refreshing positions: {str(e)}")
             return False
