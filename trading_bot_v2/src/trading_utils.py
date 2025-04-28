@@ -323,6 +323,7 @@ def get_jwt_token(account_name=None, config_manager=None):
         "redirectTo": base_url,
         "username": user
     }
+    print(payload)
     
     body = json.dumps(payload)
     
