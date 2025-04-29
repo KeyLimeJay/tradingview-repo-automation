@@ -1,7 +1,7 @@
 {
     "version": "2.0.0",
     "global": {
-      "port": 6101,
+      "port": 6100,
       "host": "0.0.0.0",
       "environment": "production",
       "log_level": "INFO",
