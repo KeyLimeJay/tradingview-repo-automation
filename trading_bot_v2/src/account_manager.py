@@ -103,6 +103,8 @@ class AccountManager:
             client = PositionWebsocketClient(
                 api_key=account['api_key'],
                 api_secret=account['api_secret'],
+                url=account['api_url'],
+                custodian_id=account['custodian_id'],
                 logger=self.logger
             )
             

@@ -13,7 +13,7 @@ import math
 import importlib.util
 
 class PositionWebsocketClient:
-    def __init__(self, api_key=None, api_secret=None, logger=None, auto_reconnect=True, reconnect_interval=5):
+    def __init__(self, api_key=None, api_secret=None, url=None, custodian_id=None, logger=None, auto_reconnect=True, reconnect_interval=5):
         self.base_url = None
         self.ws_url = None
         self.session = requests.Session()
@@ -30,6 +30,8 @@ class PositionWebsocketClient:
         self._heartbeat_interval = 30
         self.api_key = api_key
         self.api_secret = api_secret
+        self.url = url
+        self.custodian_id = custodian_id
         # New instance variables for direct credential access
         self.api_username = None
         self.api_password = None
@@ -350,7 +352,8 @@ class PositionWebsocketClient:
                 headers = {"Authorization": auth_token}
                 
                 # Call balances API
-                response = requests.get(f"{self.base_url}/rest/balances", headers=headers, timeout=30)
+                self.logger.info(self.url)
+                response = requests.get(f"{self.url}/rest/balances/custodian/{self.custodian_id}", headers=headers, timeout=30)
                 
                 if response.ok:
                     data = response.json()
