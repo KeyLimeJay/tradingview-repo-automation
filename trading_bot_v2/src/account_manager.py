@@ -103,8 +103,6 @@ class AccountManager:
             client = PositionWebsocketClient(
                 api_key=account['api_key'],
                 api_secret=account['api_secret'],
-                url=account['api_url'],
-                custodian_id=account['custodian_id'],
                 logger=self.logger
             )
             
@@ -112,17 +110,12 @@ class AccountManager:
             client.base_url = account['api_base_url']
             client.ws_url = account['ws_url']
             
-            # Set additional credentials on the client object directly
-            client.api_username = account['api_username']
-            client.api_password = account['api_password'] 
-            client.api_code = account['api_code']
-            
             # Set environment variables for this client (needed for other utility functions)
-            # This ensures the proper credentials are set before any authentication calls
-            os.environ[f'API_USERNAME'] = account['api_username']
-            os.environ[f'API_PASSWORD'] = account['api_password']
-            os.environ[f'API_CODE'] = account['api_code']
-            os.environ[f'API_BASE_URL'] = account['api_base_url']
+            # Note: In the future, we could consider passing these directly to avoid env vars
+            os.environ[f'POSITION_CLIENT_{name}_API_USERNAME'] = account['api_username']
+            os.environ[f'POSITION_CLIENT_{name}_API_PASSWORD'] = account['api_password']
+            os.environ[f'POSITION_CLIENT_{name}_API_CODE'] = account['api_code']
+            os.environ[f'POSITION_CLIENT_{name}_API_BASE_URL'] = account['api_base_url']
             
             self.position_clients[name] = client
             
@@ -186,20 +179,10 @@ class AccountManager:
         
         try:
             # Setup for this account
-            api_username = account.get('api_username')
-            api_password = account.get('api_password')
-            api_code = account.get('api_code')
-            api_base_url = account.get('api_base_url')
-            
-            # Check if we have valid credentials
-            if not all([api_username, api_password, api_code, api_base_url]):
-                self.logger.error(f"Missing required credentials for account: {account_name}")
-                return ws_repo_status  # Fall back to WebSocket status
-                
-            os.environ['API_USERNAME'] = api_username
-            os.environ['API_PASSWORD'] = api_password
-            os.environ['API_CODE'] = api_code
-            os.environ['API_BASE_URL'] = api_base_url
+            os.environ['API_USERNAME'] = account['api_username']
+            os.environ['API_PASSWORD'] = account['api_password']
+            os.environ['API_CODE'] = account['api_code']
+            os.environ['API_BASE_URL'] = account['api_base_url']
             
             # Import here to avoid circular imports
             from src.trading_utils import get_jwt_token, get_repo_details
