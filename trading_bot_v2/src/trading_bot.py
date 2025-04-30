@@ -50,6 +50,7 @@ class TradingBot:
         # Event tracking
         self.event_counter = {}  # symbol -> event_count
         self.sequence_history = {}  # symbol -> [event1, event2, ...]
+        self.sequence_type = {}  # symbol -> "Buy Start" or "Sell Start"
         
         # Separate last_signal tracking per account
         self.last_signals = {}  # account_name -> symbol -> {message, timeframe, timestamp}
@@ -163,7 +164,11 @@ class TradingBot:
         """Get current market price for a symbol (placeholder)"""
         # In a real implementation, you would fetch this from your price feed
         # This is a simplified placeholder
-        return 30000.0  # Replace with actual price fetching logic
+        if 'BTC' in symbol:
+            return 93350.0
+        elif 'ETH' in symbol:
+            return 1750.0
+        return 30000.0  # Fallback price
     
     def get_current_state(self, symbol, account_name):
         """Get the current state of balances and repos for the given symbol."""
@@ -249,44 +254,31 @@ class TradingBot:
         
         self.logger.info(f"[SEQUENCE_HISTORY][{account_name}][{symbol}] {history_str} | STATUS: {status}")
     
-    def validate_sequence(self, symbol, event_num, signal_type, account_name, 
-                         next_expected_event=None, next_expected_signal=None):
+    def validate_sequence(self, symbol, signal_type, account_name, expected_signal=None):
         """
-        Validate that the sequence is following the expected pattern and trigger recovery if needed
-        
-        Returns:
-            bool: True if sequence is valid, False if broken and recovery needed
+        Validate that signal matches expectations.
+        Returns True if valid, False if invalid.
         """
-        is_valid = True
-        warning_message = None
-        
-        # Check if event number matches what we expect
-        if next_expected_event is not None and event_num != next_expected_event:
-            is_valid = False
-            warning_message = (
-                f"[SEQUENCE_BREAK][{symbol}] "
-                f"Expected event {next_expected_event}, but got event {event_num}."
+        # If no expectation, always valid
+        if expected_signal is None:
+            return True
+            
+        # Check if signal type matches expectation
+        if signal_type != expected_signal:
+            self.logger.warning(
+                f"[SEQUENCE_BREAK][{account_name}][{symbol}] "
+                f"Expected signal {expected_signal}, but got {signal_type}. "
+                f"Initiating sequence recovery."
             )
-        
-        # Check if signal type matches what we expect
-        if next_expected_signal is not None and signal_type != next_expected_signal:
-            is_valid = False
-            warning_message = (
-                f"[SEQUENCE_BREAK][{symbol}] "
-                f"Expected signal {next_expected_signal}, but got {signal_type}."
-            )
-        
-        # Log a warning if validation fails
-        if not is_valid and warning_message:
-            self.logger.warning(warning_message + " Initiating sequence recovery.")
             # Trigger recovery procedure
             recovery_success = self.recover_sequence(symbol, account_name)
             if recovery_success:
                 self.logger.info(f"[SEQUENCE_RECOVERY][{account_name}][{symbol}] Recovery successful, sequence reset")
             else:
                 self.logger.error(f"[SEQUENCE_RECOVERY][{account_name}][{symbol}] Recovery failed")
-        
-        return is_valid
+            return False
+            
+        return True
     
     def recover_sequence(self, symbol, account_name):
         """
@@ -378,6 +370,8 @@ class TradingBot:
         self.logger.info(f"[SEQUENCE_RECOVERY][{account_name}][{symbol}] Resetting event counter")
         if symbol in self.event_counter:
             self.event_counter[symbol] = 0
+        if symbol in self.sequence_history:
+            self.sequence_history[symbol] = []
         
         # Step 4: Log recovery completed
         self.logger.info(f"[SEQUENCE_RECOVERY][{account_name}][{symbol}] Sequence recovery completed successfully")
@@ -397,12 +391,18 @@ class TradingBot:
         current_balance = current_state['balance']
         current_repo = current_state['repo']
         
+        # Create compound key for account+symbol
+        account_symbol_key = f"{account_name}:{symbol}"
+        
         # Check for repeated signals
         if symbol in self.last_signals.get(account_name, {}):
             last_signal = self.last_signals[account_name][symbol]
-            last_signal_type = "Buy Signal" if last_signal['message'] == "Trend Buy!" else "Sell Signal"
+            last_signal_time = last_signal.get('timestamp', 0)
+            current_time = time.time()
+            time_diff = current_time - last_signal_time
             
-            if last_signal_type == signal_type:
+            # Only consider it a repeat if it's within 30 seconds
+            if time_diff < 30 and last_signal.get('message') == ('Trend Buy!' if signal_type == 'Buy Signal' else 'Trend Sell!'):
                 self.logger.info(f"[{account_name}] Ignoring repeated {signal_type} for {symbol}")
                 return {
                     'steps': [],
@@ -410,65 +410,67 @@ class TradingBot:
                     'message': f"Ignoring repeated {signal_type}"
                 }
         
-        # Initialize or increment event counter
-        if symbol not in self.event_counter:
-            # First signal - determine which sequence to follow
-            if signal_type == 'Buy Signal' and current_balance == 0 and current_repo == 0:
+        # Initialize event counter for new symbol
+        new_sequence = False
+        if account_symbol_key not in self.event_counter:
+            new_sequence = True
+            if signal_type == 'Buy Signal':
                 # Start with buy sequence (1→4→3→4...)
-                self.event_counter[symbol] = 1
-                next_expected_event = 4
-                next_expected_signal = "Sell Signal"
-                self.logger.info(f"[{account_name}] Starting buy sequence for {symbol}")
-            elif signal_type == 'Sell Signal' and current_balance == 0 and current_repo == 0:
+                self.event_counter[account_symbol_key] = 1
+                self.sequence_type[account_symbol_key] = "Buy Start"
+                self.logger.info(f"[{account_name}] Starting buy sequence (1→4→3→4) for {symbol}")
+            elif signal_type == 'Sell Signal':
                 # Start with sell sequence (2→3→4→3...)
-                self.event_counter[symbol] = 2
-                next_expected_event = 3
-                next_expected_signal = "Buy Signal"
-                self.logger.info(f"[{account_name}] Starting sell sequence for {symbol}")
-            else:
-                # Default to buy sequence if starting state is unclear
-                self.event_counter[symbol] = 1
-                next_expected_event = 4
-                next_expected_signal = "Sell Signal"
-                self.logger.info(f"[{account_name}] Defaulting to buy sequence for {symbol}")
-        else:
-            # For existing sequences, validate the sequence is not broken
-            prev_event = self.event_counter[symbol]
-            
-            # Determine expected event and signal based on previous event
-            if prev_event == 1:
-                next_expected_event = 4
-                next_expected_signal = "Sell Signal"
-            elif prev_event == 2:
-                next_expected_event = 3
-                next_expected_signal = "Buy Signal"
-            elif prev_event == 3:
-                next_expected_event = 4
-                next_expected_signal = "Sell Signal"
-            elif prev_event == 4:
-                next_expected_event = 3
-                next_expected_signal = "Buy Signal"
-            
-            # Validate sequence
-            is_valid = self.validate_sequence(
-                symbol, prev_event + 1, signal_type, 
-                account_name, next_expected_event, next_expected_signal
-            )
-            
-            if not is_valid:
-                # If sequence was broken and recovery was initiated, we should refresh state
-                current_state = self.get_current_state(symbol, account_name)
-                current_balance = current_state['balance']
-                current_repo = current_state['repo']
-            
-            # Increment the event counter
-            self.event_counter[symbol] += 1
-            
-            # Handle cycling back from 4 to 3
-            if self.event_counter[symbol] > 4:
-                self.event_counter[symbol] = 3
+                self.event_counter[account_symbol_key] = 2
+                self.sequence_type[account_symbol_key] = "Sell Start"
+                self.logger.info(f"[{account_name}] Starting sell sequence (2→3→4→3) for {symbol}")
         
-        event_num = self.event_counter[symbol]
+        current_event = self.event_counter.get(account_symbol_key, 0)
+        
+        # If not a new sequence, determine next step and validate
+        if not new_sequence:
+            # Get expected signal based on current event
+            expected_signal = None
+            if current_event == 1 or current_event == 3:
+                expected_signal = "Sell Signal"
+            elif current_event == 2 or current_event == 4:
+                expected_signal = "Buy Signal"
+                
+            # Validate sequence - skip if we're just starting
+            if current_event > 0:
+                is_valid = self.validate_sequence(
+                    symbol=symbol,
+                    signal_type=signal_type,
+                    account_name=account_name,
+                    expected_signal=expected_signal
+                )
+                
+                if not is_valid:
+                    # If invalid, sequence was reset by recovery, start fresh
+                    if signal_type == 'Buy Signal':
+                        self.event_counter[account_symbol_key] = 1
+                        self.sequence_type[account_symbol_key] = "Buy Start"
+                    else:
+                        self.event_counter[account_symbol_key] = 2
+                        self.sequence_type[account_symbol_key] = "Sell Start"
+                    
+                    # Refresh state after recovery
+                    current_state = self.get_current_state(symbol, account_name)
+                    current_balance = current_state['balance']
+                    current_repo = current_state['repo']
+                else:
+                    # If valid, advance to next step
+                    if current_event == 1:
+                        self.event_counter[account_symbol_key] = 4
+                    elif current_event == 2: 
+                        self.event_counter[account_symbol_key] = 3
+                    elif current_event == 3:
+                        self.event_counter[account_symbol_key] = 4
+                    elif current_event == 4: 
+                        self.event_counter[account_symbol_key] = 3
+        
+        # Get current event number after possible changes
+        event_num = self.event_counter.get(account_symbol_key, 0)
         
         # Log sequence state
         self.log_sequence_state(
@@ -476,8 +478,18 @@ class TradingBot:
             current_balance, current_repo
         )
         
+        # Save to sequence history
+        if account_symbol_key not in self.sequence_history:
+            self.sequence_history[account_symbol_key] = []
+        self.sequence_history[account_symbol_key].append(event_num)
+        
+        # Only keep the last 10 events to avoid overly long history
+        if len(self.sequence_history[account_symbol_key]) > 10:
+            self.sequence_history[account_symbol_key] = self.sequence_history[account_symbol_key][-10:]
+        
         # Log sequence history
-        self.log_sequence_history(symbol, account_name)
+        history_str = ' → '.join([str(e) for e in self.sequence_history[account_symbol_key]])
+        self.logger.info(f"[SEQUENCE_HISTORY][{account_name}][{symbol}] {history_str}")
         
         # Get the unit size for this currency
         base_currency = symbol.split('/')[0]
@@ -511,47 +523,41 @@ class TradingBot:
         
         # Event 2, Sell Signal: Open Repo, Sell
         elif event_num == 2 and signal_type == 'Sell Signal':
-            # First part - open repo
-            if current_balance == 0 and current_repo == 0:
-                return {
-                    'steps': ['open_repo', 'open_short'],
-                    'position_size': [unit_size, unit_size],
-                    'repo_details': repo_details,
-                    'sequential': True,
-                    'starting_balance': current_balance,
-                    'starting_repo': current_repo,
-                    'expected_ending_balance': 0,
-                    'expected_ending_repo': unit_size
-                }
+            return {
+                'steps': ['open_repo', 'open_short'],
+                'position_size': [unit_size, unit_size],
+                'repo_details': repo_details,
+                'sequential': True,
+                'starting_balance': current_balance,
+                'starting_repo': current_repo,
+                'expected_ending_balance': current_balance - unit_size if current_balance >= unit_size else 0,
+                'expected_ending_repo': current_repo + unit_size
+            }
         
         # Event 3, Buy Signal: Buy twice, close repo
         elif event_num == 3 and signal_type == 'Buy Signal':
-            # Following event 2 or event 4 - balance at 0, repo at unit_size
-            if current_balance == 0 and current_repo == unit_size:
-                return {
-                    'steps': ['open_long', 'open_long', 'close_repo'],
-                    'position_size': [unit_size, unit_size, repo_symbol],
-                    'sequential': True,
-                    'starting_balance': current_balance,
-                    'starting_repo': current_repo,
-                    'expected_ending_balance': unit_size,
-                    'expected_ending_repo': 0
-                }
+            return {
+                'steps': ['open_long', 'open_long', 'close_repo'],
+                'position_size': [unit_size, unit_size, repo_symbol],
+                'sequential': True,
+                'starting_balance': current_balance,
+                'starting_repo': current_repo,
+                'expected_ending_balance': current_balance + unit_size * 2,
+                'expected_ending_repo': 0
+            }
         
         # Event 4, Sell Signal: Sell, Open Repo, Sell
         elif event_num == 4 and signal_type == 'Sell Signal':
-            # Following event 1 or event 3 - balance at 1 or more, repo at 0
-            if current_balance >= unit_size and current_repo == 0:
-                return {
-                    'steps': ['open_short', 'open_repo', 'open_short'],
-                    'position_size': [unit_size, unit_size, unit_size],
-                    'repo_details': repo_details,
-                    'sequential': True,
-                    'starting_balance': current_balance,
-                    'starting_repo': current_repo,
-                    'expected_ending_balance': 0,
-                    'expected_ending_repo': unit_size
-                }
+            return {
+                'steps': ['open_short', 'open_repo', 'open_short'],
+                'position_size': [unit_size, unit_size, unit_size],
+                'repo_details': repo_details,
+                'sequential': True,
+                'starting_balance': current_balance,
+                'starting_repo': current_repo,
+                'expected_ending_balance': current_balance - unit_size * 2 if current_balance >= unit_size * 2 else 0,
+                'expected_ending_repo': unit_size
+            }
         
         # For other cases or when the sequence doesn't match the table
         self.logger.warning(f"[{account_name}] No matching table logic for event={event_num}, " +
@@ -839,6 +845,9 @@ class TradingBot:
             position_client.refresh_positions()
             final_position = self.get_current_state(symbol, account_name)
             
+            # Account-symbol key
+            account_symbol_key = f"{account_name}:{symbol}"
+            
             # Compare expected vs actual ending state
             expected_ending_balance = trade_sequence.get('expected_ending_balance')
             expected_ending_repo = trade_sequence.get('expected_ending_repo')
@@ -858,7 +867,7 @@ class TradingBot:
                 "account": account_name,
                 "orders": responses,
                 "message": f"Successfully executed trade sequence: {', '.join(trade_sequence['steps'])}",
-                "event": self.event_counter[symbol],
+                "event": self.event_counter.get(account_symbol_key, 0),
                 "starting_balance": trade_sequence.get('starting_balance'),
                 "starting_repo": trade_sequence.get('starting_repo'),
                 "expected_ending_balance": expected_ending_balance,
@@ -902,10 +911,12 @@ class TradingBot:
                 account_positions = {}
                 for symbol in trading_pairs:
                     state = self.get_current_state(symbol, account_name)
+                    account_symbol_key = f"{account_name}:{symbol}"
                     account_positions[symbol] = {
                         'balance': state['balance'],
                         'repo': state['repo'],
-                        'event_counter': self.event_counter.get(symbol, 0)
+                        'event_counter': self.event_counter.get(account_symbol_key, 0),
+                        'sequence_type': self.sequence_type.get(account_symbol_key, "None")
                     }
                 
                 positions_data['accounts'][account_name] = {
@@ -955,11 +966,12 @@ class TradingBot:
             event_status = {}
             for symbol in trading_pairs:
                 state = self.get_current_state(symbol, account_name)
+                account_symbol_key = f"{account_name}:{symbol}"
                 position_status[symbol] = {
                     "balance": state['balance'],
                     "repo": state['repo']
                 }
-                event_status[symbol] = self.event_counter.get(symbol, 0)
+                event_status[symbol] = self.event_counter.get(account_symbol_key, 0)
             
             # Add auto-short status
             auto_short_enabled = self.config_manager.get_trading_setting(
@@ -984,96 +996,156 @@ class TradingBot:
         """Endpoint to check sequence health for all symbols."""
         sequence_data = {}
         
-        for symbol in self.event_counter:
-            for account in self.config_manager.get_enabled_accounts():
-                account_name = account.get('name')
-                if symbol in account.get('trading_pairs', []):
-                    state = self.get_current_state(symbol, account_name)
-                    
-                    current_event = self.event_counter[symbol]
-                    
-                    # Determine sequence type
-                    if current_event in [1, 3, 4]:
-                        sequence_type = "Buy Start (1→4→3→4)"
-                        if current_event == 1:
-                            next_expected = 4
-                            next_signal = "Sell Signal"
-                        elif current_event == 3:
-                            next_expected = 4
-                            next_signal = "Sell Signal"
-                        else:  # event 4
-                            next_expected = 3
-                            next_signal = "Buy Signal"
-                    else:  # event 2
-                        sequence_type = "Sell Start (2→3→4→3)"
-                        next_expected = 3
-                        next_signal = "Buy Signal"
-                    
-                    # Check sequence validity
-                    if symbol in self.sequence_history and len(self.sequence_history[symbol]) >= 4:
-                        last_four = ''.join(map(str, self.sequence_history[symbol][-4:]))
-                        valid_patterns = ['1434', '4343', '2343', '3434']
-                        is_valid = any(pattern in last_four for pattern in valid_patterns)
+        # Get sequence info for all active symbols
+        for account in self.config_manager.get_enabled_accounts():
+            account_name = account.get('name')
+            for symbol in account.get('trading_pairs', []):
+                account_symbol_key = f"{account_name}:{symbol}"
+                
+                # Get current state
+                state = self.get_current_state(symbol, account_name)
+                if not state:
+                    continue
+                
+                # Get current event
+                current_event = self.event_counter.get(account_symbol_key, 0)
+                
+                # Determine sequence type and next expected event/signal
+                if account_symbol_key in self.sequence_type:
+                    sequence_type = self.sequence_type[account_symbol_key]
+                    if sequence_type == "Buy Start":
+                        sequence_desc = "Buy Start (1→4→3→4)"
                     else:
-                        is_valid = True  # Not enough history to validate
+                        sequence_desc = "Sell Start (2→3→4→3)"
+                else:
+                    sequence_desc = "None"
                     
-                    sequence_data[f"{account_name}:{symbol}"] = {
-                        "current_event": current_event,
-                        "sequence_type": sequence_type,
-                        "next_expected_event": next_expected,
-                        "next_expected_signal": next_signal,
-                        "current_balance": state['balance'],
-                        "current_repo": state['repo'],
-                        "sequence_valid": is_valid,
-                        "sequence_history": self.sequence_history.get(symbol, [])
-                    }
+                # Determine next expected signal
+                if current_event == 1 or current_event == 3:
+                    next_expected_event = 4
+                    next_expected_signal = "Sell Signal"
+                elif current_event == 2 or current_event == 4:
+                    next_expected_event = 3
+                    next_expected_signal = "Buy Signal"
+                else:
+                    next_expected_event = None
+                    next_expected_signal = None
+                
+                # Check sequence validity
+                sequence_valid = True
+                if account_symbol_key in self.sequence_history and len(self.sequence_history[account_symbol_key]) >= 4:
+                    # Convert last 4 events to string
+                    last_four = ''.join(map(str, self.sequence_history[account_symbol_key][-4:]))
+                    # Valid patterns
+                    if sequence_desc == "Buy Start (1→4→3→4)":
+                        valid_patterns = ['1434', '4343']
+                    else:  # Sell Start
+                        valid_patterns = ['2343', '3434']
+                    
+                    sequence_valid = any(pattern in last_four for pattern in valid_patterns)
+                
+                # Add to sequence data
+                sequence_data[account_symbol_key] = {
+                    "current_event": current_event,
+                    "sequence_type": sequence_desc,
+                    "next_expected_event": next_expected_event,
+                    "next_expected_signal": next_expected_signal,
+                    "current_balance": state['balance'],
+                    "current_repo": state['repo'],
+                    "sequence_valid": sequence_valid,
+                    "sequence_history": self.sequence_history.get(account_symbol_key, [])
+                }
         
         return jsonify(sequence_data), 200
         
     def handle_sequence_reset(self):
         """Endpoint to manually reset sequence counters."""
         try:
-            data = request.json
+            # Get JSON data - handle case where it might not be provided
+            data = request.get_json(silent=True) or {}
             
-            # Validate required fields
-            if not data:
-                return jsonify({
-                    "success": False, 
-                    "error": "Missing request data"
-                }), 400
-                
             # Check if we're resetting all symbols or just one
             symbol = data.get('symbol')
             account_name = data.get('account')
             
-            if symbol:
-                # Reset specific symbol
-                if symbol in self.event_counter:
-                    old_value = self.event_counter[symbol]
-                    self.event_counter[symbol] = 0
-                    if symbol in self.sequence_history:
-                        self.sequence_history[symbol] = []
-                    self.logger.info(f"Reset event counter for {symbol} from {old_value} to 0")
-                    return jsonify({
-                        "success": True,
-                        "message": f"Reset event counter for {symbol} from {old_value} to 0"
-                    }), 200
+            # Build response data
+            response_data = {
+                "success": True,
+                "reset_counts": 0,
+                "reset_symbols": []
+            }
+            
+            if symbol and account_name:
+                # Reset specific account/symbol combination
+                account_symbol_key = f"{account_name}:{symbol}"
+                if account_symbol_key in self.event_counter:
+                    old_value = self.event_counter[account_symbol_key]
+                    self.event_counter[account_symbol_key] = 0
+                    if account_symbol_key in self.sequence_history:
+                        self.sequence_history[account_symbol_key] = []
+                    if account_symbol_key in self.sequence_type:
+                        del self.sequence_type[account_symbol_key]
+                    
+                    self.logger.info(f"Reset event counter for {account_symbol_key} from {old_value} to 0")
+                    response_data["reset_counts"] = 1
+                    response_data["reset_symbols"].append(account_symbol_key)
+                    response_data["message"] = f"Reset event counter for {account_symbol_key}"
                 else:
-                    return jsonify({
-                        "success": False,
-                        "error": f"Symbol {symbol} not found in event counters"
-                    }), 404
+                    response_data["reset_counts"] = 0
+                    response_data["message"] = f"Symbol {account_symbol_key} not found in event counters"
+            elif symbol:
+                # Reset symbol across all accounts
+                reset_count = 0
+                reset_symbols = []
+                for account in self.config_manager.get_enabled_accounts():
+                    acct_name = account.get('name')
+                    account_symbol_key = f"{acct_name}:{symbol}"
+                    if account_symbol_key in self.event_counter:
+                        old_value = self.event_counter[account_symbol_key]
+                        self.event_counter[account_symbol_key] = 0
+                        if account_symbol_key in self.sequence_history:
+                            self.sequence_history[account_symbol_key] = []
+                        if account_symbol_key in self.sequence_type:
+                            del self.sequence_type[account_symbol_key]
+                        
+                        self.logger.info(f"Reset event counter for {account_symbol_key} from {old_value} to 0")
+                        reset_count += 1
+                        reset_symbols.append(account_symbol_key)
+                
+                response_data["reset_counts"] = reset_count
+                response_data["reset_symbols"] = reset_symbols
+                response_data["message"] = f"Reset {reset_count} event counters for symbol {symbol}"
+            elif account_name:
+                # Reset all symbols for specific account
+                reset_count = 0
+                reset_symbols = []
+                for key in list(self.event_counter.keys()):
+                    if key.startswith(f"{account_name}:"):
+                        old_value = self.event_counter[key]
+                        self.event_counter[key] = 0
+                        if key in self.sequence_history:
+                            self.sequence_history[key] = []
+                        if key in self.sequence_type:
+                            del self.sequence_type[key]
+                        
+                        self.logger.info(f"Reset event counter for {key} from {old_value} to 0")
+                        reset_count += 1
+                        reset_symbols.append(key)
+                
+                response_data["reset_counts"] = reset_count
+                response_data["reset_symbols"] = reset_symbols
+                response_data["message"] = f"Reset {reset_count} event counters for account {account_name}"
             else:
-                # Reset all symbols
-                old_counters = self.event_counter.copy()
+                # Reset all symbols for all accounts
+                reset_count = len(self.event_counter)
                 self.event_counter = {}
                 self.sequence_history = {}
-                self.logger.info(f"Reset all event counters: {old_counters}")
-                return jsonify({
-                    "success": True,
-                    "message": "Reset all event counters",
-                    "previous_counters": old_counters
-                }), 200
+                self.sequence_type = {}
+                self.logger.info(f"Reset all {reset_count} event counters")
+                response_data["reset_counts"] = reset_count
+                response_data["message"] = f"Reset all {reset_count} event counters"
+                
+            return jsonify(response_data), 200
                 
         except Exception as e:
             error_msg = f"Error in sequence reset: {str(e)}"
@@ -1129,14 +1201,20 @@ class TradingBot:
     def reset_event_counter(self, symbol=None):
         """Reset the event counter for a specific symbol or all symbols."""
         if symbol:
-            if symbol in self.event_counter:
-                self.event_counter[symbol] = 0
-                if symbol in self.sequence_history:
-                    self.sequence_history[symbol] = []
-                self.logger.info(f"Reset event counter for {symbol}")
+            for account in self.config_manager.get_enabled_accounts():
+                account_name = account.get('name')
+                account_symbol_key = f"{account_name}:{symbol}"
+                if account_symbol_key in self.event_counter:
+                    self.event_counter[account_symbol_key] = 0
+                    if account_symbol_key in self.sequence_history:
+                        self.sequence_history[account_symbol_key] = []
+                    if account_symbol_key in self.sequence_type:
+                        del self.sequence_type[account_symbol_key]
+                    self.logger.info(f"Reset event counter for {account_symbol_key}")
         else:
             self.event_counter = {}
             self.sequence_history = {}
+            self.sequence_type = {}
             self.logger.info("Reset all event counters")
         return True
 
