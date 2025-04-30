@@ -1,24 +1,32 @@
 #!/usr/bin/env python3
-from flask import Flask, request, jsonify
-import json
 import os
-import datetime
-import logging
-from logging.handlers import RotatingFileHandler
+import json
 import time
+import hmac
+import hashlib
+import base64
+import requests
+import logging
+import random
+import string
+import datetime
+from flask import Flask, request, jsonify
+from logging.handlers import RotatingFileHandler
 from threading import Lock
 from collections import OrderedDict
+
+# Import necessary modules from src
 from src.position_websocket import PositionWebsocketClient
-from src.trading_utils import (
-    place_order, OrderPlacementError, place_repo_order, 
-    close_repo, get_jwt_token, get_repo_details
-)
+from src.trading_utils import place_order, OrderPlacementError
 from src.account_manager import AccountManager
 from src.auto_position_manager import AutoPositionManager
 from src.config_manager import ConfigurationManager
 
 class TradingBot:
-    """Main trading bot implementation with logic based on event sequence table."""
+    """
+    Main trading bot implementation with logic based on event sequence table.
+    Refactored to ensure proper repo handling.
+    """
     
     def __init__(self, config_path=None):
         """Initialize the trading bot with configuration."""
@@ -48,9 +56,9 @@ class TradingBot:
         self.trading_pairs = self.config_manager.get_all_trading_pairs()
         
         # Event tracking
-        self.event_counter = {}  # symbol -> event_count
-        self.sequence_history = {}  # symbol -> [event1, event2, ...]
-        self.sequence_type = {}  # symbol -> "Buy Start" or "Sell Start"
+        self.event_counter = {}  # account_name:symbol -> event_count
+        self.sequence_history = {}  # account_name:symbol -> [event1, event2, ...]
+        self.sequence_type = {}  # account_name:symbol -> "Buy Start" or "Sell Start"
         
         # Separate last_signal tracking per account
         self.last_signals = {}  # account_name -> symbol -> {message, timeframe, timestamp}
@@ -100,6 +108,262 @@ class TradingBot:
         self.app.add_url_rule('/auto-short', view_func=self.trigger_auto_short, methods=['POST'])
         self.app.add_url_rule('/sequence-reset', view_func=self.handle_sequence_reset, methods=['POST'])
         self.app.add_url_rule('/sequence-health', view_func=self.sequence_health, methods=['GET'])
+        # Add route for direct repo testing
+        self.app.add_url_rule('/test-repo', view_func=self.test_repo, methods=['POST'])
+    
+    def generate_repo_clordid(self):
+        """Generate a unique client order ID for repo orders"""
+        now = time.strftime("%Y%m%d%H%M%S")
+        random_suffix = ''.join(random.choices(string.ascii_lowercase + string.digits, k=12))
+        return f"WEB:{random_suffix}-{now}"
+    
+    def place_repo_order_direct(self, credentials, symbol, quantity, interest_rate):
+        """
+        Place a repo order using direct API call with provided credentials
+        
+        Args:
+            credentials: Dictionary containing API credentials
+            symbol: Repo symbol (e.g., "ETH/USDC110")
+            quantity: Amount to borrow
+            interest_rate: Interest rate (e.g., 10.0)
+            
+        Returns:
+            API response or None if failed
+        """
+        self.logger.info(f"Placing repo order for {symbol}, quantity={quantity}, interest_rate={interest_rate}%")
+        
+        # Set up URL
+        url = f"{credentials.get('api_url')}/rest/orders"
+        endpoint = "/rest/orders"
+        
+        # Generate a unique repo client order ID
+        clordid = self.generate_repo_clordid()
+        
+        # Create repo order data
+        order_data = {
+            "side": "BID",  # BID for borrowing
+            "price": float(interest_rate),
+            "custodianId": credentials.get('custodian_id'),
+            "symbol": symbol,
+            "currency": symbol.split('/')[0],
+            "currency2": "USDC110",
+            "orderQty": float(quantity),
+            "clOrdId": clordid,
+            "orderType": "LIMIT",
+            "tif": "GTC",
+            "dark": False,
+            "isAvgPrice": False,
+            "venue": "LIT"
+        }
+        
+        # Convert order data to JSON
+        body = json.dumps(order_data)
+        
+        # Create signature using body hash method
+        body_hash = base64.b64encode(hashlib.md5(body.encode()).digest()).decode()
+        string_to_sign = f"POST\n{endpoint}\n{body_hash}"
+        signature = base64.b64encode(
+            hmac.new(credentials.get('api_secret').encode(), string_to_sign.encode(), hashlib.sha256).digest()
+        ).decode()
+        
+        # Set up headers
+        headers = {
+            'api-key': credentials.get('api_key'),
+            'api-sign': signature,
+            'Content-Type': 'application/json'
+        }
+        
+        self.logger.info(f"Making API request to {url}")
+        self.logger.debug(f"Headers: {headers}")
+        self.logger.debug(f"Body: {body}")
+        
+        try:
+            # Make the API request
+            response = requests.post(url, headers=headers, data=body, timeout=30)
+            
+            if response.ok:
+                self.logger.info(f"Repo order placed successfully: {response.status_code}")
+                if response.text:
+                    return response.json()
+                return {"status": "success"}
+            else:
+                self.logger.error(f"Error placing repo order: {response.status_code} - {response.text}")
+                return None
+        except Exception as e:
+            self.logger.error(f"Exception placing repo order: {str(e)}")
+            return None
+    
+    def get_jwt_token(self, account_name):
+        """Get JWT token for API authentication"""
+        self.logger.info(f"Getting JWT token for account {account_name}...")
+        
+        credentials = self.config_manager.get_account_credentials(account_name)
+        if not credentials:
+            self.logger.error(f"No credentials found for account {account_name}")
+            return None
+        
+        base_url = credentials.get('api_base_url')
+        if not base_url.endswith('/'):
+            base_url += '/'
+        
+        url = f"{base_url}sso/api/login"
+        
+        payload = {
+            "username": credentials.get('api_username'),
+            "password": credentials.get('api_password'),
+            "code": credentials.get('api_code'),
+            "redirectTo": f"{base_url}/trader",
+            "email": credentials.get('api_username')
+        }
+        
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': '*/*',
+            'Origin': base_url,
+            'Referer': f'{base_url}/login?noredir=1'
+        }
+        
+        try:
+            response = requests.post(url, json=payload, headers=headers, timeout=30)
+            
+            if response.status_code == 200:
+                token = response.headers.get('Authorization', response.headers.get('authorization'))
+                if token and token.startswith('Bearer '):
+                    token = token.replace('Bearer ', '')
+                
+                self.logger.info(f"Authentication successful for account {account_name}")
+                return token
+            else:
+                self.logger.error(f"Authentication failed for account {account_name}: {response.status_code} - {response.text}")
+                return None
+        except Exception as e:
+            self.logger.error(f"Error during authentication: {str(e)}")
+            return None
+    
+    def check_existing_repo(self, account_name, symbol):
+        """Check if a repo already exists"""
+        self.logger.info(f"Checking if repo already exists for {symbol} (account: {account_name})")
+        
+        # Get JWT token
+        jwt_token = self.get_jwt_token(account_name)
+        if not jwt_token:
+            self.logger.error(f"Failed to get JWT token for account {account_name}")
+            return None
+        
+        credentials = self.config_manager.get_account_credentials(account_name)
+        if not credentials:
+            self.logger.error(f"No credentials found for account {account_name}")
+            return None
+        
+        # Set headers
+        headers = {
+            "Authorization": f"Bearer {jwt_token}",
+            "Content-Type": "application/json"
+        }
+        
+        # Form URL
+        base_url = credentials.get('api_base_url')
+        if not base_url.endswith('/'):
+            base_url += '/'
+        
+        url = f"{base_url}rest/repocontract?sortBy=id&sortDirection=DESC&status=OPEN&repoSymbol={symbol}"
+        
+        # Create payload
+        payload = {
+            "userId": credentials.get('api_username'),
+            "contractType": "BORROW",
+            "eventId": f"event{int(time.time())}",
+            "repoSymbol": symbol
+        }
+        
+        try:
+            # Make the request
+            response = requests.post(url, headers=headers, json=payload, timeout=30)
+            
+            if not response.ok:
+                self.logger.error(f"Failed to check repo status: {response.status_code} - {response.text}")
+                return None
+            
+            repo_data = response.json()
+            
+            if not repo_data.get("content") or len(repo_data["content"]) == 0:
+                self.logger.info(f"No open repo found for {symbol}")
+                return None
+            
+            # Get the first open repo
+            repo_contract = repo_data["content"][0]
+            repo_id = repo_contract.get("id")
+            
+            if repo_id:
+                self.logger.info(f"Found existing repo for {symbol} with ID: {repo_id}")
+                return {"id": repo_id}
+            else:
+                self.logger.warning(f"No repo ID found in response for {symbol}")
+                return None
+        except Exception as e:
+            self.logger.error(f"Error checking repo status: {str(e)}")
+            return None
+    
+    def close_repo_direct(self, account_name, symbol):
+        """Close a repo contract using direct API call"""
+        self.logger.info(f"Attempting to close repo for {symbol} (account: {account_name})")
+        
+        # Get JWT token
+        jwt_token = self.get_jwt_token(account_name)
+        if not jwt_token:
+            self.logger.error(f"Failed to get JWT token for account {account_name}")
+            return False
+        
+        credentials = self.config_manager.get_account_credentials(account_name)
+        if not credentials:
+            self.logger.error(f"No credentials found for account {account_name}")
+            return False
+        
+        # Get repo details first
+        repo_details = self.check_existing_repo(account_name, symbol)
+        if not repo_details:
+            self.logger.warning(f"No open repo found for {symbol} to close")
+            return True  # Consider it a success if there's no repo to close
+        
+        # Get the repo ID and set up the close request
+        repo_id = repo_details["id"]
+        
+        # Create a new event ID for closing
+        close_event_id = f"closeEvent{int(time.time())}"
+        
+        # Set headers
+        headers = {
+            "Authorization": f"Bearer {jwt_token}",
+            "Content-Type": "application/json",
+            "User-Agent": "python-requests/2.28.1"
+        }
+        
+        # Form URL
+        base_url = credentials.get('api_base_url')
+        if not base_url.endswith('/'):
+            base_url += '/'
+        
+        # Using GET with URL parameters as in the working reference code
+        close_url = f"{base_url}rest/repocontract/close?repoContractId={repo_id}&eventId={close_event_id}"
+        
+        try:
+            # Use GET with URL parameters
+            close_response = requests.get(
+                url=close_url, 
+                headers=headers,
+                timeout=30
+            )
+            
+            if not close_response.ok:
+                self.logger.error(f"Failed to close repo: {close_response.status_code} - {close_response.text}")
+                return False
+            
+            self.logger.info(f"Successfully closed repo for {symbol}")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Error closing repo: {str(e)}")
+            return False
     
     def validate_request_data(self, data):
         """Validate incoming webhook data."""
@@ -157,13 +421,24 @@ class TradingBot:
         raise ValueError(f"Cannot determine trade side from message: {message}")
     
     def verify_repo_status(self, symbol, account_name):
-        """Verify repo status for a specific account."""
-        return self.account_manager.verify_repo_status(symbol, account_name)
+        """Verify repo status for a specific symbol and account."""
+        base_currency = symbol.split('/')[0]
+        repo_symbol = f"{base_currency}/USDC110"
+        
+        # Using direct repo check
+        repo_details = self.check_existing_repo(account_name, repo_symbol)
+        has_repo = repo_details is not None
+        
+        if has_repo:
+            self.logger.info(f"Verified repo exists for {symbol} (account: {account_name})")
+        else:
+            self.logger.info(f"Verified no repo exists for {symbol} (account: {account_name})")
+            
+        return has_repo
     
     def get_current_price(self, symbol, account_name):
         """Get current market price for a symbol (placeholder)"""
         # In a real implementation, you would fetch this from your price feed
-        # This is a simplified placeholder
         if 'BTC' in symbol:
             return 93350.0
         elif 'ETH' in symbol:
@@ -191,15 +466,12 @@ class TradingBot:
         if has_repo:
             base_currency = symbol.split('/')[0]
             repo_symbol = f"{base_currency}/USDC110"
-            repo_details = get_repo_details(
-                symbol=repo_symbol,
-                config_manager=self.config_manager,
-                account_name=account_name
-            )
-            if repo_details and 'quantity' in repo_details:
-                repo_quantity = repo_details['quantity']
-            else:
-                # If we can't get the exact quantity, use min_quantity as estimate
+            repo_details = self.check_existing_repo(account_name, repo_symbol)
+            
+            if repo_details:
+                # If we have repo details, use min_quantity as estimate
+                # In a full implementation, you would extract the actual quantity
+                base_currency = symbol.split('/')[0]
                 repo_quantity = self.config_manager.get_currency_setting(
                     account_name, base_currency, 'min_quantity', 0.001)
         
@@ -225,25 +497,26 @@ class TradingBot:
     
     def log_sequence_history(self, symbol, account_name):
         """Log a visual representation of the sequence history"""
-        if symbol not in self.sequence_history:
-            self.sequence_history[symbol] = []
+        account_symbol_key = f"{account_name}:{symbol}"
+        if account_symbol_key not in self.sequence_history:
+            self.sequence_history[account_symbol_key] = []
         
         # Get current event
-        current_event = self.event_counter.get(symbol, 0)
+        current_event = self.event_counter.get(account_symbol_key, 0)
         
         # Add to history
-        self.sequence_history[symbol].append(current_event)
+        self.sequence_history[account_symbol_key].append(current_event)
         
         # Only keep the last 10 events to avoid overly long logs
-        if len(self.sequence_history[symbol]) > 10:
-            self.sequence_history[symbol] = self.sequence_history[symbol][-10:]
+        if len(self.sequence_history[account_symbol_key]) > 10:
+            self.sequence_history[account_symbol_key] = self.sequence_history[account_symbol_key][-10:]
         
         # Generate visual representation
-        history_str = ' → '.join([str(e) for e in self.sequence_history[symbol]])
+        history_str = ' → '.join([str(e) for e in self.sequence_history[account_symbol_key]])
         
         # Check for expected patterns in last 4 events
-        if len(self.sequence_history[symbol]) >= 4:
-            last_four = ''.join(map(str, self.sequence_history[symbol][-4:]))
+        if len(self.sequence_history[account_symbol_key]) >= 4:
+            last_four = ''.join(map(str, self.sequence_history[account_symbol_key][-4:]))
             # Check for valid patterns
             valid_patterns = ['1434', '4343', '2343', '3434']
             valid_pattern = any(pattern in last_four for pattern in valid_patterns)
@@ -317,12 +590,7 @@ class TradingBot:
             repo_symbol = f"{base_currency}/USDC110"
             self.logger.info(f"[SEQUENCE_RECOVERY][{account_name}][{symbol}] Closing repo {repo_symbol}")
             
-            success = close_repo(
-                symbol=repo_symbol,
-                logger=self.logger,
-                config_manager=self.config_manager,
-                account_name=account_name
-            )
+            success = self.close_repo_direct(account_name, repo_symbol)
             
             if not success:
                 self.logger.error(f"[SEQUENCE_RECOVERY][{account_name}][{symbol}] Failed to close repo")
@@ -367,11 +635,14 @@ class TradingBot:
             position_client.refresh_positions()
         
         # Step 3: Reset the event counter
+        account_symbol_key = f"{account_name}:{symbol}"
         self.logger.info(f"[SEQUENCE_RECOVERY][{account_name}][{symbol}] Resetting event counter")
-        if symbol in self.event_counter:
-            self.event_counter[symbol] = 0
-        if symbol in self.sequence_history:
-            self.sequence_history[symbol] = []
+        if account_symbol_key in self.event_counter:
+            self.event_counter[account_symbol_key] = 0
+        if account_symbol_key in self.sequence_history:
+            self.sequence_history[account_symbol_key] = []
+        if account_symbol_key in self.sequence_type:
+            del self.sequence_type[account_symbol_key]
         
         # Step 4: Log recovery completed
         self.logger.info(f"[SEQUENCE_RECOVERY][{account_name}][{symbol}] Sequence recovery completed successfully")
@@ -453,824 +724,26 @@ class TradingBot:
                     else:
                         self.event_counter[account_symbol_key] = 2
                         self.sequence_type[account_symbol_key] = "Sell Start"
-                    
-                    # Refresh state after recovery
-                    current_state = self.get_current_state(symbol, account_name)
-                    current_balance = current_state['balance']
-                    current_repo = current_state['repo']
-                else:
-                    # If valid, advance to next step
-                    if current_event == 1:
-                        self.event_counter[account_symbol_key] = 4
-                    elif current_event == 2: 
-                        self.event_counter[account_symbol_key] = 3
-                    elif current_event == 3:
-                        self.event_counter[account_symbol_key] = 4
-                    elif current_event == 4: 
-                        self.event_counter[account_symbol_key] = 3
-        
-        # Get current event number after possible changes
-        event_num = self.event_counter.get(account_symbol_key, 0)
-        
-        # Log sequence state
-        self.log_sequence_state(
-            symbol, account_name, event_num, signal_type, 
-            current_balance, current_repo
-        )
-        
-        # Save to sequence history
-        if account_symbol_key not in self.sequence_history:
-            self.sequence_history[account_symbol_key] = []
-        self.sequence_history[account_symbol_key].append(event_num)
-        
-        # Only keep the last 10 events to avoid overly long history
-        if len(self.sequence_history[account_symbol_key]) > 10:
-            self.sequence_history[account_symbol_key] = self.sequence_history[account_symbol_key][-10:]
-        
-        # Log sequence history
-        history_str = ' → '.join([str(e) for e in self.sequence_history[account_symbol_key]])
-        self.logger.info(f"[SEQUENCE_HISTORY][{account_name}][{symbol}] {history_str}")
-        
-        # Get the unit size for this currency
-        base_currency = symbol.split('/')[0]
-        unit_size = self.config_manager.get_currency_setting(
-            account_name, base_currency, 'min_quantity', 0.001)
-        
-        # Get repo interest rate from configuration
-        repo_interest = float(self.config_manager.get_trading_setting(
-            account_name, 'repo_interest_rate', 10.0))
-        
-        # Create repo details dictionary for reuse
-        repo_symbol = f"{base_currency}/USDC110"
-        repo_details = {
-            'symbol': repo_symbol,
-            'quantity': unit_size,
-            'interest_rate': repo_interest
-        }
-        
-        # Event table logic
-        # Event 1, Buy Signal: Buy
-        if event_num == 1 and signal_type == 'Buy Signal':
-            return {
-                'steps': ['open_long'],
-                'position_size': [unit_size],
-                'sequential': True,
-                'starting_balance': current_balance,
-                'starting_repo': current_repo,
-                'expected_ending_balance': current_balance + unit_size,
-                'expected_ending_repo': current_repo
-            }
-        
-        # Event 2, Sell Signal: Open Repo, Sell
-        elif event_num == 2 and signal_type == 'Sell Signal':
-            return {
-                'steps': ['open_repo', 'open_short'],
-                'position_size': [unit_size, unit_size],
-                'repo_details': repo_details,
-                'sequential': True,
-                'starting_balance': current_balance,
-                'starting_repo': current_repo,
-                'expected_ending_balance': current_balance - unit_size if current_balance >= unit_size else 0,
-                'expected_ending_repo': current_repo + unit_size
-            }
-        
-        # Event 3, Buy Signal: Buy twice, close repo
-        elif event_num == 3 and signal_type == 'Buy Signal':
-            return {
-                'steps': ['open_long', 'open_long', 'close_repo'],
-                'position_size': [unit_size, unit_size, repo_symbol],
-                'sequential': True,
-                'starting_balance': current_balance,
-                'starting_repo': current_repo,
-                'expected_ending_balance': current_balance + unit_size * 2,
-                'expected_ending_repo': 0
-            }
-        
-        # Event 4, Sell Signal: Sell, Open Repo, Sell
-        elif event_num == 4 and signal_type == 'Sell Signal':
-            return {
-                'steps': ['open_short', 'open_repo', 'open_short'],
-                'position_size': [unit_size, unit_size, unit_size],
-                'repo_details': repo_details,
-                'sequential': True,
-                'starting_balance': current_balance,
-                'starting_repo': current_repo,
-                'expected_ending_balance': current_balance - unit_size * 2 if current_balance >= unit_size * 2 else 0,
-                'expected_ending_repo': unit_size
-            }
-        
-        # For other cases or when the sequence doesn't match the table
-        self.logger.warning(f"[{account_name}] No matching table logic for event={event_num}, " +
-                           f"signal={signal_type}, balance={current_balance}, repo={current_repo}")
-        return {
-            'steps': [],
-            'position_size': [],
-            'message': f"No table logic for event {event_num} with {signal_type}"
-        }
+def get_current_price(self, symbol, account_name):
+    """
+    Get the current market price for a symbol.
     
-    def format_price(self, price, symbol, account_name='default'):
-        """Format price according to symbol's decimal precision from configuration."""
-        try:
-            price_float = float(str(price).replace(',', ''))
-            if price_float <= 0:
-                raise ValueError("Price must be greater than 0")
-            
-            base_currency = symbol.split('/')[0]
-            price_decimals = self.config_manager.get_currency_setting(
-                account_name, base_currency, 'price_decimals', 2)
-            return round(price_float, price_decimals)
-        except (ValueError, TypeError) as e:
-            raise ValueError(f"Invalid price value: {price}. Error: {e}")
+    This should come from either:
+    1. The price provided in the webhook payload
+    2. The price from position client's latest order data
+    3. If needed, an external price feed API
+    """
+    try:
+        # First check if we have price data in the position client
+        position_client = self.account_manager.get_position_client(account_name)
+        if position_client:
+            # Try to get the current price from the position client
+            # This would typically come from recent trades or market data
+            # The implementation depends on the PositionWebsocketClient capabilities
+            return position_client.get_latest_price(symbol)
+    except Exception as e:
+        self.logger.warning(f"Error getting price from position client: {str(e)}")
     
-    def webhook(self):
-        """Handle incoming webhook requests from TradingView."""
-        request_id = str(time.time())
-        
-        if not self.webhook_lock.acquire(blocking=False):
-            self.logger.warning(f"[{request_id}] Request blocked by lock")
-            return jsonify({"success": False, "error": "Request already being processed"}), 429
-        
-        try:
-            data = request.json
-            self.logger.info(f"[{request_id}] Processing webhook data: {json.dumps(data, indent=2)}")
-
-            try:
-                self.validate_request_data(data)
-            except ValueError as e:
-                self.logger.error(f"[{request_id}] Validation error: {str(e)}")
-                return jsonify({"success": False, "error": str(e)}), 400
-
-            symbol = data['symbol']
-            message = data['message']
-            timeframe = data['timeFrame']
-            account_name = data['account']  # Set during validation
-            
-            # Convert message to signal type for table logic
-            signal_type = "Buy Signal" if message == "Trend Buy!" else "Sell Signal"
-            
-            # Get the position client for this account
-            position_client = self.account_manager.get_position_client(account_name)
-            if not position_client:
-                self.logger.error(f"[{request_id}] No position client for account: {account_name}")
-                return jsonify({"success": False, "error": f"No position client for account: {account_name}"}), 500
-                
-            # Get the account config
-            account = self.config_manager.get_account(account_name)
-            if not account:
-                self.logger.error(f"[{request_id}] No account configuration for: {account_name}")
-                return jsonify({"success": False, "error": f"No account configuration for: {account_name}"}), 500
-            
-            # Initialize account signals tracking if not exists
-            if account_name not in self.last_signals:
-                self.last_signals[account_name] = {}
-            
-            # Force position refresh before decision making
-            position_client.refresh_positions()
-            
-            # Get trade sequence based on table logic
-            trade_sequence = self.determine_trade_sequence(symbol, signal_type, account_name)
-            
-            # Check if trade sequence is empty (e.g., when skipping due to existing position)
-            if not trade_sequence['steps']:
-                self.logger.info(f"[{request_id}] No trade steps to execute - skipping order placement")
-                # Update last signal to prevent repeated processing
-                self.last_signals[account_name][symbol] = {
-                    'message': message,
-                    'timeFrame': timeframe,
-                    'timestamp': time.time()
-                }
-                
-                # If there's a message in the trade_sequence, include it in the response
-                response_data = {
-                    "success": True,
-                    "message": trade_sequence.get('message', f"No action needed for {symbol} with {message} signal"),
-                    "current_position": position_client.get_truncated_position(symbol),
-                    "account": account_name
-                }
-                return jsonify(response_data), 200
-            
-            price = self.format_price(data['price'], symbol, account_name)
-            position_sizes = trade_sequence['position_size']
-            
-            # Dictionary to track currency repo operations for this request
-            repo_operations = {}
-            
-            # Check if sequential execution is required
-            sequential_required = trade_sequence.get('sequential', False)
-            
-            responses = []
-            for i, step in enumerate(trade_sequence['steps']):
-                try:
-                    self.logger.info(f"[{request_id}][{account_name}] Executing step {i+1}: {step}")
-                    
-                    if step == 'open_long':
-                        response = place_order(
-                            symbol=symbol,
-                            side='BID',
-                            price=price,
-                            quantity=position_sizes[i],
-                            config_manager=self.config_manager,
-                            account_name=account_name
-                        )
-                        
-                        if not response and sequential_required:
-                            error_msg = f"Step {step} failed. Aborting subsequent steps."
-                            self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
-                            return jsonify({"success": False, "error": error_msg}), 500
-                            
-                        responses.append({'step': step, 'response': response})
-                        
-                        # Position verification after execution
-                        time.sleep(1)  # Wait for execution to reflect in positions
-                        position_client.refresh_positions()
-                        
-                    elif step == 'open_short':
-                        response = place_order(
-                            symbol=symbol,
-                            side='ASK',
-                            price=price,
-                            quantity=position_sizes[i],
-                            config_manager=self.config_manager,
-                            account_name=account_name
-                        )
-                        
-                        if not response and sequential_required:
-                            error_msg = f"Step {step} failed. Aborting subsequent steps."
-                            self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
-                            return jsonify({"success": False, "error": error_msg}), 500
-                            
-                        responses.append({'step': step, 'response': response})
-                        
-                        # Position verification after execution
-                        time.sleep(1)  # Wait for execution to reflect in positions
-                        position_client.refresh_positions()
-                    
-                    elif step == 'open_repo':
-                        # Check for existing repo to prevent duplicates
-                        repo_details = trade_sequence.get('repo_details')
-                        if not repo_details:
-                            self.logger.error(f"[{request_id}][{account_name}] Missing repo details for open_repo step")
-                            if sequential_required:
-                                return jsonify({"success": False, "error": "Missing repo details"}), 500
-                            continue
-                            
-                        repo_symbol = repo_details['symbol']
-                        base_currency = repo_symbol.split('/')[0]
-                        
-                        # Check if we already processed a repo operation for this currency in this request
-                        if base_currency in repo_operations:
-                            self.logger.warning(f"[{request_id}][{account_name}] Already processed repo for {base_currency} in this request, skipping duplicate")
-                            responses.append({
-                                'step': step, 
-                                'skipped': True, 
-                                'reason': f'Already processed repo for {base_currency} in this request'
-                            })
-                            continue
-                        
-                        # Triple-check repo status using our comprehensive verification
-                        if self.verify_repo_status(symbol, account_name):
-                            self.logger.warning(f"[{request_id}][{account_name}] Skipping repo open - repo already exists for {symbol}")
-                            responses.append({
-                                'step': step, 
-                                'skipped': True, 
-                                'reason': 'Repo already exists'
-                            })
-                            # Mark this currency as processed to prevent duplicates
-                            repo_operations[base_currency] = 'skipped'
-                            continue
-                        
-                        # Use config-driven repo operations
-                        self.logger.info(f"[{request_id}][{account_name}] Using API key authentication for repo operation")
-                        response = place_repo_order(
-                            symbol=repo_details['symbol'],
-                            quantity=repo_details['quantity'],
-                            interest_rate=repo_details['interest_rate'],
-                            config_manager=self.config_manager,
-                            account_name=account_name,
-                            logger=self.logger
-                        )
-                        
-                        # Mark this currency as processed to prevent duplicates
-                        repo_operations[base_currency] = 'processed'
-                        
-                        # Check if step failed
-                        if not response and sequential_required:
-                            error_msg = f"Step {step} failed. Aborting subsequent steps."
-                            self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
-                            return jsonify({"success": False, "error": error_msg}), 500
-                        
-                        # Check if the response indicates an existing repo was found
-                        if isinstance(response, dict) and response.get('status') == 'skipped' and response.get('reason') == 'repo_exists':
-                            self.logger.warning(f"[{request_id}][{account_name}] Repo already exists for {repo_symbol} (direct API check)")
-                            responses.append({
-                                'step': step, 
-                                'skipped': True, 
-                                'reason': 'Repo already exists (API verification)'
-                            })
-                        else:
-                            responses.append({'step': step, 'response': response})
-                            
-                        # Refresh position data after repo operation
-                        time.sleep(1)
-                        position_client.refresh_positions()
-                    
-                    elif step == 'close_repo':
-                        self.logger.info(f"[{request_id}][{account_name}] Executing step {i+1}: {step}")
-                        repo_symbol = position_sizes[i]  # In this case, position_sizes[i] contains the repo symbol
-                        base_currency = repo_symbol.split('/')[0]
-                        
-                        # Check if we already processed a repo operation for this currency in this request
-                        if base_currency in repo_operations:
-                            self.logger.warning(f"[{request_id}][{account_name}] Already processed repo for {base_currency} in this request, proceeding with caution")
-                        
-                        # Verify repo exists before trying to close it
-                        if not self.verify_repo_status(symbol, account_name):
-                            self.logger.warning(f"[{request_id}][{account_name}] No repo exists for {symbol}, skipping close_repo")
-                            responses.append({
-                                'step': step, 
-                                'skipped': True, 
-                                'reason': 'No repo exists to close'
-                            })
-                            continue
-                        
-                        # Use config-driven repo operations
-                        success = close_repo(
-                            symbol=repo_symbol,
-                            logger=self.logger,
-                            config_manager=self.config_manager,
-                            account_name=account_name
-                        )
-                        
-                        # Mark this currency as processed
-                        repo_operations[base_currency] = 'closed'
-                        
-                        if not success and sequential_required:
-                            error_msg = f"Step {step} failed. Aborting subsequent steps."
-                            self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
-                            return jsonify({"success": False, "error": error_msg}), 500
-                            
-                        responses.append({'step': step, 'success': success})
-                        
-                        # Refresh position data after repo operation
-                        time.sleep(1)
-                        position_client.refresh_positions()
-                        
-                except OrderPlacementError as e:
-                    error_msg = f"Failed at step {step}: {str(e)}"
-                    self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
-                    
-                    if sequential_required:
-                        return jsonify({"success": False, "error": error_msg}), 500
-                    
-                    responses.append({'step': step, 'error': str(e)})
-                    
-                except Exception as e:
-                    error_msg = f"Unexpected error at step {step}: {str(e)}"
-                    self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
-                    
-                    if sequential_required:
-                        return jsonify({"success": False, "error": error_msg}), 500
-                    
-                    responses.append({'step': step, 'error': str(e)})
-            
-            # Update last signal after successful trade
-            self.last_signals[account_name][symbol] = {
-                'message': message,
-                'timeFrame': timeframe,
-                'timestamp': time.time()
-            }
-            
-            # Final position verification
-            time.sleep(1)
-            position_client.refresh_positions()
-            final_position = self.get_current_state(symbol, account_name)
-            
-            # Account-symbol key
-            account_symbol_key = f"{account_name}:{symbol}"
-            
-            # Compare expected vs actual ending state
-            expected_ending_balance = trade_sequence.get('expected_ending_balance')
-            expected_ending_repo = trade_sequence.get('expected_ending_repo')
-            actual_ending_balance = final_position['balance']
-            actual_ending_repo = final_position['repo']
-            
-            state_match = (expected_ending_balance == actual_ending_balance and 
-                          expected_ending_repo == actual_ending_repo)
-            
-            if not state_match:
-                self.logger.warning(f"[{request_id}][{account_name}] Final state doesn't match expected state:" +
-                                  f" Expected bal={expected_ending_balance}, repo={expected_ending_repo}," +
-                                  f" Actual bal={actual_ending_balance}, repo={actual_ending_repo}")
-            
-            response_data = {
-                "success": True,
-                "account": account_name,
-                "orders": responses,
-                "message": f"Successfully executed trade sequence: {', '.join(trade_sequence['steps'])}",
-                "event": self.event_counter.get(account_symbol_key, 0),
-                "starting_balance": trade_sequence.get('starting_balance'),
-                "starting_repo": trade_sequence.get('starting_repo'),
-                "expected_ending_balance": expected_ending_balance,
-                "expected_ending_repo": expected_ending_repo,
-                "actual_ending_balance": actual_ending_balance,
-                "actual_ending_repo": actual_ending_repo,
-                "state_match": state_match
-            }
-            
-            self.logger.info(f"[{request_id}][{account_name}] Trade sequence executed successfully: {json.dumps(responses, indent=2)}")
-            self.logger.info(f"[{request_id}][{account_name}] Final state: balance={actual_ending_balance}, repo={actual_ending_repo}")
-            return jsonify(response_data), 200
-            
-        except Exception as e:
-            self.logger.error(f"[{request_id}] Unexpected error: {str(e)}")
-            return jsonify({"success": False, "error": str(e)}), 500
-            
-        finally:
-            self.webhook_lock.release()
-
-    def get_positions(self):
-        """Get current positions for all trading pairs across all accounts."""
-        try:
-            positions_data = {'accounts': {}}
-            
-            # Get positions for each account
-            for account in self.config_manager.get_enabled_accounts():
-                account_name = account.get('name')
-                position_client = self.account_manager.get_position_client(account_name)
-                if not position_client:
-                    continue
-                    
-                # Force refresh positions before reporting
-                position_client.refresh_positions()
-                
-                # Get trading pairs for this account
-                trading_pairs = self.config_manager.get_account_setting(
-                    account_name, 'trading_pairs', [])
-                
-                # Get positions for all trading pairs for this account
-                account_positions = {}
-                for symbol in trading_pairs:
-                    state = self.get_current_state(symbol, account_name)
-                    account_symbol_key = f"{account_name}:{symbol}"
-                    account_positions[symbol] = {
-                        'balance': state['balance'],
-                        'repo': state['repo'],
-                        'event_counter': self.event_counter.get(account_symbol_key, 0),
-                        'sequence_type': self.sequence_type.get(account_symbol_key, "None")
-                    }
-                
-                positions_data['accounts'][account_name] = {
-                    'positions': account_positions,
-                    'timeframes': self.config_manager.get_account_setting(
-                        account_name, 'timeframes', [])
-                }
-            
-            positions_data['timestamp'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            
-            self.logger.info(f"Position status request: {json.dumps(positions_data, indent=2)}")
-            return jsonify(positions_data), 200
-            
-        except Exception as e:
-            error_msg = f"Failed to get positions: {str(e)}"
-            self.logger.error(error_msg)
-            return jsonify({"success": False, "error": error_msg}), 500
-
-    def health_check(self):
-        """Basic health check endpoint for all accounts."""
-        health_data = {
-            "status": "ok",
-            "accounts": {},
-            "timestamp": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-            "version": self.config_manager.config.get('version', '2.0.0')
-        }
-        
-        # Check health for each account
-        for account in self.config_manager.get_enabled_accounts():
-            account_name = account.get('name')
-            position_client = self.account_manager.get_position_client(account_name)
-            if not position_client:
-                health_data["accounts"][account_name] = {
-                    "status": "error",
-                    "error": "No position client available"
-                }
-                continue
-                
-            ws_status = "Connected" if position_client.is_connected() else "Disconnected"
-            
-            # Get trading pairs for this account
-            trading_pairs = self.config_manager.get_account_setting(
-                account_name, 'trading_pairs', [])
-            
-            # Get position status for each trading pair
-            position_status = {}
-            event_status = {}
-            for symbol in trading_pairs:
-                state = self.get_current_state(symbol, account_name)
-                account_symbol_key = f"{account_name}:{symbol}"
-                position_status[symbol] = {
-                    "balance": state['balance'],
-                    "repo": state['repo']
-                }
-                event_status[symbol] = self.event_counter.get(account_symbol_key, 0)
-            
-            # Add auto-short status
-            auto_short_enabled = self.config_manager.get_trading_setting(
-                account_name, 'auto_short', {}).get('enabled', False)
-            
-            # Add account-specific health data
-            health_data["accounts"][account_name] = {
-                "status": "ok" if ws_status == "Connected" else "warning",
-                "websocket": ws_status,
-                "position_status": position_status,
-                "event_status": event_status,
-                "timeframes": self.config_manager.get_account_setting(
-                    account_name, 'timeframes', []),
-                "auto_short": {
-                    "enabled": auto_short_enabled
-                }
-            }
-        
-        return jsonify(health_data), 200
-    
-    def sequence_health(self):
-        """Endpoint to check sequence health for all symbols."""
-        sequence_data = {}
-        
-        # Get sequence info for all active symbols
-        for account in self.config_manager.get_enabled_accounts():
-            account_name = account.get('name')
-            for symbol in account.get('trading_pairs', []):
-                account_symbol_key = f"{account_name}:{symbol}"
-                
-                # Get current state
-                state = self.get_current_state(symbol, account_name)
-                if not state:
-                    continue
-                
-                # Get current event
-                current_event = self.event_counter.get(account_symbol_key, 0)
-                
-                # Determine sequence type and next expected event/signal
-                if account_symbol_key in self.sequence_type:
-                    sequence_type = self.sequence_type[account_symbol_key]
-                    if sequence_type == "Buy Start":
-                        sequence_desc = "Buy Start (1→4→3→4)"
-                    else:
-                        sequence_desc = "Sell Start (2→3→4→3)"
-                else:
-                    sequence_desc = "None"
-                    
-                # Determine next expected signal
-                if current_event == 1 or current_event == 3:
-                    next_expected_event = 4
-                    next_expected_signal = "Sell Signal"
-                elif current_event == 2 or current_event == 4:
-                    next_expected_event = 3
-                    next_expected_signal = "Buy Signal"
-                else:
-                    next_expected_event = None
-                    next_expected_signal = None
-                
-                # Check sequence validity
-                sequence_valid = True
-                if account_symbol_key in self.sequence_history and len(self.sequence_history[account_symbol_key]) >= 4:
-                    # Convert last 4 events to string
-                    last_four = ''.join(map(str, self.sequence_history[account_symbol_key][-4:]))
-                    # Valid patterns
-                    if sequence_desc == "Buy Start (1→4→3→4)":
-                        valid_patterns = ['1434', '4343']
-                    else:  # Sell Start
-                        valid_patterns = ['2343', '3434']
-                    
-                    sequence_valid = any(pattern in last_four for pattern in valid_patterns)
-                
-                # Add to sequence data
-                sequence_data[account_symbol_key] = {
-                    "current_event": current_event,
-                    "sequence_type": sequence_desc,
-                    "next_expected_event": next_expected_event,
-                    "next_expected_signal": next_expected_signal,
-                    "current_balance": state['balance'],
-                    "current_repo": state['repo'],
-                    "sequence_valid": sequence_valid,
-                    "sequence_history": self.sequence_history.get(account_symbol_key, [])
-                }
-        
-        return jsonify(sequence_data), 200
-        
-    def handle_sequence_reset(self):
-        """Endpoint to manually reset sequence counters."""
-        try:
-            # Get JSON data - handle case where it might not be provided
-            data = request.get_json(silent=True) or {}
-            
-            # Check if we're resetting all symbols or just one
-            symbol = data.get('symbol')
-            account_name = data.get('account')
-            
-            # Build response data
-            response_data = {
-                "success": True,
-                "reset_counts": 0,
-                "reset_symbols": []
-            }
-            
-            if symbol and account_name:
-                # Reset specific account/symbol combination
-                account_symbol_key = f"{account_name}:{symbol}"
-                if account_symbol_key in self.event_counter:
-                    old_value = self.event_counter[account_symbol_key]
-                    self.event_counter[account_symbol_key] = 0
-                    if account_symbol_key in self.sequence_history:
-                        self.sequence_history[account_symbol_key] = []
-                    if account_symbol_key in self.sequence_type:
-                        del self.sequence_type[account_symbol_key]
-                    
-                    self.logger.info(f"Reset event counter for {account_symbol_key} from {old_value} to 0")
-                    response_data["reset_counts"] = 1
-                    response_data["reset_symbols"].append(account_symbol_key)
-                    response_data["message"] = f"Reset event counter for {account_symbol_key}"
-                else:
-                    response_data["reset_counts"] = 0
-                    response_data["message"] = f"Symbol {account_symbol_key} not found in event counters"
-            elif symbol:
-                # Reset symbol across all accounts
-                reset_count = 0
-                reset_symbols = []
-                for account in self.config_manager.get_enabled_accounts():
-                    acct_name = account.get('name')
-                    account_symbol_key = f"{acct_name}:{symbol}"
-                    if account_symbol_key in self.event_counter:
-                        old_value = self.event_counter[account_symbol_key]
-                        self.event_counter[account_symbol_key] = 0
-                        if account_symbol_key in self.sequence_history:
-                            self.sequence_history[account_symbol_key] = []
-                        if account_symbol_key in self.sequence_type:
-                            del self.sequence_type[account_symbol_key]
-                        
-                        self.logger.info(f"Reset event counter for {account_symbol_key} from {old_value} to 0")
-                        reset_count += 1
-                        reset_symbols.append(account_symbol_key)
-                
-                response_data["reset_counts"] = reset_count
-                response_data["reset_symbols"] = reset_symbols
-                response_data["message"] = f"Reset {reset_count} event counters for symbol {symbol}"
-            elif account_name:
-                # Reset all symbols for specific account
-                reset_count = 0
-                reset_symbols = []
-                for key in list(self.event_counter.keys()):
-                    if key.startswith(f"{account_name}:"):
-                        old_value = self.event_counter[key]
-                        self.event_counter[key] = 0
-                        if key in self.sequence_history:
-                            self.sequence_history[key] = []
-                        if key in self.sequence_type:
-                            del self.sequence_type[key]
-                        
-                        self.logger.info(f"Reset event counter for {key} from {old_value} to 0")
-                        reset_count += 1
-                        reset_symbols.append(key)
-                
-                response_data["reset_counts"] = reset_count
-                response_data["reset_symbols"] = reset_symbols
-                response_data["message"] = f"Reset {reset_count} event counters for account {account_name}"
-            else:
-                # Reset all symbols for all accounts
-                reset_count = len(self.event_counter)
-                self.event_counter = {}
-                self.sequence_history = {}
-                self.sequence_type = {}
-                self.logger.info(f"Reset all {reset_count} event counters")
-                response_data["reset_counts"] = reset_count
-                response_data["message"] = f"Reset all {reset_count} event counters"
-                
-            return jsonify(response_data), 200
-                
-        except Exception as e:
-            error_msg = f"Error in sequence reset: {str(e)}"
-            self.logger.error(error_msg)
-            return jsonify({"success": False, "error": error_msg}), 500
-        
-    def trigger_auto_short(self):
-        """Manually trigger auto-short for testing and emergencies."""
-        try:
-            data = request.json
-            
-            # Validate required fields
-            required_fields = ['account', 'symbol']
-            missing_fields = [field for field in required_fields if field not in data]
-            if missing_fields:
-                return jsonify({
-                    "success": False, 
-                    "error": f"Missing required fields: {missing_fields}"
-                }), 400
-                
-            account_name = data['account']
-            symbol = data['symbol']
-            quantity = data.get('quantity')  # Optional
-            
-            # Check if account exists
-            if not self.config_manager.get_account(account_name):
-                return jsonify({
-                    "success": False, 
-                    "error": f"Account not found: {account_name}"
-                }), 404
-                
-            # Execute the auto-short
-            self.logger.info(f"Manually triggered auto-short for {symbol} on account {account_name}")
-            result = self.auto_position_manager.manually_trigger_short(
-                account_name, symbol, quantity)
-                
-            if result:
-                return jsonify({
-                    "success": True, 
-                    "message": f"Auto-short triggered for {symbol}"
-                }), 200
-            else:
-                return jsonify({
-                    "success": False, 
-                    "error": "Failed to execute auto-short"
-                }), 500
-                
-        except Exception as e:
-            error_msg = f"Error in auto-short trigger: {str(e)}"
-            self.logger.error(error_msg)
-            return jsonify({"success": False, "error": error_msg}), 500
-
-    def reset_event_counter(self, symbol=None):
-        """Reset the event counter for a specific symbol or all symbols."""
-        if symbol:
-            for account in self.config_manager.get_enabled_accounts():
-                account_name = account.get('name')
-                account_symbol_key = f"{account_name}:{symbol}"
-                if account_symbol_key in self.event_counter:
-                    self.event_counter[account_symbol_key] = 0
-                    if account_symbol_key in self.sequence_history:
-                        self.sequence_history[account_symbol_key] = []
-                    if account_symbol_key in self.sequence_type:
-                        del self.sequence_type[account_symbol_key]
-                    self.logger.info(f"Reset event counter for {account_symbol_key}")
-        else:
-            self.event_counter = {}
-            self.sequence_history = {}
-            self.sequence_type = {}
-            self.logger.info("Reset all event counters")
-        return True
-
-    def run(self):
-        """Run the trading bot with event-based table logic."""
-        try:
-            # Start all WebSocket clients
-            self.account_manager.start_all_clients()
-            
-            # Give the WebSockets time to connect
-            time.sleep(2)
-            
-            # Start automatic position management
-            self.auto_position_manager.start()
-            
-            # Get port and host from configuration
-            port = int(self.config_manager.get_global_setting('port', 6100))
-            host = self.config_manager.get_global_setting('host', '0.0.0.0')
-            debug = self.config_manager.get_global_setting('environment', 'production') == 'development'
-            
-            self.logger.info(f"Trading bot with table-based logic starting on {host}:{port}")
-            self.logger.info(f"Environment: {'Development' if debug else 'Production'}")
-            
-            # Log information about all accounts
-            for account in self.config_manager.get_enabled_accounts():
-                name = account.get('name')
-                self.logger.info(f"Account: {name}")
-                self.logger.info(f"  Timeframes: {','.join(account.get('timeframes', []))}")
-                self.logger.info(f"  Trading pairs: {','.join(account.get('trading_pairs', []))}")
-                credentials = self.config_manager.get_account_credentials(name)
-                self.logger.info(f"  API URL: {credentials.get('api_url')}")
-                self.logger.info(f"  WebSocket URL: {credentials.get('ws_url')}")
-                
-                # Log auto-short status
-                auto_short_enabled = self.config_manager.get_trading_setting(
-                    name, 'auto_short', {}).get('enabled', False)
-                if auto_short_enabled:
-                    self.logger.info(f"  Auto-short: Enabled")
-                else:
-                    self.logger.info(f"  Auto-short: Disabled")
-            
-            # Start the Flask application
-            self.app.run(host=host, port=port, debug=debug)
-        
-        except Exception as e:
-            self.logger.error(f"Error starting trading bot: {e}")
-            raise
-        finally:
-            self.auto_position_manager.stop()
-            self.account_manager.stop_all_clients()
-
-def create_app(config_path=None):
-    """Create a new trading bot instance with table-based logic."""
-    bot = TradingBot(config_path)
-    return bot
-
-if __name__ == "__main__":
-    bot = create_app()
-    bot.run()
+    # If we don't have a price from the position client, log a warning
+    self.logger.warning(f"Could not determine market price for {symbol} - webhook should provide price")
+    return None  # Return None to indicate price is not available
