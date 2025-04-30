@@ -898,7 +898,7 @@ class TradingBot:
             self.auto_position_manager.start()
             
             # Get port and host from configuration
-            port = int(self.config_manager.get_global_setting('port', 6101))
+            port = int(self.config_manager.get_global_setting('port', 6100))
             host = self.config_manager.get_global_setting('host', '0.0.0.0')
             debug = self.config_manager.get_global_setting('environment', 'production') == 'development'
             

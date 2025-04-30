@@ -238,7 +238,7 @@ class PositionWebsocketClient:
                 
                 # Optionally notify webhook of repo updates
                 try:
-                    port = os.getenv('PORT', 6101)
+                    port = os.getenv('PORT', 6100)
                     webhook_url = f"http://localhost:{port}/webhook/repo"
                     requests.post(webhook_url, json=content, timeout=2)
                 except Exception as e:
