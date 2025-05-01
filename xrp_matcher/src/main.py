@@ -92,10 +92,12 @@ def main():
         execution_queue = queue.Queue()
         bid_queue = queue.Queue()
         
-        # Create and start the Bitstamp client
-        bitstamp_client = BitstampClient(execution_queue, running_event)
+        # Create and start the Bitstamp client with subaccount filtering
+        # Specify the subaccount name "rippleArbitrage" here
+        subaccount_name = "rippleArbitrage"
+        bitstamp_client = BitstampClient(execution_queue, running_event, subaccount_name)
         bitstamp_ws, bitstamp_thread = bitstamp_client.start()
-        logger.info("Bitstamp client started")
+        logger.info(f"Bitstamp client started with subaccount filter: {subaccount_name}")
         
         # Create and start the Bosonic client
         bosonic_client = BosonicClient(bid_queue, running_event)
