@@ -62,7 +62,7 @@
       "trading_pairs": ["BTC/USDC", "ETH/USDC"],
       "enabled": true,
       "trading": {
-        "default_tif": "GTC",
+        "default_tif": "IOC",
         "bid_adjustment": 1.05,
         "ask_adjustment": 0.95,
         "max_retries": 3,
@@ -104,7 +104,7 @@
       "trading_pairs": ["BTC/USDC", "ETH/USDC"],
       "enabled": true,
       "trading": {
-        "default_tif": "GTC",
+        "default_tif": "IOC",
         "bid_adjustment": 1.05,
         "ask_adjustment": 0.95,
         "max_retries": 3,

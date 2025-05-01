@@ -1,4 +1,3 @@
-#trading_utils.py
 #!/usr/bin/env python3
 import requests
 import hmac
@@ -161,6 +160,10 @@ def place_order(api_key=None, api_secret=None, symbol=None, side=None, price=Non
         max_retries: Maximum number of retry attempts
         config_manager: Optional ConfigurationManager instance
         account_name: Optional account name for account-specific settings
+        
+    Returns:
+        Response dict with additional fill information for IOC orders
+        or None if the order failed to be placed/filled
     """
     # Get credentials from config if provided
     if config_manager and account_name:
@@ -196,7 +199,7 @@ def place_order(api_key=None, api_secret=None, symbol=None, side=None, price=Non
     endpoint = "/rest/orders"
     method = "POST"
     
-    logger.info(f"Placing Order - Symbol: {symbol}, Side: {side}, Price: {price}, Quantity: {quantity}")
+    logger.info(f"Placing Order - Symbol: {symbol}, Side: {side}, Price: {price}, Quantity: {quantity}, TIF: {tif}")
     
     try:
         # Adjust price according to our strategy
@@ -256,6 +259,34 @@ def place_order(api_key=None, api_secret=None, symbol=None, side=None, price=Non
                 
                 if response.ok:
                     logger.info(f"Order placed successfully: Status {response.status_code}")
+                    
+                    # For IOC orders, specifically check fill status
+                    if tif == 'IOC':
+                        response_data = response.json() if response.text else {}
+                        
+                        # Try to get fill information
+                        if response_data:
+                            # Check if the order was filled
+                            ord_status = response_data.get('ordStatus', '')
+                            leaves_qty = float(response_data.get('leavesQty', 0))
+                            cum_qty = float(response_data.get('cumQty', 0))
+                            
+                            # Add fill information to response
+                            response_data['fill_complete'] = (
+                                ord_status == 'FILLED' or 
+                                (cum_qty > 0 and leaves_qty == 0)
+                            )
+                            
+                            # If not filled, treat as failure for IOC
+                            if not response_data['fill_complete']:
+                                logger.warning(f"IOC order not filled: {ord_status}, leaves_qty={leaves_qty}, cum_qty={cum_qty}")
+                                if ord_status in ['EXPIRED', 'REJECTED', 'CANCELLED']:
+                                    return None  # Order failed to fill
+                            
+                            logger.info(f"IOC order fill status: {response_data['fill_complete']}")
+                            return response_data
+                    
+                    # For non-IOC orders, just return the response
                     if response.text:
                         return response.json()
                     return {}
