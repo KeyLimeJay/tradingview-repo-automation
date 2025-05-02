@@ -763,6 +763,78 @@ class TradingBot:
             time.sleep(1)
             position_client.refresh_positions()
             final_position = position_client.get_truncated_position(symbol)
+
+
+            # For Event 4, explicitly execute second post-repo sell if it didn't happen
+            if is_event_4 and post_repo_trades_executed < len(post_repo_indices):
+                self.logger.warning(f"[{request_id}][{account_name}] First attempt at second post-repo sell failed - attempting again directly")
+                
+                # Get min quantity from configuration
+                base_currency = symbol.split('/')[0]
+                min_quantity = self.config_manager.get_currency_setting(
+                    account_name, base_currency, 'min_quantity', 0.001)
+                
+                # Force position refresh and delay
+                time.sleep(3)
+                position_client.refresh_positions()
+                current_position = position_client.get_truncated_position(symbol)
+                self.logger.info(f"[{request_id}][{account_name}] Position before second attempt at post-repo sell: {current_position}")
+                
+                # Make direct call to place the second sell
+                try:
+                    self.logger.info(f"[{request_id}][{account_name}] FORCING second post-repo sell with quantity {min_quantity}")
+                    second_sell_response = place_order(
+                        symbol=symbol,
+                        side='ASK',
+                        price=price,
+                        quantity=min_quantity,  # Use min_quantity for the second sell
+                        config_manager=self.config_manager,
+                        account_name=account_name,
+                        tif=tif  # Always use GTC
+                    )
+                    
+                    if second_sell_response:
+                        self.logger.info(f"[{request_id}][{account_name}] FORCED second post-repo sell succeeded!")
+                        post_repo_trades_executed += 1
+                        responses.append({
+                            'step': 'open_short', 
+                            'response': second_sell_response, 
+                            'forced_second_sell': True
+                        })
+                        
+                        # Update final position after forced sell
+                        time.sleep(1)
+                        position_client.refresh_positions()
+                        final_position = position_client.get_truncated_position(symbol)
+                    else:
+                        self.logger.error(f"[{request_id}][{account_name}] FORCED second post-repo sell failed!")
+                
+                except Exception as e:
+                    self.logger.error(f"[{request_id}][{account_name}] Error in FORCED second post-repo sell: {str(e)}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
             
             response_data = {
                 "success": True,
