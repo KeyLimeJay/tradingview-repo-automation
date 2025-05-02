@@ -550,11 +550,16 @@ class TradingBot:
                             if sequential_required and i < len(trade_sequence['steps']) - 1:
                                 self.logger.warning(f"[{request_id}][{account_name}] Skipping remaining steps to avoid exceeding position limits")
                                 break  # Skip remaining steps
-                        
+                                            
                     elif step == 'open_short':
-                        # For post-repo trades in Event 4, log extra debug information
+                        # Special handling for post-repo trades in Event 4
                         if is_post_repo_trade:
-                            self.logger.info(f"[{request_id}][{account_name}] Executing post-repo short #{post_repo_indices.index(i)+1} with quantity {position_sizes[i]}")
+                            self.logger.info(f"[{request_id}][{account_name}] ATTEMPTING POST-REPO SELL #{post_repo_indices.index(i)+1} with quantity {position_sizes[i]}")
+                            # Add extra delay before post-repo sells
+                            time.sleep(2)  
+                            position_client.refresh_positions()
+                            current_position = position_client.get_truncated_position(symbol)
+                            self.logger.info(f"[{request_id}][{account_name}] Current position before post-repo sell #{post_repo_indices.index(i)+1}: {current_position}")
                         
                         response = place_order(
                             symbol=symbol,
@@ -588,9 +593,12 @@ class TradingBot:
                                 responses.append({'step': step, 'response': response})
                                 trades_executed += 1
                         
-                        # Position verification after execution
+                        # Position verification after execution with extra logging for post-repo sells
                         time.sleep(1)  # Wait for execution to reflect in positions
                         position_client.refresh_positions()
+                        if is_post_repo_trade:
+                            current_position = position_client.get_truncated_position(symbol)
+                            self.logger.info(f"[{request_id}][{account_name}] Position after post-repo sell #{post_repo_indices.index(i)+1}: {current_position}")
                     
                     elif step == 'open_repo':
                         # Check for existing repo to prevent duplicates
@@ -656,6 +664,17 @@ class TradingBot:
                             })
                         else:
                             responses.append({'step': step, 'response': response})
+                        
+                        # Special handling for Event 4 post-repo operations
+                        if is_event_4 and i == repo_index:
+                            self.logger.info(f"[{request_id}][{account_name}] Event 4 repo operation completed, preparing for post-repo sells")
+                            # Add extra delay to ensure repo is fully processed
+                            time.sleep(3)  # Longer delay after repo operation for Event 4
+                            position_client.refresh_positions()
+                            current_position = position_client.get_truncated_position(symbol)
+                            self.logger.info(f"[{request_id}][{account_name}] Position after repo: {current_position}")
+                            repo_status = self.verify_repo_status(symbol, account_name)
+                            self.logger.info(f"[{request_id}][{account_name}] Repo status after operation: {repo_status}")
                             
                         # Refresh position data after repo operation
                         time.sleep(1)
