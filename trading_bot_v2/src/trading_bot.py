@@ -260,8 +260,7 @@ class TradingBot:
                 return {
                     'steps': ['open_long'],
                     'position_size': [min_quantity],
-                    'event': 'Event 1',
-                    'require_ioc': True
+                    'event': 'Event 1'
                 }
             
             # Event 3: Buy Signal with repo open (Both sequences)
@@ -273,7 +272,6 @@ class TradingBot:
                     'repo_details': {'symbol': repo_symbol},
                     'sequential': True,
                     'event': 'Event 3',
-                    'require_ioc': True,
                     'trade_step_count': 2  # Number of trade steps before repo ops
                 }
             
@@ -297,7 +295,6 @@ class TradingBot:
                     'repo_details': repo_details,
                     'sequential': True,
                     'event': 'Event 2',
-                    'require_ioc': True,
                     'trade_step_index': 1  # Index of first trade step (after repo ops)
                 }
             
@@ -310,7 +307,6 @@ class TradingBot:
                     'repo_details': repo_details,
                     'sequential': True,
                     'event': 'Event 4',
-                    'require_ioc': True,
                     'trade_step_index': 0,  # Index of first trade step (before repo ops)
                     'repo_step_index': 1,   # Index of repo step
                     'post_repo_trade_index': 2  # Index of trade step after repo
@@ -486,12 +482,10 @@ class TradingBot:
             # Check if sequential execution is required
             sequential_required = trade_sequence.get('sequential', False)
             
-            # Get TIF setting - use IOC if required by this trade sequence
-            default_tif = self.config_manager.get_trading_setting(account_name, 'default_tif', 'GTC')
-            tif = 'IOC' if trade_sequence.get('require_ioc', False) else default_tif
+            # Always use GTC (Good-Till-Canceled) for all orders
+            tif = 'GTC'
             
-            # Tracking for trade fills before repo operations
-            trade_fills_ok = True
+            # Track indices for step operations
             trade_step_count = trade_sequence.get('trade_step_count', 0)
             trade_step_index = trade_sequence.get('trade_step_index', None)
             repo_step_index = trade_sequence.get('repo_step_index', None)
@@ -501,26 +495,6 @@ class TradingBot:
             responses = []
             for i, step in enumerate(trade_sequence['steps']):
                 try:
-                    # Skip repo operations if preceding trades didn't fill completely
-                    if not trade_fills_ok and step == 'open_repo':
-                        self.logger.warning(f"[{request_id}][{account_name}] Skipping repo operation because previous trade didn't fill completely")
-                        responses.append({
-                            'step': step, 
-                            'skipped': True, 
-                            'reason': 'Previous trade did not fill completely'
-                        })
-                        continue
-                    
-                    # Skip post-repo trades if previous trades or repo didn't complete successfully
-                    if i == post_repo_trade_index and not trade_fills_ok:
-                        self.logger.warning(f"[{request_id}][{account_name}] Skipping post-repo trade because previous operations didn't complete successfully")
-                        responses.append({
-                            'step': step, 
-                            'skipped': True, 
-                            'reason': 'Previous operations did not complete successfully'
-                        })
-                        continue
-                    
                     self.logger.info(f"[{request_id}][{account_name}] Executing step {i+1}: {step}")
                     
                     if step == 'open_long':
@@ -531,46 +505,21 @@ class TradingBot:
                             quantity=position_sizes[i],
                             config_manager=self.config_manager,
                             account_name=account_name,
-                            tif=tif  # Use IOC when required
+                            tif=tif  # Always use GTC
                         )
                         
                         if not response:
-                            error_msg = f"Step {step} failed. Order did not fill."
+                            error_msg = f"Step {step} failed. Order placement error."
                             self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
-                            trade_fills_ok = False
                             
-                            # If this is a sequential operation, consider if we need to abort
+                            # If we need all steps to execute and one fails, handle the error
                             if sequential_required:
-                                # If we're using IOC and this is a trade before repo operations,
-                                # mark that trades didn't fill completely
-                                if tif == 'IOC':
-                                    trade_fills_ok = False
-                                    
-                                # If we need all steps to execute, abort sequence
-                                if sequential_required:
-                                    responses.append({'step': step, 'error': error_msg})
-                                    # Don't abort immediately - we'll handle incomplete fills by
-                                    # skipping subsequent repo operations as needed
+                                responses.append({'step': step, 'error': error_msg})
                             
-                        responses.append({'step': step, 'response': response})
-                        trades_executed += 1
+                        else:
+                            responses.append({'step': step, 'response': response})
+                            trades_executed += 1
 
-
-                        # Inside the webhook method where we check for fills
-                        if trade_step_count > 0 and trades_executed >= trade_step_count:
-                            # Use position data to check if trades filled as expected
-                            time.sleep(1)  # Wait for execution to reflect in positions
-                            position_client.refresh_positions()
-                            current_position = position_client.get_truncated_position(symbol)
-                            
-                            # Get min_quantity from the configuration - this was missing
-                            base_currency = symbol.split('/')[0]
-                            min_quantity = self.config_manager.get_currency_setting(
-                                account_name, base_currency, 'min_quantity', 0.001)
-                                
-                            expected_position = min_quantity * trades_executed
-
-                        
                         # Position verification after execution
                         time.sleep(1)  # Wait for execution to reflect in positions
                         position_client.refresh_positions()
@@ -591,24 +540,16 @@ class TradingBot:
                             quantity=position_sizes[i],
                             config_manager=self.config_manager,
                             account_name=account_name,
-                            tif=tif  # Use IOC when required
+                            tif=tif  # Always use GTC
                         )
                         
                         if not response:
-                            error_msg = f"Step {step} failed. Order did not fill."
+                            error_msg = f"Step {step} failed. Order placement error."
                             self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
                             
-                            # If we're using IOC and this is a trade before repo operations,
-                            # mark that trades didn't fill completely
-                            if tif == 'IOC':
-                                if trade_step_index is not None and i == trade_step_index:
-                                    trade_fills_ok = False
-                                    
-                            # If we need all steps to execute, abort sequence
+                            # If we need all steps to execute, handle the error
                             if sequential_required:
                                 responses.append({'step': step, 'error': error_msg})
-                                # Don't abort immediately - we'll handle incomplete fills by
-                                # skipping subsequent repo operations as needed
                         else:
                             responses.append({'step': step, 'response': response})
                         
@@ -620,16 +561,6 @@ class TradingBot:
                         position_client.refresh_positions()
                     
                     elif step == 'open_repo':
-                        # Skip if previous trades didn't fill completely when using IOC
-                        if not trade_fills_ok and tif == 'IOC':
-                            self.logger.warning(f"[{request_id}][{account_name}] Skipping repo operation because previous trades didn't fill completely")
-                            responses.append({
-                                'step': step, 
-                                'skipped': True, 
-                                'reason': 'Previous trades did not fill completely'
-                            })
-                            continue
-                            
                         # Check for existing repo to prevent duplicates
                         repo_details = trade_sequence.get('repo_details')
                         if not repo_details:
@@ -699,8 +630,7 @@ class TradingBot:
                         position_client.refresh_positions()
                     
                     elif step == 'close_repo':
-                        # Close repo even after failed trades that came first
-                        # since we might need to close a repo we already had open
+                        # Close repo operation
                         self.logger.info(f"[{request_id}][{account_name}] Executing step {i+1}: {step}")
                         repo_symbol = position_sizes[i]  # In this case, position_sizes[i] contains the repo symbol
                         base_currency = repo_symbol.split('/')[0]
@@ -745,10 +675,6 @@ class TradingBot:
                     error_msg = f"Failed at step {step}: {str(e)}"
                     self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
                     
-                    # For trade failures before repo operations, mark trades as failed
-                    if step in ['open_long', 'open_short']:
-                        trade_fills_ok = False
-                    
                     if sequential_required:
                         responses.append({'step': step, 'error': str(e)})
                         # Note: We don't return error immediately to allow closing repo logic to execute
@@ -759,44 +685,13 @@ class TradingBot:
                     error_msg = f"Unexpected error at step {step}: {str(e)}"
                     self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
                     
-                    # For trade failures before repo operations, mark trades as failed
-                    if step in ['open_long', 'open_short']:
-                        trade_fills_ok = False
-                    
                     if sequential_required:
                         responses.append({'step': step, 'error': str(e)})
                         # Note: We don't return error immediately to allow closing repo logic to execute
                     else:
                         responses.append({'step': step, 'error': str(e)})
             
-            # Check if a repo was opened but subsequent trades failed with IOC
-            if (tif == 'IOC' and 'open_repo' in trade_sequence['steps'] and 
-                post_repo_trade_index is not None and not trade_fills_ok):
-                # Check if we opened a repo
-                repo_opened = False
-                for response in responses:
-                    if response.get('step') == 'open_repo' and not response.get('skipped', False):
-                        repo_opened = True
-                        break
-                
-                # If repo was opened but subsequent trade failed, close the repo
-                if repo_opened:
-                    self.logger.warning(f"[{request_id}][{account_name}] Trades after repo failed, closing repo")
-                    repo_symbol = trade_sequence['repo_details']['symbol']
-                    success = close_repo(
-                        symbol=repo_symbol,
-                        logger=self.logger,
-                        config_manager=self.config_manager,
-                        account_name=account_name
-                    )
-                    
-                    responses.append({
-                        'step': 'auto_close_repo', 
-                        'success': success,
-                        'reason': 'Closing repo after trades failed'
-                    })
-            
-            # Update last signal after successful trade
+            # Update last signal after trade execution
             self.last_signals[account_name][symbol] = {
                 'message': message,
                 'timeFrame': timeframe,
@@ -814,9 +709,7 @@ class TradingBot:
                 "orders": responses,
                 "message": f"Executed trade sequence: {', '.join(trade_sequence['steps'])}",
                 "final_position": final_position,
-                "event": trade_sequence.get('event', 'Unknown'),
-                "ioc_required": tif == 'IOC',
-                "trades_filled_completely": trade_fills_ok
+                "event": trade_sequence.get('event', 'Unknown')
             }
             
             self.logger.info(f"[{request_id}][{account_name}] Trade sequence executed with {len(responses)} responses")
