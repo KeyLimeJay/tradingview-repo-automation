@@ -466,7 +466,7 @@ class TradingBot:
                 repo_index = trade_sequence['repo_step_index']
                 # Get all indices of open_short operations that come after the repo operation
                 post_repo_indices = [i for i, step in enumerate(trade_sequence['steps']) 
-                                    if i > repo_index and step == 'open_short']
+                                if i > repo_index and step == 'open_short']
                 self.logger.info(f"[{request_id}][{account_name}] Event 4 detected with post-repo indices: {post_repo_indices}")
             
             price = self.format_price(data['price'], symbol, account_name)
@@ -550,11 +550,11 @@ class TradingBot:
                             if sequential_required and i < len(trade_sequence['steps']) - 1:
                                 self.logger.warning(f"[{request_id}][{account_name}] Skipping remaining steps to avoid exceeding position limits")
                                 break  # Skip remaining steps
-                                            
+                        
                     elif step == 'open_short':
-                        # Special handling for post-repo trades in Event 4
+                        # For post-repo trades in Event 4, log extra debug information
                         if is_post_repo_trade:
-                            self.logger.info(f"[{request_id}][{account_name}] ATTEMPTING POST-REPO SELL #{post_repo_indices.index(i)+1} with quantity {position_sizes[i]}")
+                            self.logger.info(f"[{request_id}][{account_name}] Executing post-repo short #{post_repo_indices.index(i)+1} with quantity {position_sizes[i]}")
                             # Add extra delay before post-repo sells
                             time.sleep(2)  
                             position_client.refresh_positions()
@@ -593,7 +593,7 @@ class TradingBot:
                                 responses.append({'step': step, 'response': response})
                                 trades_executed += 1
                         
-                        # Position verification after execution with extra logging for post-repo sells
+                        # Position verification after execution
                         time.sleep(1)  # Wait for execution to reflect in positions
                         position_client.refresh_positions()
                         if is_post_repo_trade:
@@ -664,7 +664,7 @@ class TradingBot:
                             })
                         else:
                             responses.append({'step': step, 'response': response})
-                        
+                            
                         # Special handling for Event 4 post-repo operations
                         if is_event_4 and i == repo_index:
                             self.logger.info(f"[{request_id}][{account_name}] Event 4 repo operation completed, preparing for post-repo sells")
@@ -675,7 +675,7 @@ class TradingBot:
                             self.logger.info(f"[{request_id}][{account_name}] Position after repo: {current_position}")
                             repo_status = self.verify_repo_status(symbol, account_name)
                             self.logger.info(f"[{request_id}][{account_name}] Repo status after operation: {repo_status}")
-                            
+                                
                         # Refresh position data after repo operation
                         time.sleep(1)
                         position_client.refresh_positions()
@@ -752,19 +752,6 @@ class TradingBot:
                 if post_repo_trades_executed < len(post_repo_indices):
                     self.logger.warning(f"[{request_id}][{account_name}] Not all post-repo trades were executed! Expected {len(post_repo_indices)}, got {post_repo_trades_executed}")
             
-            # Update last signal after trade execution
-            self.last_signals[account_name][symbol] = {
-                'message': message,
-                'timeFrame': timeframe,
-                'timestamp': time.time()
-            }
-            
-            # Final position verification
-            time.sleep(1)
-            position_client.refresh_positions()
-            final_position = position_client.get_truncated_position(symbol)
-
-
             # For Event 4, explicitly execute second post-repo sell if it didn't happen
             if is_event_4 and post_repo_trades_executed < len(post_repo_indices):
                 self.logger.warning(f"[{request_id}][{account_name}] First attempt at second post-repo sell failed - attempting again directly")
@@ -811,30 +798,18 @@ class TradingBot:
                 
                 except Exception as e:
                     self.logger.error(f"[{request_id}][{account_name}] Error in FORCED second post-repo sell: {str(e)}")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             
+            # Update last signal after trade execution
+            self.last_signals[account_name][symbol] = {
+                'message': message,
+                'timeFrame': timeframe,
+                'timestamp': time.time()
+            }
+            
+            # Final position verification
+            time.sleep(1)
+            position_client.refresh_positions()
+            final_position = position_client.get_truncated_position(symbol)
             
             response_data = {
                 "success": True,
@@ -862,50 +837,50 @@ class TradingBot:
             
         finally:
             self.webhook_lock.release()
-           
-    def get_positions(self):
-        """Get current positions for all trading pairs across all accounts."""
-        try:
-            positions_data = {'accounts': {}}
             
-            # Get positions for each account
-            for account_name in self.config_manager.get_enabled_accounts():
-                account_name = account_name.get('name')
-                position_client = self.account_manager.get_position_client(account_name)
-                if not position_client:
-                    continue
+        def get_positions(self):
+            """Get current positions for all trading pairs across all accounts."""
+            try:
+                positions_data = {'accounts': {}}
+                
+                # Get positions for each account
+                for account_name in self.config_manager.get_enabled_accounts():
+                    account_name = account_name.get('name')
+                    position_client = self.account_manager.get_position_client(account_name)
+                    if not position_client:
+                        continue
+                        
+                    # Force refresh positions before reporting
+                    position_client.refresh_positions()
                     
-                # Force refresh positions before reporting
-                position_client.refresh_positions()
-                
-                # Get trading pairs for this account
-                trading_pairs = self.config_manager.get_account_setting(
-                    account_name, 'trading_pairs', [])
-                
-                # Get positions for all trading pairs for this account
-                account_positions = {}
-                for symbol in trading_pairs:
-                    account_positions[symbol] = {
-                        'raw_quantity': position_client.get_position(symbol),
-                        'truncated_quantity': position_client.get_truncated_position(symbol),
-                        'has_repo': self.verify_repo_status(symbol, account_name)
+                    # Get trading pairs for this account
+                    trading_pairs = self.config_manager.get_account_setting(
+                        account_name, 'trading_pairs', [])
+                    
+                    # Get positions for all trading pairs for this account
+                    account_positions = {}
+                    for symbol in trading_pairs:
+                        account_positions[symbol] = {
+                            'raw_quantity': position_client.get_position(symbol),
+                            'truncated_quantity': position_client.get_truncated_position(symbol),
+                            'has_repo': self.verify_repo_status(symbol, account_name)
+                        }
+                    
+                    positions_data['accounts'][account_name] = {
+                        'positions': account_positions,
+                        'timeframes': self.config_manager.get_account_setting(
+                            account_name, 'timeframes', [])
                     }
                 
-                positions_data['accounts'][account_name] = {
-                    'positions': account_positions,
-                    'timeframes': self.config_manager.get_account_setting(
-                        account_name, 'timeframes', [])
-                }
-            
-            positions_data['timestamp'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            
-            self.logger.info(f"Position status request: {json.dumps(positions_data, indent=2)}")
-            return jsonify(positions_data), 200
-            
-        except Exception as e:
-            error_msg = f"Failed to get positions: {str(e)}"
-            self.logger.error(error_msg)
-            return jsonify({"success": False, "error": error_msg}), 500
+                positions_data['timestamp'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                
+                self.logger.info(f"Position status request: {json.dumps(positions_data, indent=2)}")
+                return jsonify(positions_data), 200
+                
+            except Exception as e:
+                error_msg = f"Failed to get positions: {str(e)}"
+                self.logger.error(error_msg)
+                return jsonify({"success": False, "error": error_msg}), 500
 
     def health_check(self):
         """Basic health check endpoint for all accounts."""
