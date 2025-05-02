@@ -838,7 +838,7 @@ class TradingBot:
         finally:
             self.webhook_lock.release()
             
-        def get_positions(self):
+    def get_positions(self):
             """Get current positions for all trading pairs across all accounts."""
             try:
                 positions_data = {'accounts': {}}
