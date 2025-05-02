@@ -232,13 +232,14 @@ class TradingBot:
         strict_limit = self.get_strict_limit(symbol, account_name)
         
         # Determine position status
-        is_long = current_position > 0
+        is_long = current_position > 0.0001  # Position is long if positive and significant
+        is_short = current_position < -0.0001  # Position is short if negative and significant
         no_position = abs(current_position) < 0.0001  # Nearly zero
         has_one_unit = abs(current_position - min_quantity) < 0.0001  # Approximately one unit
         
         self.logger.info(f"[{account_name}] Position analysis for {symbol}: position={current_position}, " +
-                       f"is_long={is_long}, no_position={no_position}, has_one_unit={has_one_unit}, " +
-                       f"has_repo={has_open_repo}, strict_limit={strict_limit}")
+                    f"is_long={is_long}, is_short={is_short}, no_position={no_position}, " +
+                    f"has_one_unit={has_one_unit}, has_repo={has_open_repo}, strict_limit={strict_limit}")
         
         # Check if position exceeds limits
         if current_position >= strict_limit:
@@ -298,12 +299,15 @@ class TradingBot:
                     'trade_step_index': 1  # Index of first trade step (after repo ops)
                 }
             
-            # Event 4: Sell Signal with 1 unit and no repo (Both sequences)
-            elif has_one_unit and not has_open_repo:
-                self.logger.info(f"[{account_name}] Event 4: Sell Signal with 1 unit and no repo - Sell 1 unit, Open Repo, Sell 1 unit")
+            # Event 4: Sell Signal with long position (any size) and no repo - NEW MODIFIED LOGIC
+            elif is_long and not has_open_repo:
+                # Calculate how many units we need to sell to close the position
+                units_to_close = current_position
+                self.logger.info(f"[{account_name}] Event 4: Sell Signal with long position {units_to_close} and no repo - "
+                            f"Sell to close, Open Repo, Sell 1 unit to short")
                 return {
                     'steps': ['open_short', 'open_repo', 'open_short'],
-                    'position_size': [min_quantity, min_quantity, min_quantity],
+                    'position_size': [units_to_close, min_quantity, min_quantity],
                     'repo_details': repo_details,
                     'sequential': True,
                     'event': 'Event 4',
@@ -323,6 +327,7 @@ class TradingBot:
         
         # Should never get here
         return {'steps': [], 'position_size': [], 'message': f"Unknown side: {side}"}
+
     
     def format_price(self, price, symbol, account_name='default'):
         """Format price according to symbol's decimal precision from configuration."""
