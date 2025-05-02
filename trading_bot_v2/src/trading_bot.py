@@ -758,8 +758,8 @@ class TradingBot:
                 
                 if post_repo_trades_executed < len(post_repo_indices):
                     self.logger.warning(f"[{request_id}][{account_name}] Not all post-repo trades were executed! Expected {len(post_repo_indices)}, got {post_repo_trades_executed}")
-            
-            # For Event 4, explicitly execute second post-repo sell if it didn't happen
+            ###########################################################################
+           # For Event 4, explicitly execute second post-repo sell if it didn't happen
             if is_event_4 and post_repo_trades_executed < len(post_repo_indices):
                 self.logger.warning(f"[{request_id}][{account_name}] First attempt at second post-repo sell failed - attempting again directly")
                 
@@ -805,19 +805,78 @@ class TradingBot:
                 
                 except Exception as e:
                     self.logger.error(f"[{request_id}][{account_name}] Error in FORCED second post-repo sell: {str(e)}")
-            
+
+            # Force BOTH post-repo sells explicitly, regardless of what happened previously
+            if is_event_4:
+                self.logger.warning(f"[{request_id}][{account_name}] FORCING BOTH post-repo sells directly")
+                
+                # Get min quantity from configuration
+                base_currency = symbol.split('/')[0]
+                min_quantity = self.config_manager.get_currency_setting(
+                    account_name, base_currency, 'min_quantity', 0.001)
+                
+                # Short delay to ensure proper sequence
+                time.sleep(3)
+                
+                # Make first post-repo sell
+                try:
+                    self.logger.info(f"[{request_id}][{account_name}] FORCING first post-repo sell with quantity {min_quantity}")
+                    first_sell_response = place_order(
+                        symbol=symbol,
+                        side='ASK',
+                        price=price,
+                        quantity=min_quantity,
+                        config_manager=self.config_manager,
+                        account_name=account_name,
+                        tif=tif
+                    )
+                    if first_sell_response:
+                        self.logger.info(f"[{request_id}][{account_name}] FORCED first post-repo sell succeeded")
+                        responses.append({
+                            'step': 'open_short',
+                            'response': first_sell_response,
+                            'forced_first_sell': True
+                        })
+                except Exception as e:
+                    self.logger.error(f"[{request_id}][{account_name}] Error in FORCED first post-repo sell: {str(e)}")
+                    
+                # Short delay between sells
+                time.sleep(2)
+                
+                # Make second post-repo sell
+                try:
+                    self.logger.info(f"[{request_id}][{account_name}] FORCING second post-repo sell with quantity {min_quantity}")
+                    second_sell_response = place_order(
+                        symbol=symbol,
+                        side='ASK',
+                        price=price,
+                        quantity=min_quantity,
+                        config_manager=self.config_manager,
+                        account_name=account_name,
+                        tif=tif
+                    )
+                    if second_sell_response:
+                        self.logger.info(f"[{request_id}][{account_name}] FORCED second post-repo sell succeeded")
+                        responses.append({
+                            'step': 'open_short',
+                            'response': second_sell_response,
+                            'forced_second_sell': True
+                        })
+                except Exception as e:
+                    self.logger.error(f"[{request_id}][{account_name}] Error in FORCED second post-repo sell: {str(e)}")
+
             # Update last signal after trade execution
             self.last_signals[account_name][symbol] = {
                 'message': message,
                 'timeFrame': timeframe,
                 'timestamp': time.time()
             }
-            
+
             # Final position verification
             time.sleep(1)
             position_client.refresh_positions()
             final_position = position_client.get_truncated_position(symbol)
-            
+
             response_data = {
                 "success": True,
                 "account": account_name,
@@ -826,17 +885,19 @@ class TradingBot:
                 "final_position": final_position,
                 "event": trade_sequence.get('event', 'Unknown')
             }
-            
+
             # For Event 4, add post-repo trade summary to response
             if is_event_4:
                 response_data["post_repo_trades"] = {
                     "expected": len(post_repo_indices),
                     "executed": post_repo_trades_executed
                 }
-            
+
             self.logger.info(f"[{request_id}][{account_name}] Trade sequence executed with {len(responses)} responses")
             self.logger.info(f"[{request_id}][{account_name}] Final position after trade: {final_position}")
             return jsonify(response_data), 200
+            # Log the webhook request    
+            ###########################################################################
             
         except Exception as e:
             self.logger.error(f"[{request_id}] Unexpected error: {str(e)}")
