@@ -299,22 +299,28 @@ class TradingBot:
                     'trade_step_index': 1  # Index of first trade step (after repo ops)
                 }
             
-            # Event 4: Sell Signal with long position (any size) and no repo - NEW MODIFIED LOGIC
+               
+
+            # Event 4: Sell Signal with long position (any size) and no repo
+
             elif is_long and not has_open_repo:
                 # Calculate how many units we need to sell to close the position
                 units_to_close = current_position
                 self.logger.info(f"[{account_name}] Event 4: Sell Signal with long position {units_to_close} and no repo - "
-                            f"Sell to close, Open Repo, Sell 1 unit to short")
+                            f"Sell to close, Open Repo, Sell 2 units to short")
                 return {
-                    'steps': ['open_short', 'open_repo', 'open_short'],
-                    'position_size': [units_to_close, min_quantity, min_quantity],
+                    'steps': ['open_short', 'open_repo', 'open_short', 'open_short'],  # Added a second 'open_short' after the repo
+                    'position_size': [units_to_close, min_quantity, min_quantity, min_quantity],  # Added quantity for second short
                     'repo_details': repo_details,
                     'sequential': True,
                     'event': 'Event 4',
-                    'trade_step_index': 0,  # Index of first trade step (before repo ops)
-                    'repo_step_index': 1,   # Index of repo step
-                    'post_repo_trade_index': 2  # Index of trade step after repo
+                    'trade_step_index': 0,     # Index of first trade step (before repo ops)
+                    'repo_step_index': 1,      # Index of repo step
+                    'post_repo_trade_index': 2  # Index of first trade step after repo (now there are two)
                 }
+
+
+
             
             # Invalid state for this strategy
             else:
