@@ -299,10 +299,7 @@ class TradingBot:
                     'trade_step_index': 1  # Index of first trade step (after repo ops)
                 }
             
-               
-
             # Event 4: Sell Signal with long position (any size) and no repo
-
             elif is_long and not has_open_repo:
                 # Calculate how many units we need to sell to close the position
                 units_to_close = current_position
@@ -316,11 +313,8 @@ class TradingBot:
                     'event': 'Event 4',
                     'trade_step_index': 0,     # Index of first trade step (before repo ops)
                     'repo_step_index': 1,      # Index of repo step
-                    'post_repo_trade_index': 2  # Index of first trade step after repo (now there are two)
+                    'post_repo_steps': [2, 3]  # Indices of all trade steps after repo (new property)
                 }
-
-
-
             
             # Invalid state for this strategy
             else:
@@ -392,6 +386,7 @@ class TradingBot:
         
         return (True, "Position within limits")
     
+
     def webhook(self):
         """Handle incoming webhook requests from TradingView."""
         request_id = str(time.time())
@@ -462,6 +457,18 @@ class TradingBot:
                 }
                 return jsonify(response_data), 200
             
+            # Identify Event 4 scenario for special handling
+            is_event_4 = trade_sequence.get('event') == 'Event 4'
+            post_repo_indices = []
+            
+            # For Event 4, identify all post-repo sell operations
+            if is_event_4 and 'repo_step_index' in trade_sequence:
+                repo_index = trade_sequence['repo_step_index']
+                # Get all indices of open_short operations that come after the repo operation
+                post_repo_indices = [i for i, step in enumerate(trade_sequence['steps']) 
+                                    if i > repo_index and step == 'open_short']
+                self.logger.info(f"[{request_id}][{account_name}] Event 4 detected with post-repo indices: {post_repo_indices}")
+            
             price = self.format_price(data['price'], symbol, account_name)
             position_sizes = trade_sequence['position_size']
             
@@ -496,17 +503,18 @@ class TradingBot:
             # Always use GTC (Good-Till-Canceled) for all orders
             tif = 'GTC'
             
-            # Track indices for step operations
-            trade_step_count = trade_sequence.get('trade_step_count', 0)
-            trade_step_index = trade_sequence.get('trade_step_index', None)
-            repo_step_index = trade_sequence.get('repo_step_index', None)
-            post_repo_trade_index = trade_sequence.get('post_repo_trade_index', None)
+            # Execution tracking flags
             trades_executed = 0
+            post_repo_trades_executed = 0
             
             responses = []
             for i, step in enumerate(trade_sequence['steps']):
                 try:
-                    self.logger.info(f"[{request_id}][{account_name}] Executing step {i+1}: {step}")
+                    # Check if this is a post-repo sell operation for Event 4
+                    is_post_repo_trade = is_event_4 and i in post_repo_indices
+                    
+                    self.logger.info(f"[{request_id}][{account_name}] Executing step {i+1}: {step}" + 
+                                (f" (post-repo trade #{post_repo_indices.index(i)+1})" if is_post_repo_trade else ""))
                     
                     if step == 'open_long':
                         response = place_order(
@@ -544,6 +552,10 @@ class TradingBot:
                                 break  # Skip remaining steps
                         
                     elif step == 'open_short':
+                        # For post-repo trades in Event 4, log extra debug information
+                        if is_post_repo_trade:
+                            self.logger.info(f"[{request_id}][{account_name}] Executing post-repo short #{post_repo_indices.index(i)+1} with quantity {position_sizes[i]}")
+                        
                         response = place_order(
                             symbol=symbol,
                             side='ASK',
@@ -561,11 +573,20 @@ class TradingBot:
                             # If we need all steps to execute, handle the error
                             if sequential_required:
                                 responses.append({'step': step, 'error': error_msg})
+                                if is_post_repo_trade:
+                                    self.logger.error(f"[{request_id}][{account_name}] Post-repo short #{post_repo_indices.index(i)+1} failed")
                         else:
-                            responses.append({'step': step, 'response': response})
-                        
-                        if trade_step_index is not None and i == trade_step_index:
-                            trades_executed += 1
+                            if is_post_repo_trade:
+                                post_repo_trades_executed += 1
+                                responses.append({
+                                    'step': step, 
+                                    'response': response, 
+                                    'post_repo_index': post_repo_indices.index(i)+1
+                                })
+                                self.logger.info(f"[{request_id}][{account_name}] Post-repo short #{post_repo_indices.index(i)+1} executed successfully")
+                            else:
+                                responses.append({'step': step, 'response': response})
+                                trades_executed += 1
                         
                         # Position verification after execution
                         time.sleep(1)  # Wait for execution to reflect in positions
@@ -702,6 +723,16 @@ class TradingBot:
                     else:
                         responses.append({'step': step, 'error': str(e)})
             
+            # Post-processing summary for Event 4
+            if is_event_4:
+                self.logger.info(f"[{request_id}][{account_name}] Event 4 execution summary:")
+                self.logger.info(f"[{request_id}][{account_name}] - Total trades executed: {trades_executed}")
+                self.logger.info(f"[{request_id}][{account_name}] - Post-repo trades executed: {post_repo_trades_executed}")
+                self.logger.info(f"[{request_id}][{account_name}] - Expected post-repo trades: {len(post_repo_indices)}")
+                
+                if post_repo_trades_executed < len(post_repo_indices):
+                    self.logger.warning(f"[{request_id}][{account_name}] Not all post-repo trades were executed! Expected {len(post_repo_indices)}, got {post_repo_trades_executed}")
+            
             # Update last signal after trade execution
             self.last_signals[account_name][symbol] = {
                 'message': message,
@@ -723,6 +754,13 @@ class TradingBot:
                 "event": trade_sequence.get('event', 'Unknown')
             }
             
+            # For Event 4, add post-repo trade summary to response
+            if is_event_4:
+                response_data["post_repo_trades"] = {
+                    "expected": len(post_repo_indices),
+                    "executed": post_repo_trades_executed
+                }
+            
             self.logger.info(f"[{request_id}][{account_name}] Trade sequence executed with {len(responses)} responses")
             self.logger.info(f"[{request_id}][{account_name}] Final position after trade: {final_position}")
             return jsonify(response_data), 200
@@ -733,7 +771,7 @@ class TradingBot:
             
         finally:
             self.webhook_lock.release()
-            
+           
     def get_positions(self):
         """Get current positions for all trading pairs across all accounts."""
         try:
