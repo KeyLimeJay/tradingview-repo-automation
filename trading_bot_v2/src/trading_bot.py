@@ -307,7 +307,7 @@ class TradingBot:
                             f"Sell to close, Open Repo, Sell 1 unit to short")
                 return {
                     'steps': ['open_short', 'open_repo', 'open_short'],  # Removed the second 'open_short'
-                    'position_size': [units_to_close, min_quantity, min_quantity],  # Removed the quantity for second short
+                    'position_size': [units_to_close, min_quantity, min_quantity * 2],  # Removed the quantity for second short
                     'repo_details': repo_details,
                     'sequential': True,
                     'event': 'Event 4',
