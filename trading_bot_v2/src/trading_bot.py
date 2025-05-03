@@ -304,16 +304,16 @@ class TradingBot:
                 # Calculate how many units we need to sell to close the position
                 units_to_close = current_position
                 self.logger.info(f"[{account_name}] Event 4: Sell Signal with long position {units_to_close} and no repo - "
-                            f"Sell to close, Open Repo, Sell 1 unit to short")
+                            f"Open Repo, Sell 2 units to short")
                 return {
-                    'steps': ['open_short', 'open_repo', 'open_short'],  # Removed the second 'open_short'
-                    'position_size': [units_to_close, min_quantity, min_quantity * 2],  # Removed the quantity for second short
+                    'steps': ['open_repo', 'open_short'],  # Changed the order and removed first open_short
+                    'position_size': [min_quantity, min_quantity * 2],  # Removed units_to_close
                     'repo_details': repo_details,
                     'sequential': True,
                     'event': 'Event 4',
-                    'trade_step_index': 0,     # Index of first trade step (before repo ops)
-                    'repo_step_index': 1,      # Index of repo step
-                    'post_repo_steps': [2]     # Only one post-repo step now
+                    'trade_step_index': 1,     # Index of first trade step (after repo ops)
+                    'repo_step_index': 0,      # Index of repo step is now 0
+                    'post_repo_steps': [1]     # Only one post-repo step now
                 }
             
             # Invalid state for this strategy
