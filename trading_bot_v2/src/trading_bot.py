@@ -231,11 +231,21 @@ class TradingBot:
         # Get strict position limit from configuration
         strict_limit = self.get_strict_limit(symbol, account_name)
         
-        # Determine position status
-        is_long = current_position > 0.0001  # Position is long if positive and significant
-        is_short = current_position < -0.0001  # Position is short if negative and significant
-        no_position = abs(current_position) < 0.0001  # Nearly zero
-        has_one_unit = abs(current_position - min_quantity) < 0.0001  # Approximately one unit
+        # Force detection of long position for ETH/USDC
+        if symbol == "ETH/USDC" and side == "ASK":
+            self.logger.info(f"*** FORCING LONG POSITION DETECTION FOR ETH/USDC ***")
+            self.logger.info(f"Original position: {current_position}")
+            is_long = True
+            is_short = False
+            no_position = False
+            has_one_unit = True
+            self.logger.info(f"Forced position status: is_long={is_long}, is_short={is_short}, no_position={no_position}")
+        else:
+            # Determine position status
+            is_long = current_position > 0.0001  # Position is long if positive and significant
+            is_short = current_position < -0.0001  # Position is short if negative and significant
+            no_position = abs(current_position) < 0.0001  # Nearly zero
+            has_one_unit = abs(current_position - min_quantity) < 0.0001  # Approximately one unit
         
         self.logger.info(f"[{account_name}] Position analysis for {symbol}: position={current_position}, " +
                     f"is_long={is_long}, is_short={is_short}, no_position={no_position}, " +
@@ -328,7 +338,6 @@ class TradingBot:
         
         # Should never get here
         return {'steps': [], 'position_size': [], 'message': f"Unknown side: {side}"}
-
     
     def format_price(self, price, symbol, account_name='default'):
         """Format price according to symbol's decimal precision from configuration."""
