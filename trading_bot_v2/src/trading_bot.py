@@ -761,14 +761,78 @@ class TradingBot:
                         responses.append({'step': step, 'error': str(e)})
             
             # Post-processing summary for Event 4
+            # Event 4 execution summary (only for Event 4)
             if is_event_4:
                 self.logger.info(f"[{request_id}][{account_name}] Event 4 execution summary:")
                 self.logger.info(f"[{request_id}][{account_name}] - Total trades executed: {trades_executed}")
                 self.logger.info(f"[{request_id}][{account_name}] - Post-repo trades executed: {post_repo_trades_executed}")
                 self.logger.info(f"[{request_id}][{account_name}] - Expected post-repo trades: {len(post_repo_indices)}")
                 
+                # Only run fallback mechanism if the main sequence didn't execute all required sells
                 if post_repo_trades_executed < len(post_repo_indices):
-                    self.logger.warning(f"[{request_id}][{account_name}] Not all post-repo trades were executed! Expected {len(post_repo_indices)}, got {post_repo_trades_executed}")
+                    self.logger.warning(f"[{request_id}][{account_name}] Some post-repo sells did not execute. Running fallback mechanism.")
+                    
+                    # Get min quantity from configuration
+                    base_currency = symbol.split('/')[0]
+                    min_quantity = self.config_manager.get_currency_setting(
+                        account_name, base_currency, 'min_quantity', 0.001)
+                    
+                    # Short delay to ensure proper sequence
+                    time.sleep(3)
+                    
+                    # Calculate how many sells we still need to execute
+                    remaining_sells = len(post_repo_indices) - post_repo_trades_executed
+                    self.logger.info(f"[{request_id}][{account_name}] Need to execute {remaining_sells} more sell(s)")
+                    
+                    # Make first post-repo sell if needed
+                    if remaining_sells > 0:
+                        try:
+                            self.logger.info(f"[{request_id}][{account_name}] FORCING first post-repo sell with quantity {min_quantity}")
+                            first_sell_response = place_order(
+                                symbol=symbol,
+                                side='ASK',
+                                price=price,
+                                quantity=min_quantity,
+                                config_manager=self.config_manager,
+                                account_name=account_name,
+                                tif=tif
+                            )
+                            if first_sell_response:
+                                self.logger.info(f"[{request_id}][{account_name}] FORCED first post-repo sell succeeded")
+                                responses.append({
+                                    'step': 'open_short',
+                                    'response': first_sell_response,
+                                    'forced_first_sell': True
+                                })
+                                remaining_sells -= 1
+                        except Exception as e:
+                            self.logger.error(f"[{request_id}][{account_name}] Error in FORCED first post-repo sell: {str(e)}")
+                            
+                    # Short delay between sells
+                    time.sleep(2)
+                    
+                    # Make second post-repo sell if needed
+                    if remaining_sells > 0:
+                        try:
+                            self.logger.info(f"[{request_id}][{account_name}] FORCING second post-repo sell with quantity {min_quantity}")
+                            second_sell_response = place_order(
+                                symbol=symbol,
+                                side='ASK',
+                                price=price,
+                                quantity=min_quantity,
+                                config_manager=self.config_manager,
+                                account_name=account_name,
+                                tif=tif
+                            )
+                            if second_sell_response:
+                                self.logger.info(f"[{request_id}][{account_name}] FORCED second post-repo sell succeeded")
+                                responses.append({
+                                    'step': 'open_short',
+                                    'response': second_sell_response,
+                                    'forced_second_sell': True
+                                })
+                        except Exception as e:
+                            self.logger.error(f"[{request_id}][{account_name}] Error in FORCED second post-repo sell: {str(e)}")
             ###########################################################################
            # For Event 4, explicitly execute second post-repo sell if it didn't happen
             if is_event_4 and post_repo_trades_executed < len(post_repo_indices):
