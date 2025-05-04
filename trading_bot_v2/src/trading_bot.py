@@ -313,7 +313,8 @@ class TradingBot:
                     'sequential': True,
                     'event': 'Event 4',
                     'trade_step_index': 1,
-                    'repo_step_index': 0
+                    'repo_step_index': 0,
+                    'post_repo_steps': [1, 2]  # Explicitly define which steps are post-repo operations
                 }
             
             # Invalid state for this strategy
