@@ -280,30 +280,16 @@ class PositionWebsocketClient:
         # Extract currency if full trading pair is provided
         currency = symbol.split('/')[0] if '/' in symbol else symbol
         
-        # Get truncation decimals from environment or config
-        # First try to get from config if available
-        truncation_decimals = None
-        try:
-            # Try to import config_manager module dynamically
-            if importlib.util.find_spec("src.config_manager"):
-                from src.config_manager import ConfigurationManager
-                config_manager = ConfigurationManager()
-                
-                # Try to find which account this client belongs to
-                for account_name, client in self.get_all_position_clients().items():
-                    if client == self:
-                        truncation_decimals = config_manager.get_currency_setting(
-                            account_name, currency, 'truncation_decimals')
-                        break
-        except Exception as e:
-            self.logger.debug(f"Could not get truncation_decimals from config: {e}")
-        
-        # If we couldn't get from config, use defaults
-        if truncation_decimals is None:
-            truncation_decimals = {
-                'BTC': 3,  # Keep 3 decimal places (0.001)
-                'ETH': 2,  # Keep 2 decimal places (0.01)
-            }.get(currency, 2)  # Default to 2 decimal places
+        # Define currency-specific truncation
+        if currency == 'BTC':
+            # For BTC, keep 2 decimal places (0.01)
+            truncation_decimals = 2
+        elif currency == 'ETH':
+            # For ETH, keep 1 decimal place (0.1)
+            truncation_decimals = 1
+        else:
+            # Default to 2 decimal places for other currencies
+            truncation_decimals = 2
         
         # Handle zero or very small values to avoid rounding issues
         if abs(balance) < 1e-10:
@@ -319,7 +305,6 @@ class PositionWebsocketClient:
             return balance  # Use raw value as fallback
             
         return truncated
-
     def refresh_positions(self):
         """Force a position refresh from the API"""
         # Rate limit refreshes to avoid hammering the API
