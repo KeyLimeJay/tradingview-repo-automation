@@ -381,17 +381,18 @@ class TradingBot:
             elif op == 'ASK':
                 estimated_position -= qty
         
-        # Check if estimated position exceeds limit - ONLY for LONG positions
-        # For short positions, we don't want to block further shorts
-        if estimated_position > 0 and estimated_position >= strict_limit:
-            return (False, f"Planned operations would result in position {estimated_position}, exceeding limit {strict_limit}")
-        
         # For Event 4 specifically, always allow the full sequence to execute
         # Check if we're executing Event 4 by seeing if there are multiple sells
         sell_count = sum(1 for op, _ in planned_changes if op == 'ASK')
         if sell_count >= 2:
             # This is likely an Event 4 sequence, allow it to proceed
+            self.logger.info(f"[{account_name}] Event 4 sequence with {sell_count} sells detected - allowing to proceed")
             return (True, "Event 4 sequence allowed to proceed")
+        
+        # Check if estimated position exceeds limit - ONLY for LONG positions
+        # For short positions, we don't want to block further shorts
+        if estimated_position > 0 and estimated_position >= strict_limit:
+            return (False, f"Planned operations would result in position {estimated_position}, exceeding limit {strict_limit}")
         
         return (True, "Position within limits")
 
