@@ -299,12 +299,16 @@ class PositionWebsocketClient:
         factor = 10 ** truncation_decimals
         truncated = math.floor(abs(balance) * factor) / factor * (1 if balance >= 0 else -1)
         
+        # Add this one critical logging line
+        self.logger.info(f"CRITICAL: {symbol} raw={balance} truncated={truncated} decimals={truncation_decimals}")
+        
         # Safety check to ensure truncation doesn't increase position
         if abs(truncated) > abs(balance):
             self.logger.warning(f"Truncation error: truncated value {truncated} exceeds raw value {balance}")
             return balance  # Use raw value as fallback
             
         return truncated
+
     def refresh_positions(self):
         """Force a position refresh from the API"""
         # Rate limit refreshes to avoid hammering the API
