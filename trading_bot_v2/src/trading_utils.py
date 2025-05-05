@@ -742,18 +742,25 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
     # Create a new event ID for closing
     close_event_id = f"closeEvent{int(time.time())}"
     
-    # IMPORTANT: Use GET with URL parameters, not POST with JSON payload
+    # Ensure base_url is properly formatted
     if not base_url.endswith('/'):
         base_url += '/'
     
-    # Using GET with URL parameters as in the working reference code
-    close_url = f"{base_url}rest/repocontract/close?repoContractId={repo_id}&eventId={close_event_id}"
+    # Use POST with JSON payload instead of GET with URL parameters
+    close_url = f"{base_url}rest/repocontract/close"
+    
+    # Create the JSON payload for the POST request
+    payload = {
+        "repoContractId": repo_id,
+        "eventId": close_event_id
+    }
     
     try:
-        # Use GET with URL parameters
-        close_response = requests.get(
+        # Use POST with JSON payload
+        close_response = requests.post(
             url=close_url, 
             headers=headers,
+            json=payload,  # Send as JSON
             timeout=30
         )
         
