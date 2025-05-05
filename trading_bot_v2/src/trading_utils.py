@@ -746,23 +746,31 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
     if not base_url.endswith('/'):
         base_url += '/'
     
-    # Use POST with JSON payload instead of GET with URL parameters
-    close_url = f"{base_url}rest/repocontract/close"
-    
-    # Create the JSON payload for the POST request
-    payload = {
-        "repoContractId": repo_id,
-        "eventId": close_event_id
-    }
+    # Try a different URL format that may be required by the API
+    close_url = f"{base_url}rest/repocontract/{repo_id}/close?eventId={close_event_id}"
     
     try:
-        # Use POST with JSON payload
-        close_response = requests.post(
-            url=close_url, 
+        # Try a different HTTP method - some APIs use DELETE for closing resources
+        close_response = requests.delete(
+            url=close_url,
             headers=headers,
-            json=payload,  # Send as JSON
             timeout=30
         )
+        
+        if not close_response.ok:
+            # If DELETE fails, fall back to POST
+            close_url = f"{base_url}rest/repocontract/close"
+            payload = {
+                "repoContractId": repo_id,
+                "eventId": close_event_id
+            }
+            
+            close_response = requests.post(
+                url=close_url,
+                headers=headers,
+                json=payload,
+                timeout=30
+            )
         
         if log:
             log.debug(f"Close repo response: {close_response.status_code}")
