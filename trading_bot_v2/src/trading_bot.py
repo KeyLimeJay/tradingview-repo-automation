@@ -311,20 +311,21 @@ class TradingBot:
 
             # Event 4: Sell Signal with long position (any size) and no repo
             elif is_long and not has_open_repo:
-                # Calculate how many units we need to sell to close the position
-                units_to_close = current_position
-                self.logger.info(f"[{account_name}] Event 4: Sell Signal with long position {units_to_close} and no repo - "
-                            f"Sell to close position, Open Repo, Sell to short")
+                # Ensure we're selling a non-zero amount
+                units_to_close = max(current_position, min_quantity)
+                self.logger.info(f"[{account_name}] Event 4: Sell Signal with long position {current_position} and no repo - "
+                            f"Open Repo, then sell to close position and open short")
+                self.logger.info(f"Using sell quantity of {units_to_close} for first sell")
                 return {
-                    'steps': ['open_short', 'open_repo', 'open_short'],  # Sell, Repo, Sell sequence
-                    'position_size': [units_to_close, min_quantity, min_quantity],  # First sell matches position size
+                    'steps': ['open_repo', 'open_short', 'open_short'],  # Repo first, then sells
+                    'position_size': [min_quantity, units_to_close, min_quantity],  # First sell uses safe non-zero quantity
                     'repo_details': repo_details,
                     'sequential': True,
                     'event': 'Event 4',
-                    'trade_step_index': 0,  # First step is a trade
-                    'repo_step_index': 1,   # Second step is repo
-                    'post_repo_steps': [2]  # Only one post-repo step (the final sell)
-                }
+                    'trade_step_index': 1,
+                    'repo_step_index': 0,
+                    'post_repo_steps': [1, 2]  # Indices of post-repo steps
+                    }
             
             # Invalid state for this strategy
             else:
