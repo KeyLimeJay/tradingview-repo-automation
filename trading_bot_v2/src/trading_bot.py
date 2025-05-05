@@ -274,17 +274,18 @@ class TradingBot:
                     'event': 'Event 1'
                 }
             
-            # Event 3: Buy Signal with repo open (Both sequences)
-            elif has_open_repo:
-                self.logger.info(f"[{account_name}] Event 3: Buy Signal with repo open - Buy 2 units, Close Repo")
-                return {
-                    'steps': ['open_long', 'open_long', 'close_repo'],
-                    'position_size': [min_quantity, min_quantity, repo_symbol],
-                    'repo_details': {'symbol': repo_symbol},
-                    'sequential': True,
-                    'event': 'Event 3',
-                    'trade_step_count': 2  # Number of trade steps before repo ops
-                }
+        # Event 3: Buy Signal with repo open (Both sequences)
+        elif has_open_repo:
+            self.logger.info(f"[{account_name}] Event 3: Buy Signal with repo open - Buy 2 units, Close Repo")
+            return {
+                'steps': ['open_long', 'open_long', 'close_repo'],
+                'position_size': [min_quantity, min_quantity, repo_symbol],
+                'repo_details': {'symbol': repo_symbol},
+                'sequential': True,
+                'event': 'Event 3',
+                'trade_step_index': 0,  # First trade step index
+                'repo_step_index': 2    # Index of repo close operation
+            }
             
             # Invalid state for this strategy
             else:
