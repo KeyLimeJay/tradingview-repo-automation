@@ -705,8 +705,13 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
     if config_manager and account_name:
         credentials = config_manager.get_account_credentials(account_name)
         base_url = credentials.get('api_base_url')
+        # Use api_url instead of api_base_url if api_base_url isn't working
+        if not base_url:
+            base_url = credentials.get('api_url')
     else:
         base_url = os.getenv("API_BASE_URL")
+        if not base_url:
+            base_url = os.getenv("API_URL")
         
     # Check if base_url is valid
     if not base_url:
@@ -742,39 +747,50 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
     # Create a new event ID for closing
     close_event_id = f"closeEvent{int(time.time())}"
     
-    # Ensure base_url is properly formatted
+    # Simplest possible URL - just the bare endpoint
     if not base_url.endswith('/'):
         base_url += '/'
     
-    # Try a different URL format that may be required by the API
-    close_url = f"{base_url}rest/repocontract/{repo_id}/close?eventId={close_event_id}"
+    close_url = f"{base_url}rest/repocontract/close"
+    
+    # Try both query parameters and body
+    params = {
+        "repoContractId": repo_id,
+        "eventId": close_event_id
+    }
     
     try:
-        # Try a different HTTP method - some APIs use DELETE for closing resources
-        close_response = requests.delete(
+        # Log the exact URL and parameters we're using
+        log.info(f"Attempting to close repo with ID {repo_id} using URL: {close_url}")
+        log.info(f"Using parameters: {params}")
+        
+        # Try POST with parameters in both query and body
+        close_response = requests.post(
             url=close_url,
+            params=params,  # Add as URL parameters
+            json=params,    # Also add as JSON body
             headers=headers,
             timeout=30
         )
         
+        if log:
+            log.debug(f"Close repo response status: {close_response.status_code}")
+            log.debug(f"Close repo response body: {close_response.text}")
+        
         if not close_response.ok:
-            # If DELETE fails, fall back to POST
-            close_url = f"{base_url}rest/repocontract/close"
-            payload = {
-                "repoContractId": repo_id,
-                "eventId": close_event_id
-            }
+            # If that failed, try the exact URL format from your original code
+            modified_url = f"{base_url}rest/repocontract/close?repoContractId={repo_id}&eventId={close_event_id}"
+            log.info(f"First attempt failed. Trying with URL: {modified_url}")
             
-            close_response = requests.post(
-                url=close_url,
+            close_response = requests.get(  # Use GET as in your original code
+                url=modified_url,
                 headers=headers,
-                json=payload,
                 timeout=30
             )
-        
-        if log:
-            log.debug(f"Close repo response: {close_response.status_code}")
-            log.debug(f"Close repo response body: {close_response.text}")
+            
+            if log:
+                log.debug(f"Second attempt status: {close_response.status_code}")
+                log.debug(f"Second attempt body: {close_response.text}")
         
         if not close_response.ok:
             if log:
