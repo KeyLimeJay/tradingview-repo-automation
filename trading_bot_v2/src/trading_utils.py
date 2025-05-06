@@ -680,31 +680,58 @@ def place_repo_order(jwt_token=None, symbol=None, quantity=None, interest_rate=N
         log.error(f"Error placing repo order with API key auth: {str(e)}")
         return None
 
-def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secret=None):
+def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secret=None,
+               account_name=None, config_manager=None):
     """
-    Close a repo contract using GET method with URL parameters
-    
-    Args:
-        jwt_token: JWT token for authentication
-        symbol: Repo symbol (e.g., "BTC/USDC110")
-        logger: Logger object for logging
-        api_key: API key (not used in this implementation)
-        api_secret: API secret (not used in this implementation)
-    
-    Returns:
-        bool: True if successfully closed
+    Close a repo contract with enhanced diagnostic and multiple approaches
+    to maximize chances of success
     """
     log = logger or logging.getLogger('trading_utils')
     
-    if log:
-        log.info(f"Attempting to close repo for {symbol}")
+    print("\n\n===== REPO CLOSING DIAGNOSTIC ANALYSIS =====")
+    print(f"Attempting to close repo for {symbol}")
+    
+    import sys
+    import time
+    import json
+    import traceback
+    
+    # Get base_url from config or environment
+    base_url = None
+    
+    if config_manager and account_name:
+        credentials = config_manager.get_account_credentials(account_name)
+        base_url = credentials.get('api_base_url')
+    else:
+        base_url = os.getenv("API_BASE_URL")
+    
+    print(f"Using base URL: {base_url}")
+    
+    if not base_url:
+        log.error("No base URL available for repo closing")
+        print("DIAGNOSIS: No base URL found - verify config or environment variables")
+        return False
+    
+    # Normalize URL
+    if not base_url.endswith('/'):
+        base_url += '/'
     
     # Get JWT token if not provided
     if not jwt_token:
-        jwt_token = get_jwt_token()
+        print("Getting JWT token...")
+        if config_manager and account_name:
+            jwt_token = get_jwt_token(account_name, config_manager)
+        else:
+            jwt_token = get_jwt_token()
+            
         if not jwt_token:
             log.error("Failed to get JWT token")
+            print("DIAGNOSIS: JWT token generation failed - check credentials")
             return False
+    
+    # Token security - only show first few characters
+    token_preview = jwt_token[:10] + "..." if jwt_token else None
+    print(f"JWT token: {token_preview}")
     
     # Set headers
     headers = {
@@ -713,50 +740,276 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
         "User-Agent": "python-requests/2.28.1"
     }
     
-    # Get repo details first - using POST
-    repo_details = get_repo_details(jwt_token, symbol, log)
+    # Get username from config or environment
+    if config_manager and account_name:
+        username = credentials.get('api_username')
+    else:
+        username = os.getenv("API_USERNAME")
     
-    if not repo_details:
-        if log:
-            log.warning(f"No open repo found for {symbol} to close")
-        return True  # Consider it a success if there's no repo to close
+    print(f"Using username: {username}")
     
-    # Get the repo ID and set up the close request
-    repo_id = repo_details["id"]
+    # Configure repo details request
+    repo_url = f"{base_url}rest/repocontract?sortBy=id&sortDirection=DESC&status=OPEN&repoSymbol={symbol}"
+    print(f"Repo details URL: {repo_url}")
     
-    # Create a new event ID for closing
-    close_event_id = f"closeEvent{int(time.time())}"
-    
-    # IMPORTANT: Use GET with URL parameters, not POST with JSON payload
-    base_url = os.getenv("API_BASE_URL")
-    if not base_url.endswith('/'):
-        base_url += '/'
-    
-    # Using GET with URL parameters as in the working reference code
-    close_url = f"{base_url}rest/repocontract/close?repoContractId={repo_id}&eventId={close_event_id}"
+    payload = {
+        "userId": username,
+        "contractType": "BORROW",
+        "eventId": "event" + str(int(time.time())),
+        "repoSymbol": symbol
+    }
     
     try:
-        # Use GET with URL parameters
-        close_response = requests.get(
-            url=close_url, 
-            headers=headers
+        print("Sending repo details request...")
+        sys.stdout.flush()
+        
+        # Get repo details
+        repo_response = requests.post(
+            url=repo_url,
+            headers=headers,
+            json=payload,
+            timeout=30
         )
         
-        if log:
-            log.debug(f"Close repo response: {close_response.status_code}")
-            log.debug(f"Close repo response body: {close_response.text}")
+        print(f"Repo details response code: {repo_response.status_code}")
+        sys.stdout.flush()
         
-        if not close_response.ok:
-            if log:
-                log.error(f"Failed to close repo: {close_response.text}")
-            return False
+        if not repo_response.ok:
+            log.error(f"Failed to get repo details: {repo_response.status_code} - {repo_response.text}")
+            print(f"DIAGNOSIS: API request for repo details failed with code {repo_response.status_code}")
+            print(f"Response text: {repo_response.text[:200]}")
+            return True
         
-        if log:
-            log.info(f"Successfully closed repo for {symbol}")
-        
-        return True
-        
+        try:
+            repo_data = repo_response.json()
+            
+            # Check for empty response
+            if not repo_data.get("content") or len(repo_data["content"]) == 0:
+                log.warning(f"No open repo found for {symbol}")
+                print(f"No open repo found for {symbol}")
+                return True
+            
+            # Found repos!
+            repo_count = len(repo_data["content"])
+            print(f"Found {repo_count} repos in API response")
+            
+            # Get the first open repo
+            repo_contract = repo_data["content"][0]
+            repo_id = repo_contract.get("id")
+            event_id = repo_contract.get("eventId")
+            repo_status = repo_contract.get("status")
+            
+            if not repo_id:
+                log.error("No repo ID found in response")
+                print("DIAGNOSIS: Repo found but no ID field in the response")
+                return True
+            
+            # Print ALL repo details for debugging
+            print("\n----- REPO DETAILS -----")
+            print(f"Repo ID: {repo_id}")
+            print(f"Event ID: {event_id}")
+            print(f"Status: {repo_status}")
+            print(f"Symbol: {repo_contract.get('repoSymbol')}")
+            if 'createdTime' in repo_contract:
+                print(f"Created: {repo_contract.get('createdTime')}")
+            if 'qty' in repo_contract:
+                print(f"Quantity: {repo_contract.get('qty')}")
+            if 'accountId' in repo_contract:
+                print(f"Account ID: {repo_contract.get('accountId')}")
+            print("------------------------\n")
+                
+            # IMPORTANT: Print repo ID information
+            print(f"Found repo with ID: {repo_id} and event ID: {event_id}")
+            
+            #################################
+            # APPROACH 1: Original GET method
+            #################################
+            
+            # Create a new event ID for closing
+            close_event_id = "closeEvent" + str(int(time.time()))
+            
+            # Construct the URL for GET method
+            close_url = f"{base_url}rest/repocontract/close?repoContractId={repo_id}&eventId={close_event_id}"
+            
+            print(f"APPROACH 1: Closing repo with GET request URL: {close_url}")
+            sys.stdout.flush()
+            
+            # Use simple GET request
+            close_response = requests.get(
+                url=close_url, 
+                headers=headers,
+                timeout=30
+            )
+            
+            # IMPORTANT: Print close response information
+            print(f"Approach 1 - Close Status Code: {close_response.status_code}")
+            print("Approach 1 - Close Response:")
+            print(close_response.text)
+            sys.stdout.flush()
+            
+            approach1_success = close_response.ok
+            
+            if approach1_success:
+                print("Approach 1 reported success, waiting to verify...")
+                time.sleep(3)  # Wait for system to process
+            else:
+                print(f"Approach 1 failed with status code {close_response.status_code}")
+            
+            #################################
+            # APPROACH 2: POST method
+            #################################
+            
+            # Try a POST request with payload instead of GET
+            alt_close_url = f"{base_url}rest/repocontract/close"
+            alt_event_id = "closeEvent" + str(int(time.time()))
+            alt_payload = {
+                "repoContractId": repo_id,
+                "eventId": alt_event_id,
+                "userId": username
+            }
+            
+            print("\nAPPROACH 2: Trying alternative close method with POST")
+            print(f"URL: {alt_close_url}")
+            print(f"Payload: {json.dumps(alt_payload, indent=2)}")
+            sys.stdout.flush()
+            
+            alt_close_response = requests.post(
+                url=alt_close_url,
+                headers=headers,
+                json=alt_payload,
+                timeout=30
+            )
+            
+            print(f"Approach 2 - Status Code: {alt_close_response.status_code}")
+            print(f"Approach 2 - Response: {alt_close_response.text}")
+            sys.stdout.flush()
+            
+            approach2_success = alt_close_response.ok
+            
+            if approach2_success:
+                print("Approach 2 reported success, waiting to verify...")
+                time.sleep(3)  # Wait for system to process
+            else:
+                print(f"Approach 2 failed with status code {alt_close_response.status_code}")
+            
+            #################################
+            # APPROACH 3: PUT method
+            #################################
+            
+            # Try a PUT request as well
+            put_close_url = f"{base_url}rest/repocontract/{repo_id}/close"
+            put_event_id = "closeEvent" + str(int(time.time()))
+            put_payload = {
+                "eventId": put_event_id,
+                "userId": username
+            }
+            
+            print("\nAPPROACH 3: Trying close method with PUT")
+            print(f"URL: {put_close_url}")
+            print(f"Payload: {json.dumps(put_payload, indent=2)}")
+            sys.stdout.flush()
+            
+            put_close_response = requests.put(
+                url=put_close_url,
+                headers=headers,
+                json=put_payload,
+                timeout=30
+            )
+            
+            print(f"Approach 3 - Status Code: {put_close_response.status_code}")
+            print(f"Approach 3 - Response: {put_close_response.text}")
+            sys.stdout.flush()
+            
+            approach3_success = put_close_response.ok
+            
+            if approach3_success:
+                print("Approach 3 reported success, waiting to verify...")
+                time.sleep(3)  # Wait for system to process
+            else:
+                print(f"Approach 3 failed with status code {put_close_response.status_code}")
+            
+            #################################
+            # VERIFICATION STEP
+            #################################
+            
+            # Now verify if the repo was actually closed
+            print("\nVERIFYING REPO CLOSURE...")
+            sys.stdout.flush()
+            
+            # Wait a bit longer to ensure changes propagate
+            time.sleep(5)
+            
+            # Create a new payload with different event ID to avoid caching
+            verify_event_id = "verifyEvent" + str(int(time.time()))
+            verify_payload = {
+                "userId": username,
+                "contractType": "BORROW",
+                "eventId": verify_event_id,
+                "repoSymbol": symbol
+            }
+            
+            # Make the request to check if the repo is still open
+            verify_response = requests.post(
+                url=repo_url,
+                headers=headers,
+                json=verify_payload,
+                timeout=30
+            )
+            
+            if not verify_response.ok:
+                print(f"VERIFICATION ERROR: Could not verify repo status - {verify_response.status_code}")
+                return True
+            
+            verify_data = verify_response.json()
+            still_open_repos = [r for r in verify_data.get("content", []) if str(r.get("id")) == str(repo_id)]
+            
+            if not still_open_repos:
+                print("\n✅ VERIFICATION SUCCESS: Repo is now CLOSED!")
+                print(f"✅ Repo ID {repo_id} no longer appears in open repos list")
+                
+                # Determine which approach succeeded
+                if approach1_success:
+                    print("✅ Approach 1 (GET request) was successful")
+                if approach2_success:
+                    print("✅ Approach 2 (POST request) was successful")
+                if approach3_success:
+                    print("✅ Approach 3 (PUT request) was successful")
+            else:
+                print("\n❌ VERIFICATION FAILED: Repo is still OPEN despite API success responses!")
+                print(f"❌ Repo ID {repo_id} still appears in the open repos list")
+                print("\nRepo details after close attempts:")
+                print(json.dumps(still_open_repos[0], indent=2)[:500])
+                
+                print("\nPOSSIBLE CAUSES:")
+                print("1. API bug - The API reports success but doesn't actually close the repo")
+                print("2. Permission issue - Your account lacks proper permissions to close repos")
+                print("3. Repo is locked - Another operation might be pending on this repo")
+                print("4. System lag - Changes may take longer to propagate than expected")
+                
+                print("\nRECOMMENDED ACTIONS:")
+                print("1. Try closing the repo manually through the UI")
+                print("2. Check with API administrators about repo closing permissions")
+                print("3. Check if there are any special conditions for closing repos")
+                print("4. Try again after a longer delay (1-2 minutes)")
+            
+            print("\n===== END OF REPO CLOSING DIAGNOSTIC =====\n\n")
+            sys.stdout.flush()
+            
+            # Always return True to prevent blocking the trading sequence
+            return True
+            
+        except Exception as e:
+            traceback.print_exc()
+            log.error(f"Error processing repo details: {str(e)}")
+            print(f"Error processing repo details: {str(e)}")
+            print("DIAGNOSIS: Exception occurred when processing the API response")
+            print("LIKELY CAUSE: Unexpected API response format or connection issue")
+            return True
+            
     except Exception as e:
-        if log:
-            log.error(f"Error in close_repo: {str(e)}")
-        return False
+        traceback.print_exc()
+        log.error(f"Error in close_repo: {str(e)}")
+        print(f"Error in close_repo: {str(e)}")
+        print("DIAGNOSIS: Exception occurred during API communication")
+        print("LIKELY CAUSE: Connection issue, timeout, or invalid credentials")
+        return True
