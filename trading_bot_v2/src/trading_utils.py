@@ -787,6 +787,7 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
                 return True  # Return true to continue trading sequence
             
             log.info(f"Found repo with ID: {repo_id}")
+            # Add this print statement to show repo ID
             print(f"Found repo with ID: {repo_id} and event ID: {event_id}")
             
             # Create a new event ID for closing - same format as working code
@@ -804,14 +805,14 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
                 timeout=30
             )
             
+            # Add these print statements for status code and response
             print(f"Close Status Code: {close_response.status_code}")
             print("Close Response:")
+            print(close_response.text)
+            
+            log.debug(f"Close repo response: {close_response.status_code}")
             if close_response.text:
-                try:
-                    response_json = json.loads(close_response.text)
-                    print(json.dumps(response_json, indent=2))
-                except:
-                    print(close_response.text)
+                log.debug(f"Close repo response body: {close_response.text[:500]}")
             
             if not close_response.ok:
                 log.error(f"Failed to close repo: {close_response.status_code} - {close_response.text[:100]}")
@@ -821,6 +822,7 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
                 return True
             
             log.info(f"Successfully closed repo for {symbol} with ID {repo_id}")
+            # Add this print statement for success confirmation
             print(f"Successfully closed repo contract with ID: {repo_id}")
             
             return True
