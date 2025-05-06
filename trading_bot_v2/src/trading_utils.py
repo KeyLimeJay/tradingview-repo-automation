@@ -699,8 +699,9 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
     """
     log = logger or logging.getLogger('trading_utils')
     
-    if log:
-        log.info(f"Attempting to close repo for {symbol}")
+    # Print diagnostic start
+    print("\n=== REPO CLOSING DIAGNOSTIC START ===")
+    print(f"Attempting to close repo for {symbol}")
     
     # Get base_url from config or environment
     base_url = None
@@ -708,11 +709,15 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
     if config_manager and account_name:
         credentials = config_manager.get_account_credentials(account_name)
         base_url = credentials.get('api_base_url')
+        print(f"Using base URL from config: {base_url}")
     else:
         base_url = os.getenv("API_BASE_URL")
+        print(f"Using base URL from env: {base_url}")
     
     if not base_url:
         log.error("No base URL available for repo closing")
+        print("FAILED: No base URL available for repo closing")
+        print("=== REPO CLOSING DIAGNOSTIC END ===\n")
         return False
     
     # Normalize URL
@@ -721,6 +726,7 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
     
     # Get JWT token if not provided
     if not jwt_token:
+        print("Getting JWT token...")
         if config_manager and account_name:
             jwt_token = get_jwt_token(account_name, config_manager)
         else:
@@ -728,7 +734,13 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
             
         if not jwt_token:
             log.error("Failed to get JWT token")
+            print("FAILED: Could not get JWT token")
+            print("=== REPO CLOSING DIAGNOSTIC END ===\n")
             return False
+        
+        print("JWT token obtained successfully")
+    else:
+        print("JWT token was provided")
     
     # Set headers - exactly as in the working code
     headers = {
@@ -736,15 +748,19 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
         "Content-Type": "application/json",
         "User-Agent": "python-requests/2.28.1"
     }
+    print(f"Headers set up with JWT token")
     
     # Get repo details using the exact URL format from working example
     repo_url = f"{base_url}rest/repocontract?sortBy=id&sortDirection=DESC&status=OPEN&repoSymbol={symbol}"
+    print(f"Repo details URL: {repo_url}")
     
     # Get username from config or environment
     if config_manager and account_name:
         username = credentials.get('api_username')
+        print(f"Using username from config: {username}")
     else:
         username = os.getenv("API_USERNAME")
+        print(f"Using username from env: {username}")
     
     payload = {
         "userId": username,
@@ -752,9 +768,11 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
         "eventId": "event" + str(int(time.time())),
         "repoSymbol": symbol
     }
+    print(f"Repo details payload: {payload}")
     
     try:
         log.info(f"Getting repo details from URL: {repo_url}")
+        print(f"Sending repo details request...")
         
         repo_response = requests.post(
             url=repo_url,
@@ -763,17 +781,25 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
             timeout=30
         )
         
+        print(f"Repo details response code: {repo_response.status_code}")
+        
         if not repo_response.ok:
             log.error(f"Failed to get repo details: {repo_response.status_code} - {repo_response.text}")
+            print(f"FAILED: Repo details request failed: {repo_response.status_code}")
+            print(f"Response text: {repo_response.text[:500]}")
+            print("=== REPO CLOSING DIAGNOSTIC END ===\n")
             
             # Consider it a success if we can't even get repo details (as there might not be any repo)
             return True
         
         try:
             repo_data = repo_response.json()
+            print(f"Successfully parsed repo details JSON")
             
             if not repo_data.get("content") or len(repo_data["content"]) == 0:
                 log.warning(f"No open repo found for {symbol}")
+                print(f"WARNING: No open repo found for {symbol}")
+                print("=== REPO CLOSING DIAGNOSTIC END ===\n")
                 return True  # Consider it a success if there's no repo to close
             
             # Get the first open repo
@@ -782,9 +808,16 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
             
             if not repo_id:
                 log.error("No repo ID found in response")
+                print("FAILED: No repo ID found in response")
+                print("=== REPO CLOSING DIAGNOSTIC END ===\n")
                 return True  # Return true to continue trading sequence
             
             log.info(f"Found repo with ID: {repo_id}")
+            print(f"FOUND REPO with ID: {repo_id}")
+            print(f"Repo status: {repo_contract.get('status')}")
+            print(f"Repo symbol: {repo_contract.get('repoSymbol')}")
+            print(f"Repo quantity: {repo_contract.get('qty')}")
+            print(f"Repo created: {repo_contract.get('createdTime')}")
             
             # Create a new event ID for closing - same format as working code
             close_event_id = "closeEvent" + str(int(time.time()))
@@ -793,8 +826,10 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
             close_url = f"{base_url}rest/repocontract/close?repoContractId={repo_id}&eventId={close_event_id}"
             
             log.info(f"Closing repo with URL: {close_url}")
+            print(f"Closing repo with URL: {close_url}")
             
             # Use simple GET request - exactly as in the working code
+            print(f"Sending close repo request...")
             close_response = requests.get(
                 url=close_url, 
                 headers=headers,
@@ -802,25 +837,38 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
             )
             
             log.debug(f"Close repo response: {close_response.status_code}")
+            print(f"Close repo response code: {close_response.status_code}")
             if close_response.text:
                 log.debug(f"Close repo response body: {close_response.text[:500]}")
+                print(f"Close repo response body: {close_response.text[:500]}")
             
             if not close_response.ok:
                 log.error(f"Failed to close repo: {close_response.status_code} - {close_response.text[:100]}")
+                print(f"FAILED: Close repo request failed: {close_response.status_code}")
+                print(f"Response text: {close_response.text[:500]}")
+                print("=== REPO CLOSING DIAGNOSTIC END ===\n")
                 
                 # Return TRUE anyway to prevent blocking the trading sequence
                 return True
             
             log.info(f"Successfully closed repo for {symbol} with ID {repo_id}")
+            print(f"SUCCESS: Closed repo for {symbol} with ID {repo_id}")
+            print("=== REPO CLOSING DIAGNOSTIC END ===\n")
             
             return True
             
         except Exception as e:
             log.error(f"Error processing repo details: {str(e)}")
+            print(f"FAILED: Error processing repo details: {str(e)}")
+            print(f"Exception details: {type(e).__name__}: {str(e)}")
+            print("=== REPO CLOSING DIAGNOSTIC END ===\n")
             return True  # Return true to continue trading sequence
             
     except Exception as e:
         log.error(f"Error in close_repo: {str(e)}")
+        print(f"FAILED: Error in close_repo: {str(e)}")
+        print(f"Exception details: {type(e).__name__}: {str(e)}")
+        print("=== REPO CLOSING DIAGNOSTIC END ===\n")
         
         # Return TRUE anyway to prevent blocking the trading sequence
         return True
