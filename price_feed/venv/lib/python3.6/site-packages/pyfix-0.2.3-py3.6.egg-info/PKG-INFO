@@ -1,0 +1,38 @@
+Metadata-Version: 1.1
+Name: pyfix
+Version: 0.2.3
+Summary: A framework for writing automated software tests (non xUnit based)
+Home-page: https://github.com/pyclectic/pyfix
+Author: Alexander Metzner
+Author-email: halimath.wilanthaou@gmail.com
+License: Apache Software License
+Description: 
+        pyfix
+        -----
+        
+        pyfix is a framework for writing and executing automated tests including unittests, integration tests or acceptance
+        tests. pyfix provides capabilities similar to other tools (such as unittest) but does not follow the xUnit semantics
+        to write tests.
+        
+        pyfix Principals
+        ````````````````
+        
+        pyfix aims to make tests easy to read and understand while it encourages the use of accepted software design principles
+        such as favor composition over inheritance. pyfix also tries to reduce the amount of syntactic "waste" that some other
+        frameworks suffer from (i.e. putting self in front of almost everything).
+        
+        Links
+        `````
+        * pyfix Github repository <https://github.com/pyclectic/pyfix>
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Other Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.2
+Classifier: Topic :: Software Development :: Quality Assurance
+Classifier: Topic :: Software Development :: Testing

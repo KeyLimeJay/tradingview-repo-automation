@@ -1,0 +1,44 @@
+Metadata-Version: 1.1
+Name: pyassert
+Version: 0.4.2
+Summary: Rich assertions library for Python
+Home-page: https://github.com/pyclectic/pyassert
+Author: Alexander Metzner, Michael Gruber
+Author-email: halimath.wilanthaou@gmail.com, aelgru@gmail.com
+License: Apache Software License
+Description: 
+        pyassert is an assertion library for the Python programming language.
+        
+        Introduction
+        ------------
+        
+        Assertions are used in automated tests to verify that a given piece of code behaves as expected. pyassert aims to provide assertions with provide
+        
+        * **rich functionality**: common assertions should be expressed easily
+        * **good readability**: assertions should be easy to read and easy to understand to enhance the overall understandability of the test
+        * **independent of the test framework**: pyassert assertions work with every Python test environment.
+        
+        How to install it?
+        ``````````````````
+        
+        pyassert is available via the [Cheeseshop](http://pypi.python.org/pypi/pyassert/) so you can use easy_install or pip:
+        
+            $ pip install pyassert
+        
+        
+        Links
+        `````
+        
+        * pyassert Github repository including documentation <https://github.com/pyclectic/pyassert>
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Other Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.2
+Classifier: Topic :: Software Development :: Quality Assurance
+Classifier: Topic :: Software Development :: Testing
