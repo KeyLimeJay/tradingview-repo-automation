@@ -58,7 +58,7 @@
     {
       "name": "TM6",
       "credentials_file": "credentials/tm6.json",
-      "timeframes": ["5m"],
+      "timeframes": ["1m"],
       "trading_pairs": ["BTC/USDC", "ETH/USDC"],
       "enabled": true,
       "trading": {
@@ -100,7 +100,7 @@
     {
       "name": "TM5",
       "credentials_file": "credentials/tm5.json",
-      "timeframes": ["1m"],
+      "timeframes": ["5m"],
       "trading_pairs": ["BTC/USDC", "ETH/USDC"],
       "enabled": true,
       "trading": {
