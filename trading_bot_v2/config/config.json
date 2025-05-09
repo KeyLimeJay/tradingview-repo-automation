@@ -100,7 +100,7 @@
     {
       "name": "TM5",
       "credentials_file": "credentials/tm5.json",
-      "timeframes": ["5m"],
+      "timeframes": ["1m"],
       "trading_pairs": ["BTC/USDC", "ETH/USDC"],
       "enabled": true,
       "trading": {
