@@ -1,518 +1,332 @@
+#!/usr/bin/env python3
 import socket
 import time
 import datetime
-import pandas as pd
-import threading
-import re
-import os
-import logging
-from dotenv import load_dotenv
 
-# Load environment variables from .env file
-load_dotenv()
-
-# Configure logging
-log_level = os.getenv("LOG_LEVEL", "INFO")
-log_file = os.getenv("LOG_FILE", "bosonic_fix_client.log")
-
-numeric_level = getattr(logging, log_level.upper(), None)
-if not isinstance(numeric_level, int):
-    raise ValueError(f"Invalid log level: {log_level}")
-
-logging.basicConfig(
-    level=numeric_level,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(log_file),
-        logging.StreamHandler()
-    ]
-)
-
-logger = logging.getLogger("BosionicClient")
-
-class BosionicClient:
-    def __init__(self, host, port, sender_comp_id, target_comp_id):
-        """Initialize the Bosonic FIX client"""
+class BosonicClient:
+    def __init__(self, host='127.0.0.1', port=18305, 
+                 sender_comp_id='KUROSHIO_PRICE_FEED_MD', 
+                 target_comp_id='OGG_MD_KUROSHIO_PRICE_FEED',
+                 heartbeat_interval=30):
+        """
+        Initialize Bosonic FIX client with connection parameters
+        """
         self.host = host
-        self.port = int(port)
+        self.port = port
         self.sender_comp_id = sender_comp_id
         self.target_comp_id = target_comp_id
+        self.heartbeat_interval = heartbeat_interval
         self.socket = None
         self.seq_num = 1
-        self.connected = False
-        self.market_data = {}
-        self.msg_buffer = ""
-        self.listener_thread = None
-        self.heartbeat_thread = None
-        self.running = False
-        self.SOH = chr(1)  # Start of Header character (ASCII 1)
-        logger.info(f"Initialized client for {sender_comp_id} -> {target_comp_id}")
-        
+        self.session_established = False
+        self.trading_pairs = ["BTC/USD", "ETH/USD"]  # Default trading pairs from .env file
+    
     def connect(self):
-        """Establish connection to the server"""
+        """
+        Establish socket connection to Bosonic FIX server
+        """
         try:
-            logger.info(f"Connecting to {self.host}:{self.port}")
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            # Set timeout for connection attempt
-            self.socket.settimeout(10)  
             self.socket.connect((self.host, self.port))
-            # Set back to blocking mode for normal operation
-            self.socket.settimeout(None)  
-            self.connected = True
-            logger.info(f"Connected to {self.host}:{self.port}")
-            
-            # Send logon message
-            self.send_logon()
-            
-            # Start listener thread
-            self.running = True
-            self.listener_thread = threading.Thread(target=self.listen)
-            self.listener_thread.daemon = True
-            self.listener_thread.start()
-            
-            # Start heartbeat thread
-            self.heartbeat_thread = threading.Thread(target=self.heartbeat_sender)
-            self.heartbeat_thread.daemon = True
-            self.heartbeat_thread.start()
-            
+            print(f"Connected to {self.host}:{self.port}")
             return True
         except Exception as e:
-            logger.error(f"Connection failed: {e}")
-            self.connected = False
+            print(f"Connection error: {e}")
             return False
             
-    def disconnect(self):
-        """Close the connection"""
-        if self.connected:
-            try:
-                # Send logout message
-                self.send_logout()
-                self.running = False
-                time.sleep(1)  # Allow time for listener thread to exit
-                self.socket.close()
-                logger.info("Disconnected from server")
-            except Exception as e:
-                logger.error(f"Error during disconnect: {e}")
-        self.connected = False
-        
-    def create_header(self, msg_type):
-        """Create FIX message header"""
-        now = datetime.datetime.utcnow()
-        sending_time = now.strftime("%Y%m%d-%H:%M:%S.%f")[:-3]
-        
-        header = (
-            f"8=FIX.4.4{self.SOH}"  # BeginString
-            f"9=0{self.SOH}"  # BodyLength (to be filled later)
-            f"35={msg_type}{self.SOH}"  # MsgType
-            f"49={self.sender_comp_id}{self.SOH}"  # SenderCompID
-            f"56={self.target_comp_id}{self.SOH}"  # TargetCompID
-            f"34={self.seq_num}{self.SOH}"  # MsgSeqNum
-            f"52={sending_time}{self.SOH}"  # SendingTime
-        )
-        
-        self.seq_num += 1
-        return header
+    def calculate_checksum(self, message):
+        """
+        Calculate FIX checksum (sum of all bytes modulo 256)
+        """
+        # Remove SOH character (ASCII 1) for checksum calculation 
+        checksum = sum(message.replace('\x01', '').encode('utf-8')) % 256
+        return f"{checksum:03d}"
     
-    def calculate_checksum(self, msg):
-        """Calculate FIX message checksum"""
-        checksum = sum(ord(c) for c in msg) % 256
-        return f"10={checksum:03d}{self.SOH}"
-    
-    def calculate_body_length(self, msg):
-        """Calculate FIX message body length"""
-        # Find start of body (after tag 9) and end of body (before tag 10)
-        start = msg.find(f"{self.SOH}35=")
-        if start == -1:
-            return 0
+    def create_message(self, msg_type, fields):
+        """
+        Create a FIX message with proper header, body and trailer
+        """
+        # Standard header fields
+        header = [
+            f"8=FIX.4.4",  # BeginString
+            f"9=0",  # BodyLength placeholder
+            f"35={msg_type}",  # MsgType
+            f"49={self.sender_comp_id}",  # SenderCompID
+            f"56={self.target_comp_id}",  # TargetCompID
+            f"34={self.seq_num}",  # MsgSeqNum
+            f"52={datetime.datetime.utcnow().strftime('%Y%m%d-%H:%M:%S')}"  # SendingTime
+        ]
         
-        end = msg.find(f"{self.SOH}10=")
-        if end == -1:
-            end = len(msg)
-            
-        return end - start
-    
-    def create_fix_message(self, msg_type, body):
-        """Create a complete FIX message"""
-        header = self.create_header(msg_type)
-        msg = header + body
+        # Combine header and body
+        message = header + fields
         
-        # Calculate body length (excluding checksum)
-        body_length = self.calculate_body_length(msg)
+        # Join with SOH delimiter
+        msg_str = "\x01".join(message) + "\x01"
         
-        # Replace placeholder body length
-        msg = msg.replace(f"9=0{self.SOH}", f"9={body_length}{self.SOH}")
+        # Calculate body length (exclude tags 8, 9, and the delimiters between them)
+        body_len = len(msg_str) - msg_str.find("\x0135=") + 2
         
-        # Add checksum
-        msg += self.calculate_checksum(msg)
+        # Update body length
+        msg_str = msg_str.replace("9=0", f"9={body_len}")
         
-        return msg
+        # Calculate and append checksum
+        checksum = self.calculate_checksum(msg_str)
+        msg_str += f"10={checksum}\x01"
+        
+        return msg_str
     
     def send_message(self, message):
-        """Send a FIX message to the server"""
-        if not self.connected:
-            logger.warning("Not connected to server")
-            return False
-            
+        """
+        Send a message to the FIX server
+        """
         try:
             self.socket.sendall(message.encode('utf-8'))
-            # Print message with SOH replaced by '|' for readability
-            logger.debug("Sent: " + message.replace(self.SOH, '|'))
+            self.seq_num += 1
             return True
         except Exception as e:
-            logger.error(f"Error sending message: {e}")
-            self.connected = False
+            print(f"Error sending message: {e}")
             return False
     
-    def send_logon(self):
-        """Send a logon message"""
-        body = (
-            f"98=0{self.SOH}"  # EncryptMethod (0 = None)
-            f"108=30{self.SOH}"  # HeartBtInt (30 seconds)
-            f"141=Y{self.SOH}"  # ResetSeqNumFlag (Y = Yes)
-        )
-        
-        msg = self.create_fix_message("A", body)
-        return self.send_message(msg)
-    
-    def send_logout(self):
-        """Send a logout message"""
-        msg = self.create_fix_message("5", "")
-        return self.send_message(msg)
-    
-    def send_heartbeat(self):
-        """Send a heartbeat message"""
-        msg = self.create_fix_message("0", "")
-        return self.send_message(msg)
-    
-    def request_market_data(self, symbols):
-        """Request market data for the given symbols"""
-        if not isinstance(symbols, list):
-            symbols = [symbols]
+    def receive_message(self, timeout=5):
+        """
+        Receive and parse a FIX message from the server
+        """
+        try:
+            self.socket.settimeout(timeout)
+            buffer = b""
+            while b"\x0110=" not in buffer:
+                data = self.socket.recv(4096)
+                if not data:
+                    break
+                buffer += data
             
-        for symbol in symbols:
-            self.send_market_data_request(symbol)
-    
-    def send_market_data_request(self, symbol):
-        """Send a market data request for a single symbol"""
-        body = (
-            f"262=MD_{self.seq_num}{self.SOH}"  # MDReqID (unique identifier)
-            f"263=1{self.SOH}"  # SubscriptionRequestType (1 = Subscribe)
-            f"264=0{self.SOH}"  # MarketDepth (0 = Full Book)
-            f"265=0{self.SOH}"  # MDUpdateType (0 = Full Refresh)
-            f"267=5{self.SOH}"  # NoMDEntryTypes (5 types)
-            f"269=0{self.SOH}"  # MDEntryType (0 = Bid)
-            f"269=1{self.SOH}"  # MDEntryType (1 = Offer)
-            f"269=PB{self.SOH}"  # MDEntryType (PB = Peg Bid)
-            f"269=PO{self.SOH}"  # MDEntryType (PO = Peg Offer)
-            f"269=PM{self.SOH}"  # MDEntryType (PM = Mid Point)
-            f"146=1{self.SOH}"  # NoRelatedSym (1 symbol)
-            f"55={symbol}{self.SOH}"  # Symbol
-        )
-        
-        msg = self.create_fix_message("V", body)
-        success = self.send_message(msg)
-        
-        if success:
-            logger.info(f"Market data request sent for {symbol}")
-        
-    def listen(self):
-        """Listen for incoming messages"""
-        logger.info("Listener thread started")
-        while self.running:
-            try:
-                # Use a timeout to allow for checking self.running periodically
-                self.socket.settimeout(1.0)
-                try:
-                    data = self.socket.recv(4096)
-                    if not data:
-                        logger.warning("Connection closed by server")
-                        self.connected = False
-                        break
-                        
-                    # Add received data to buffer
-                    self.msg_buffer += data.decode('utf-8')
-                    
-                    # Process complete messages
-                    self.process_buffer()
-                except socket.timeout:
-                    # This is expected - just check if we should continue running
+            # Process received messages
+            messages = buffer.split(b"\x0110=")
+            parsed_messages = []
+            
+            for msg in messages:
+                if not msg:
                     continue
+                # Add back the checksum part that was removed in the split
+                if msg != messages[-1]:
+                    msg = msg + b"\x0110=" + messages[messages.index(msg) + 1].split(b"\x01")[0]
                 
-            except Exception as e:
-                logger.error(f"Error receiving data: {e}")
-                self.connected = False
-                break
-                
-        logger.info("Listener thread stopped")
-    
-    def process_buffer(self):
-        """Process the message buffer for complete FIX messages"""
-        # Find the start of message
-        while f"{self.SOH}10=" in self.msg_buffer:
-            # Extract and process one message
-            msg_end = self.msg_buffer.find(self.SOH, self.msg_buffer.find(f"{self.SOH}10=") + 4)
+                # Decode and parse the message
+                try:
+                    decoded = msg.decode('utf-8')
+                    msg_parts = decoded.split("\x01")
+                    msg_dict = {}
+                    
+                    for part in msg_parts:
+                        if "=" in part:
+                            tag, value = part.split("=", 1)
+                            msg_dict[tag] = value
+                    
+                    parsed_messages.append(msg_dict)
+                except Exception as e:
+                    print(f"Error parsing message: {e}")
             
-            if msg_end != -1:
-                # Extract the complete message
-                msg = self.msg_buffer[:msg_end + 1]
-                self.msg_buffer = self.msg_buffer[msg_end + 1:]
+            return parsed_messages
+        except socket.timeout:
+            print("Socket timeout waiting for response")
+            return []
+        except Exception as e:
+            print(f"Error receiving message: {e}")
+            return []
+    
+    def logon(self):
+        """
+        Send a Logon message to establish FIX session
+        """
+        logon_fields = [
+            f"98=0",  # EncryptMethod (none)
+            f"108={self.heartbeat_interval}"  # HeartBeat interval
+        ]
+        
+        logon_msg = self.create_message("A", logon_fields)
+        if self.send_message(logon_msg):
+            print("Logon message sent")
+            
+            responses = self.receive_message()
+            for response in responses:
+                if response.get("35") == "A":
+                    self.session_established = True
+                    print("Logon successful, session established")
+                    return True
+            
+            print("Did not receive logon confirmation")
+            return False
+        else:
+            print("Failed to send logon message")
+            return False
+    
+    def heartbeat(self):
+        """
+        Send a heartbeat message
+        """
+        heartbeat_msg = self.create_message("0", [])
+        if self.send_message(heartbeat_msg):
+            print("Heartbeat sent")
+            return True
+        else:
+            print("Failed to send heartbeat")
+            return False
+    
+    def request_market_data(self, symbols=None):
+        """
+        Request market data for specific trading pairs
+        """
+        if not symbols:
+            symbols = self.trading_pairs
+        
+        # Convert symbols to Bosonic format (Base/Local)
+        formatted_symbols = []
+        for symbol in symbols:
+            if "/" in symbol:
+                formatted_symbols.append(symbol.replace("/", ""))
+        
+        md_req_id = f"MD_{int(time.time())}"  # Create unique MD request ID
+        
+        md_fields = [
+            f"262={md_req_id}",  # MDReqID
+            f"263=1",  # SubscriptionRequestType (1=Subscribe)
+            f"264=0",  # MarketDepth (0=Full book)
+            f"265=0",  # MDUpdateType (0=Full refresh)
+            f"267=2"  # NoMDEntryTypes (2 types: bid and offer)
+        ]
+        
+        # Add entry types
+        md_fields.append("269=0")  # MDEntryType (0=Bid)
+        md_fields.append("269=1")  # MDEntryType (1=Offer)
+        
+        # Add symbols
+        md_fields.append(f"146={len(formatted_symbols)}")  # NoRelatedSym
+        
+        for symbol in formatted_symbols:
+            md_fields.append(f"55={symbol}")  # Symbol
+        
+        md_request_msg = self.create_message("V", md_fields)
+        if self.send_message(md_request_msg):
+            print(f"Market data request sent for {', '.join(symbols)}")
+            
+            # Wait for and process market data response
+            responses = self.receive_message(10)  # Longer timeout for market data
+            market_data = []
+            
+            for response in responses:
+                # Check if it's a market data message
+                if response.get("35") == "W":  # Market Data Snapshot Full Refresh
+                    print("Received market data snapshot")
+                    market_data.append(response)
+                elif response.get("35") == "Y":  # Market Data Request Reject
+                    print(f"Market data request rejected: {response.get('58', 'No reason provided')}")
+            
+            return market_data
+        else:
+            print("Failed to send market data request")
+            return []
+    
+    def logout(self):
+        """
+        Send a Logout message and close the connection
+        """
+        if self.session_established:
+            logout_msg = self.create_message("5", [])
+            if self.send_message(logout_msg):
+                print("Logout message sent")
                 
-                # Process the message
-                self.handle_message(msg)
+                responses = self.receive_message()
+                for response in responses:
+                    if response.get("35") == "5":
+                        print("Logout acknowledged")
+                        break
             else:
-                # Incomplete message, wait for more data
-                break
+                print("Failed to send logout message")
+        
+        if self.socket:
+            self.socket.close()
+            print("Connection closed")
+        
+        self.session_established = False
     
-    def handle_message(self, msg):
-        """Handle a FIX message"""
-        # Log message with SOH replaced by '|' for readability
-        logger.debug("Received: " + msg.replace(self.SOH, '|'))
+    def format_market_data(self, market_data):
+        """
+        Format market data into readable output
+        """
+        if not market_data:
+            return "No market data received"
         
-        # Extract message type
-        match = re.search(f'35=([^{self.SOH}]+)', msg)
-        if not match:
-            logger.warning("Invalid message format")
-            return
-            
-        msg_type = match.group(1)
+        output = []
         
-        if msg_type == '0':  # Heartbeat
-            logger.debug("Received Heartbeat")
-        elif msg_type == '1':  # Test Request
-            # Extract TestReqID
-            match = re.search(f'112=([^{self.SOH}]+)', msg)
-            if match:
-                test_req_id = match.group(1)
-                self.send_heartbeat_response(test_req_id)
-        elif msg_type == 'A':  # Logon
-            logger.info("Logon successful")
-        elif msg_type == '5':  # Logout
-            logger.info("Received Logout")
-            self.connected = False
-        elif msg_type == 'W':  # Market Data Snapshot
-            self.handle_market_data(msg)
-        elif msg_type == 'Y':  # Market Data Request Reject
-            self.handle_market_data_reject(msg)
-    
-    def send_heartbeat_response(self, test_req_id):
-        """Send heartbeat response to a test request"""
-        body = f"112={test_req_id}{self.SOH}"  # TestReqID
-        msg = self.create_fix_message("0", body)
-        self.send_message(msg)
-    
-    def handle_market_data(self, msg):
-        """Process market data snapshot message"""
-        # Extract symbol
-        match = re.search(f'55=([^{self.SOH}]+)', msg)
-        if not match:
-            logger.warning("Symbol not found in market data message")
-            return
+        for msg in market_data:
+            symbol = msg.get("55", "Unknown")
+            entry_count = int(msg.get("268", "0"))
             
-        symbol = match.group(1)
-        
-        # Initialize data for this symbol if not exists
-        if symbol not in self.market_data:
-            self.market_data[symbol] = {'bids': [], 'asks': [], 'mid': None, 'timestamp': None}
+            output.append(f"Market data for {symbol}:")
             
-        # Get current timestamp
-        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
-        self.market_data[symbol]['timestamp'] = current_time
-        
-        # Reset current bids/asks
-        self.market_data[symbol]['bids'] = []
-        self.market_data[symbol]['asks'] = []
-        
-        # Extract number of entries
-        match = re.search(r'268=(\d+)', msg)
-        if not match:
-            logger.warning("NoMDEntries not found in market data message")
-            return
-            
-        entries_count = int(match.group(1))
-        
-        # Extract and process entries
-        entry_pattern = f'269=([^{self.SOH}]+){self.SOH}270=([^{self.SOH}]+)(?:{self.SOH}271=([^{self.SOH}]+))?'
-        for entry_match in re.finditer(entry_pattern, msg):
-            entry_type = entry_match.group(1)
-            price = float(entry_match.group(2))
-            
-            # Size might be optional
-            size = None
-            if entry_match.group(3):
-                size = float(entry_match.group(3))
-            
-            if entry_type == '0':  # Bid
-                self.market_data[symbol]['bids'].append({'price': price, 'size': size})
-            elif entry_type == '1':  # Offer
-                self.market_data[symbol]['asks'].append({'price': price, 'size': size})
-            elif entry_type == 'PM':  # Mid-Point
-                self.market_data[symbol]['mid'] = price
+            # Parse entries
+            entries = []
+            for i in range(entry_count):
+                entry_type = msg.get(f"269{i}")
+                price = msg.get(f"270{i}")
+                size = msg.get(f"271{i}")
                 
-        # Sort bids and asks
-        self.market_data[symbol]['bids'].sort(key=lambda x: x['price'], reverse=True)
-        self.market_data[symbol]['asks'].sort(key=lambda x: x['price'])
-        
-        # Display market data update
-        self.display_market_data_update(symbol)
-        
-        # Save market data to CSV
-        self.save_market_data_to_csv(symbol)
-    
-    def handle_market_data_reject(self, msg):
-        """Handle market data request rejections"""
-        # Extract reason
-        match = re.search(r'281=(\d+)', msg)
-        if match:
-            reason_code = match.group(1)
-            logger.warning(f"Market data request rejected with code: {reason_code}")
+                if entry_type == "0":
+                    entry_type = "Bid"
+                elif entry_type == "1":
+                    entry_type = "Offer"
+                elif entry_type == "PB":
+                    entry_type = "Peg Bid"
+                elif entry_type == "PO":
+                    entry_type = "Peg Offer"
+                elif entry_type == "PM":
+                    entry_type = "Peg Mid"
+                
+                if price and entry_type:
+                    entry = f"{entry_type}: {price}"
+                    if size:
+                        entry += f" (Size: {size})"
+                    entries.append(entry)
             
-        # Extract text
-        match = re.search(f'58=([^{self.SOH}]+)', msg)
-        if match:
-            text = match.group(1)
-            logger.warning(f"Rejection reason: {text}")
-    
-    def display_market_data_update(self, symbol):
-        """Display update for a specific symbol"""
-        data = self.market_data[symbol]
-        logger.info(f"Market data update for {symbol} at {data['timestamp']}")
+            output.append("\n".join(entries))
+            output.append("")
         
-        if data['bids']:
-            top_bid = data['bids'][0]['price']
-            logger.info(f"Top bid: {top_bid}")
-            
-        if data['asks']:
-            top_ask = data['asks'][0]['price']
-            logger.info(f"Top ask: {top_ask}")
-            
-        if data['mid'] is not None:
-            logger.info(f"Mid price: {data['mid']}")
-            
-        if data['bids'] and data['asks']:
-            spread = data['asks'][0]['price'] - data['bids'][0]['price']
-            logger.info(f"Spread: {spread}")
-    
-    def save_market_data_to_csv(self, symbol):
-        """Save market data for a symbol to CSV file"""
-        data = self.market_data[symbol]
-        timestamp = data['timestamp']
-        
-        # Create a directory for data if it doesn't exist
-        os.makedirs('market_data', exist_ok=True)
-        
-        # Format timestamp for filename
-        date_str = timestamp.split(' ')[0]
-        
-        # Create a dataframe for this update
-        rows = []
-        
-        # Add bids
-        for i, bid in enumerate(data['bids']):
-            rows.append({
-                'timestamp': timestamp,
-                'symbol': symbol,
-                'side': 'bid',
-                'level': i+1,
-                'price': bid['price'],
-                'size': bid['size']
-            })
-            
-        # Add asks
-        for i, ask in enumerate(data['asks']):
-            rows.append({
-                'timestamp': timestamp,
-                'symbol': symbol,
-                'side': 'ask',
-                'level': i+1,
-                'price': ask['price'],
-                'size': ask['size']
-            })
-            
-        # Add mid price
-        if data['mid'] is not None:
-            rows.append({
-                'timestamp': timestamp,
-                'symbol': symbol,
-                'side': 'mid',
-                'level': 0,
-                'price': data['mid'],
-                'size': None
-            })
-            
-        # Create dataframe
-        df = pd.DataFrame(rows)
-        
-        # Save to CSV
-        filename = f"market_data/{symbol.replace('/', '_')}_{date_str}.csv"
-        file_exists = os.path.isfile(filename)
-        
-        # Append to file if it exists, otherwise create new file with header
-        df.to_csv(filename, mode='a', header=not file_exists, index=False)
-            
-    def heartbeat_sender(self):
-        """Send heartbeats periodically"""
-        logger.info("Heartbeat sender thread started")
-        while self.running and self.connected:
-            time.sleep(25)  # Send heartbeat every 25 seconds (slightly less than the 30s interval)
-            if self.connected:
-                self.send_heartbeat()
-        logger.info("Heartbeat sender thread stopped")
-
-    def get_current_prices(self):
-        """Get the current top of book prices for all symbols"""
-        result = {}
-        for symbol, data in self.market_data.items():
-            result[symbol] = {
-                'timestamp': data['timestamp'],
-                'bid': data['bids'][0]['price'] if data['bids'] else None,
-                'ask': data['asks'][0]['price'] if data['asks'] else None,
-                'mid': data['mid']
-            }
-        return result
+        return "\n".join(output)
 
 def main():
-    """Main function to run the Bosonic client"""
-    # Load connection settings from environment variables
-    host = os.getenv("BOSONIC_HOST")
-    port = os.getenv("BOSONIC_PORT")
-    sender_comp_id = os.getenv("BOSONIC_SENDER_COMP_ID")
-    target_comp_id = os.getenv("BOSONIC_TARGET_COMP_ID")
+    """
+    Main function to execute the Bosonic client
+    """
+    # Create and connect client
+    client = BosonicClient()
     
-    # Get trading pairs from environment variable
-    trading_pairs_str = os.getenv("TRADING_PAIRS", "EUR/USD,BTC/USD,ETH/USD")
-    trading_pairs = [pair.strip() for pair in trading_pairs_str.split(",")]
-    
-    # Validate settings
-    if not all([host, port, sender_comp_id, target_comp_id]):
-        logger.error("Missing required environment variables. Check your .env file.")
-        return
-    
-    # Create client
-    client = BosionicClient(host, port, sender_comp_id, target_comp_id)
-    
-    try:
-        # Connect to server
-        if client.connect():
-            logger.info(f"Successfully connected to Bosonic at {host}:{port}")
-            
-            # Request market data
-            client.request_market_data(trading_pairs)
-            
-            # Run until user interrupts
-            try:
-                while client.connected:
-                    time.sleep(1)
-            except KeyboardInterrupt:
-                logger.info("User interrupted. Shutting down...")
-        else:
-            logger.error("Failed to connect to server")
-    
-    except Exception as e:
-        logger.error(f"Error: {e}")
-    
-    finally:
-        # Ensure clean shutdown
-        client.disconnect()
+    if client.connect():
+        try:
+            # Establish FIX session
+            if client.logon():
+                print("Successfully logged on to Bosonic FIX API")
+                
+                # Request market data for BTC/USD and ETH/USD
+                market_data = client.request_market_data()
+                
+                # Format and display the data
+                formatted_data = client.format_market_data(market_data)
+                print("\nMARKET DATA:")
+                print(formatted_data)
+                
+                # Send heartbeat
+                client.heartbeat()
+                
+                # Wait a moment to see if we get any more data
+                time.sleep(2)
+                
+            else:
+                print("Failed to establish FIX session")
+        finally:
+            # Always properly logout and close connection
+            client.logout()
+    else:
+        print("Failed to connect to Bosonic server")
 
 if __name__ == "__main__":
     main()
