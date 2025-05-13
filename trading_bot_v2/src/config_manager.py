@@ -1,4 +1,3 @@
-#config_manager.py
 #!/usr/bin/env python3
 import json
 import os
@@ -97,6 +96,31 @@ class ConfigurationManager:
         """Get list of enabled account configurations"""
         return [account for account in self.config.get('accounts', []) 
                 if account.get('enabled', True)]
+    
+    def get_all_accounts_for_timeframe(self, timeframe):
+        """
+        Get all accounts configured for a specific timeframe.
+        
+        Args:
+            timeframe: Timeframe to look for (e.g., '1h', '5m')
+            
+        Returns:
+            List of account names that support this timeframe
+        """
+        accounts = []
+        
+        # Get all enabled accounts
+        enabled_accounts = self.get_enabled_accounts()
+        
+        # Check each account if timeframe is supported
+        for account in enabled_accounts:
+            account_name = account.get('name')
+            account_timeframes = self.get_account_setting(account_name, 'timeframes', [])
+            
+            if timeframe in account_timeframes:
+                accounts.append(account_name)
+        
+        return accounts
                 
     def get_account_for_timeframe(self, timeframe):
         """Find the account responsible for a specific timeframe"""
