@@ -17,7 +17,7 @@
       "name": "default",
       "credentials_file": "credentials/default.json",
       "timeframes": ["1h", "4h", "1d"],
-      "trading_pairs": ["BTC/USDC", "ETH/USDC"],
+      "trading_pairs": ["BTC/USDT", "ETH/USDT"],
       "enabled": true,
       "trading": {
         "default_tif": "GTC",

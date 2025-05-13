@@ -201,7 +201,7 @@ class PositionWebsocketClient:
                     continue
                     
                 # Check if this is a repo symbol
-                is_repo = 'USDC110' in symbol
+                is_repo = '110' in symbol  # Updated to check for 110 suffix, works for both USDC110 and USDT110
                 base_symbol = symbol
                 
                 # If it's a repo symbol, track the base symbol for repo status
@@ -209,7 +209,8 @@ class PositionWebsocketClient:
                     parts = symbol.split('/')
                     if len(parts) > 0:
                         base_currency = parts[0]
-                        base_symbol = f"{base_currency}/USDC"
+                        quote_currency = parts[1].replace('110', '')  # Remove 110 to get the base quote currency
+                        base_symbol = f"{base_currency}/{quote_currency}"
                         self.repos[base_symbol] = True
                         self.logger.debug(f"Tracking repo for base symbol: {base_symbol}")
                 
@@ -235,16 +236,17 @@ class PositionWebsocketClient:
             symbol = content.get('symbol', '')
             
             # Process repo status updates
-            if 'USDC110' in symbol:
+            if '110' in symbol:  # Updated to check for 110 suffix, works for both USDC110 and USDT110
                 status = content.get('ordStatus')
                 base_symbol = None
                 
-                # Extract base symbol (e.g. BTC/USDC from BTC/USDC110)
+                # Extract base symbol (e.g. BTC/USDC from BTC/USDC110 or BTC/USDT from BTC/USDT110)
                 if symbol:
                     parts = symbol.split('/')
                     if len(parts) > 0:
                         base_currency = parts[0]
-                        base_symbol = f"{base_currency}/USDC"
+                        quote_currency = parts[1].replace('110', '')  # Remove 110 to get the base quote currency
+                        base_symbol = f"{base_currency}/{quote_currency}"
                 
                 if base_symbol:
                     if status == 'FILLED':
@@ -375,7 +377,8 @@ class PositionWebsocketClient:
     def set_repo_status(self, symbol, has_repo):
         """Manually set repo status for a symbol"""
         base_currency = symbol.split('/')[0] if '/' in symbol else symbol
-        base_symbol = f"{base_currency}/USDC"
+        quote_currency = symbol.split('/')[1] if '/' in symbol else "USDC"  # Default to USDC if not specified
+        base_symbol = f"{base_currency}/{quote_currency}"
         self.repos[base_symbol] = has_repo
         self.logger.info(f"Manually set repo status for {base_symbol}: {has_repo}")
         return True
@@ -406,7 +409,8 @@ class PositionWebsocketClient:
         """Check if we have an active repo for this symbol"""
         if '/' in symbol:
             base_currency = symbol.split('/')[0]
-            base_symbol = f"{base_currency}/USDC"
+            quote_currency = symbol.split('/')[1]
+            base_symbol = f"{base_currency}/{quote_currency}"
             return self.repos.get(base_symbol, False)
         return self.repos.get(symbol, False)
 

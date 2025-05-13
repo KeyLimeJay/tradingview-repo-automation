@@ -441,6 +441,38 @@ def get_jwt_token(account_name=None, config_manager=None):
     
     return token
 
+def get_repo_symbol(symbol, config_manager=None, account_name=None):
+    """
+    Get the appropriate repo symbol based on the trading pair
+    
+    Args:
+        symbol: Trading pair symbol (e.g., "BTC/USDC" or "BTC/USDT")
+        config_manager: Optional ConfigurationManager instance
+        account_name: Optional account name to get settings from
+        
+    Returns:
+        Repo symbol (e.g., "BTC/USDC110" or "BTC/USDT110")
+    """
+    try:
+        # Extract base and quote currencies from symbol
+        if '/' not in symbol:
+            return None
+            
+        parts = symbol.split('/')
+        if len(parts) != 2:
+            return None
+            
+        base_currency = parts[0]
+        quote_currency = parts[1]
+        
+        # Form repo symbol by appending '110' to the quote currency
+        repo_symbol = f"{base_currency}/{quote_currency}110"
+        
+        return repo_symbol
+    except Exception as e:
+        logger.error(f"Error generating repo symbol for {symbol}: {str(e)}")
+        return None
+
 def get_repo_details(jwt_token=None, symbol=None, logger=None, 
                      account_name=None, config_manager=None):
     """
@@ -448,7 +480,7 @@ def get_repo_details(jwt_token=None, symbol=None, logger=None,
     
     Args:
         jwt_token: JWT token for authentication
-        symbol: Repo symbol (e.g., "BTC/USDC110")
+        symbol: Trading pair symbol (e.g., "BTC/USDC" or "BTC/USDT")
         logger: Optional logger
         account_name: Optional account name to get base_url from
         config_manager: Optional ConfigurationManager instance
@@ -458,8 +490,16 @@ def get_repo_details(jwt_token=None, symbol=None, logger=None,
     """
     log = logger or logging.getLogger('trading_utils')
     
+    # Get the repo symbol (e.g., "BTC/USDC110" or "BTC/USDT110") based on the trading pair
+    repo_symbol = symbol
+    if '/' in symbol and not symbol.endswith('110'):
+        repo_symbol = get_repo_symbol(symbol, config_manager, account_name)
+        if not repo_symbol:
+            log.error(f"Could not generate repo symbol for {symbol}")
+            return None
+        
     if log:
-        log.info(f"Getting repo details for {symbol}")
+        log.info(f"Getting repo details for {repo_symbol} (from trading pair {symbol})")
     
     # Get base_url from config if provided
     if config_manager and account_name:
@@ -471,7 +511,7 @@ def get_repo_details(jwt_token=None, symbol=None, logger=None,
         username = os.getenv("API_USERNAME")
         
     # Ensure required parameters are present
-    if not all([base_url, username, symbol]):
+    if not all([base_url, username, repo_symbol]):
         log.error("Missing required parameters for repo details lookup")
         return None
     
@@ -498,11 +538,11 @@ def get_repo_details(jwt_token=None, symbol=None, logger=None,
         "userId": username,
         "contractType": "BORROW",
         "eventId": "event" + str(int(time.time())),
-        "repoSymbol": symbol
+        "repoSymbol": repo_symbol
     }
     
     # URL for repo details
-    url = f"{base_url}rest/repocontract?sortBy=id&sortDirection=DESC&status=OPEN&repoSymbol={symbol}"
+    url = f"{base_url}rest/repocontract?sortBy=id&sortDirection=DESC&status=OPEN&repoSymbol={repo_symbol}"
     
     try:
         # Make the POST request to get repo details
@@ -525,7 +565,7 @@ def get_repo_details(jwt_token=None, symbol=None, logger=None,
         
         if not repo_data.get("content") or len(repo_data["content"]) == 0:
             if log:
-                log.warning(f"No open repo found for {symbol}")
+                log.warning(f"No open repo found for {repo_symbol}")
             return None
         
         # Get the first open repo
@@ -559,7 +599,7 @@ def place_repo_order(jwt_token=None, symbol=None, quantity=None, interest_rate=N
     
     Args:
         jwt_token: JWT token (not used, kept for compatibility)
-        symbol: Repo symbol (e.g., "BTC/USDC110")
+        symbol: Trading pair symbol (e.g., "BTC/USDC" or "BTC/USDT")
         quantity: Amount to borrow
         interest_rate: Interest rate (e.g., 10%)
         custodian_id: Custodian ID
@@ -575,8 +615,16 @@ def place_repo_order(jwt_token=None, symbol=None, quantity=None, interest_rate=N
     """
     log = logger or logging.getLogger('trading_utils')
     
+    # Generate the repo symbol based on the trading pair
+    repo_symbol = symbol
+    if '/' in symbol and not symbol.endswith('110'):
+        repo_symbol = get_repo_symbol(symbol, config_manager, account_name)
+        if not repo_symbol:
+            log.error(f"Could not generate repo symbol for {symbol}")
+            return None
+        
     if log:
-        log.info(f"Placing repo order - Symbol: {symbol}, Quantity: {quantity}, Rate: {interest_rate}%")
+        log.info(f"Placing repo order - Symbol: {repo_symbol}, Quantity: {quantity}, Rate: {interest_rate}%")
     
     # Get credentials and settings from config if provided
     if config_manager and account_name:
@@ -596,7 +644,7 @@ def place_repo_order(jwt_token=None, symbol=None, quantity=None, interest_rate=N
         interest_rate = interest_rate or float(os.getenv('REPO_INTEREST_RATE', 10.0))
     
     # Check if credentials are valid
-    if not all([api_key, api_secret, custodian_id, api_url, symbol, quantity]):
+    if not all([api_key, api_secret, custodian_id, api_url, repo_symbol, quantity]):
         log.error("Missing required parameters for repo order placement")
         return None
     
@@ -605,11 +653,12 @@ def place_repo_order(jwt_token=None, symbol=None, quantity=None, interest_rate=N
     endpoint = "/rest/orders"
     
     # Validate input
-    if not symbol or not '/' in symbol:
-        raise ValueError(f"Invalid symbol format: {symbol}. Expected format: BASE/QUOTE110")
+    if not repo_symbol or not '/' in repo_symbol:
+        raise ValueError(f"Invalid repo symbol format: {repo_symbol}. Expected format: BASE/QUOTE110")
     
-    # Extract currencies from symbol
-    base_currency = symbol.split('/')[0]
+    # Extract currencies from repo symbol
+    base_currency = repo_symbol.split('/')[0]
+    quote_currency_with_110 = repo_symbol.split('/')[1]
     
     # Check if a repo already exists for this symbol
     jwt_token = get_jwt_token(account_name, config_manager)
@@ -618,7 +667,7 @@ def place_repo_order(jwt_token=None, symbol=None, quantity=None, interest_rate=N
             jwt_token, symbol, log, account_name, config_manager)
         if existing_repo:
             if log:
-                log.warning(f"SAFEGUARD: Repo already exists for {symbol} (ID: {existing_repo['id']}). Skipping new repo creation.")
+                log.warning(f"SAFEGUARD: Repo already exists for {repo_symbol} (ID: {existing_repo['id']}). Skipping new repo creation.")
             return {"status": "skipped", "reason": "repo_exists", "existing_repo_id": existing_repo['id']}
     
     # Generate a unique repo client order ID
@@ -629,9 +678,9 @@ def place_repo_order(jwt_token=None, symbol=None, quantity=None, interest_rate=N
         "side": side,
         "price": float(interest_rate),
         "custodianId": custodian_id,
-        "symbol": symbol,
+        "symbol": repo_symbol,
         "currency": base_currency,
-        "currency2": "USDC110",
+        "currency2": quote_currency_with_110,
         "orderQty": float(quantity),
         "clOrdId": clordid,
         "orderType": "LIMIT",
@@ -688,8 +737,16 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
     """
     log = logger or logging.getLogger('trading_utils')
     
+    # Get the repo symbol based on the trading pair
+    repo_symbol = symbol
+    if '/' in symbol and not symbol.endswith('110'):
+        repo_symbol = get_repo_symbol(symbol, config_manager, account_name)
+        if not repo_symbol:
+            log.error(f"Could not generate repo symbol for {symbol}")
+            return False
+    
     print("\n\n===== REPO CLOSING DIAGNOSTIC ANALYSIS =====")
-    print(f"Attempting to close repo for {symbol}")
+    print(f"Attempting to close repo for {repo_symbol}")
     
     import sys
     import time
@@ -749,14 +806,14 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
     print(f"Using username: {username}")
     
     # Configure repo details request
-    repo_url = f"{base_url}rest/repocontract?sortBy=id&sortDirection=DESC&status=OPEN&repoSymbol={symbol}"
+    repo_url = f"{base_url}rest/repocontract?sortBy=id&sortDirection=DESC&status=OPEN&repoSymbol={repo_symbol}"
     print(f"Repo details URL: {repo_url}")
     
     payload = {
         "userId": username,
         "contractType": "BORROW",
         "eventId": "event" + str(int(time.time())),
-        "repoSymbol": symbol
+        "repoSymbol": repo_symbol
     }
     
     try:
@@ -785,8 +842,8 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
             
             # Check for empty response
             if not repo_data.get("content") or len(repo_data["content"]) == 0:
-                log.warning(f"No open repo found for {symbol}")
-                print(f"No open repo found for {symbol}")
+                log.warning(f"No open repo found for {repo_symbol}")
+                print(f"No open repo found for {repo_symbol}")
                 return True
             
             # Found repos!
@@ -945,7 +1002,7 @@ def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secre
                 "userId": username,
                 "contractType": "BORROW",
                 "eventId": verify_event_id,
-                "repoSymbol": symbol
+                "repoSymbol": repo_symbol
             }
             
             # Make the request to check if the repo is still open

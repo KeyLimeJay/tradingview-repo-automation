@@ -1,4 +1,3 @@
-#trading_bot.py
 #!/usr/bin/env python3
 from flask import Flask, request, jsonify
 import json
@@ -14,7 +13,7 @@ from collections import OrderedDict
 from src.position_websocket import PositionWebsocketClient
 from src.trading_utils import (
     place_order, OrderPlacementError, place_repo_order, 
-    close_repo, get_jwt_token, get_repo_details
+    close_repo, get_jwt_token, get_repo_details, get_repo_symbol
 )
 import requests
 from src.account_manager import AccountManager
@@ -141,15 +140,9 @@ class TradingBot:
                 self.logger.warning(f"Received invalid timeFrame: {data['timeFrame']}")
                 raise ValueError(f"Invalid timeFrame: {data['timeFrame']}. Expected one of {valid_timeframes}")
                 
-        # Get account for this timeframe
-        account_name = self.config_manager.get_account_for_timeframe(data['timeFrame'])
-        if not account_name:
-            self.logger.warning(f"No account configured for timeframe: {data['timeFrame']}")
-            raise ValueError(f"No account configured for timeframe: {data['timeFrame']}")
-            
-        # Add account to the data for later use
-        data['account'] = account_name
-            
+        # Get all accounts for this timeframe
+        accounts_for_timeframe = self.config_manager.get_all_accounts_for_timeframe(data['timeFrame'])
+        
         # Enhanced duplicate signal detection with time-based threshold
         current_time = time.time()
         signal_key = f"{data['symbol']}:{data['message']}:{data['timeFrame']}"
@@ -159,16 +152,17 @@ class TradingBot:
             time_diff = current_time - last_time
             
             # Check for repeated signals (exact match) by account
-            if account_name not in self.last_signals:
-                self.last_signals[account_name] = {}
+            for account_name in accounts_for_timeframe:
+                if account_name not in self.last_signals:
+                    self.last_signals[account_name] = {}
+                    
+                account_signals = self.last_signals[account_name]
                 
-            account_signals = self.last_signals[account_name]
-            
-            if (data['symbol'] in account_signals and 
-                account_signals[data['symbol']].get('message') == data['message'] and
-                account_signals[data['symbol']].get('timeFrame') == data['timeFrame']):
-                self.logger.warning(f"Rejected repeated {data['message']} signal for {data['symbol']} on {data['timeFrame']} (account: {account_name})")
-                raise ValueError(f"Duplicate signal rejected: {data['message']}")
+                if (data['symbol'] in account_signals and 
+                    account_signals[data['symbol']].get('message') == data['message'] and
+                    account_signals[data['symbol']].get('timeFrame') == data['timeFrame']):
+                    self.logger.warning(f"Rejected repeated {data['message']} signal for {data['symbol']} on {data['timeFrame']} (account: {account_name})")
+                    raise ValueError(f"Duplicate signal rejected: {data['message']}")
                 
             # Reject signals that arrive too quickly
             min_signal_interval = float(self.config_manager.get_global_setting('min_signal_interval', 5.0))
@@ -216,7 +210,9 @@ class TradingBot:
         
         # Get trading settings from configuration
         base_currency = symbol.split('/')[0]
-        repo_symbol = f"{base_currency}/USDC110"
+        quote_currency = symbol.split('/')[1]
+        # Dynamic repo symbol based on quote currency
+        repo_symbol = get_repo_symbol(symbol)
         
         # Get min quantity from configuration
         min_quantity = self.config_manager.get_currency_setting(
@@ -428,443 +424,27 @@ class TradingBot:
             symbol = data['symbol']
             message = data['message']
             timeframe = data['timeFrame']
-            account_name = data['account']  # Set during validation
-            side = self.determine_trade_side(message)
             
-            # Get the position client for this account
-            position_client = self.account_manager.get_position_client(account_name)
-            if not position_client:
-                self.logger.error(f"[{request_id}] No position client for account: {account_name}")
-                return jsonify({"success": False, "error": f"No position client for account: {account_name}"}), 500
-                
-            # Get the account config
-            account = self.config_manager.get_account(account_name)
-            if not account:
-                self.logger.error(f"[{request_id}] No account configuration for: {account_name}")
-                return jsonify({"success": False, "error": f"No account configuration for: {account_name}"}), 500
+            # Get all accounts for this timeframe - MODIFIED TO SUPPORT MULTIPLE ACCOUNTS
+            accounts_for_timeframe = self.config_manager.get_all_accounts_for_timeframe(timeframe)
             
-            # Initialize account signals tracking if not exists
-            if account_name not in self.last_signals:
-                self.last_signals[account_name] = {}
-                
-            # Cancel any partially filled orders from previous signals if this is a reversal
-            if (symbol in self.last_signals[account_name] and 
-                self.last_signals[account_name][symbol].get('message') != message):
-                reversed_side = 'ASK' if side == 'BID' else 'BID'
-                self.cancel_partially_filled_orders(symbol, reversed_side, account_name)
+            if not accounts_for_timeframe:
+                self.logger.error(f"[{request_id}] No accounts configured for timeframe: {timeframe}")
+                return jsonify({"success": False, "error": f"No accounts configured for timeframe: {timeframe}"}), 400
             
-            # Force position refresh before decision making
-            position_client.refresh_positions()
-            
-            trade_sequence = self.determine_trade_type(symbol, side, timeframe, account_name)
-            
-            # Check if trade sequence is empty (e.g., when skipping due to existing position)
-            if not trade_sequence['steps']:
-                self.logger.info(f"[{request_id}] No trade steps to execute - skipping order placement")
-                # Update last signal to prevent repeated processing
-                self.last_signals[account_name][symbol] = {
-                    'message': message,
-                    'timeFrame': timeframe,
-                    'timestamp': time.time()
-                }
-                
-                # If there's a message in the trade_sequence, include it in the response
-                response_data = {
-                    "success": True,
-                    "message": trade_sequence.get('message', f"No action needed for {symbol} with {message} signal"),
-                    "current_position": position_client.get_truncated_position(symbol),
-                    "account": account_name
-                }
-                return jsonify(response_data), 200
-            
-            # Identify Event 4 scenario for special handling
-            is_event_4 = trade_sequence.get('event') == 'Event 4'
-            post_repo_indices = []
-            
-            # For Event 4, identify all post-repo sell operations
-            if is_event_4 and 'repo_step_index' in trade_sequence:
-                repo_index = trade_sequence['repo_step_index']
-                # Get all indices of open_short operations that come after the repo operation
-                post_repo_indices = [i for i, step in enumerate(trade_sequence['steps']) 
-                                if i > repo_index and step == 'open_short']
-                self.logger.info(f"[{request_id}][{account_name}] Event 4 detected with post-repo indices: {post_repo_indices}")
-            
-            price = self.format_price(data['price'], symbol, account_name)
-            position_sizes = trade_sequence['position_size']
-            
-            # Build planned changes for verification
-            planned_changes = []
-            for i, step in enumerate(trade_sequence['steps']):
-                if step == 'open_long':
-                    planned_changes.append(('BID', position_sizes[i]))
-                elif step == 'open_short':
-                    planned_changes.append(('ASK', position_sizes[i]))
-            
-            # Verify position limits before executing
-            if planned_changes:
-                is_safe, limit_message = self.verify_position_limits(symbol, planned_changes, account_name)
-                if not is_safe:
-                    self.logger.warning(f"[{request_id}] {limit_message}")
-                    self.last_signals[account_name][symbol] = {
-                        'message': message,
-                        'timeFrame': timeframe,
-                        'timestamp': time.time()
-                    }
-                    return jsonify({"success": False, "error": limit_message}), 400
-            
-            # Dictionary to track currency repo operations for this request
-            # This ensures we don't try to open more than one repo for the same currency 
-            # in a single request, even if logic somehow determines we should
-            repo_operations = {}
-            
-            # Check if sequential execution is required
-            sequential_required = trade_sequence.get('sequential', False)
-            
-            # Always use GTC (Good-Till-Canceled) for all orders
-            tif = 'GTC'
-            
-            # Execution tracking flags
-            trades_executed = 0
-            post_repo_trades_executed = 0
-            
-            responses = []
-            for i, step in enumerate(trade_sequence['steps']):
-                try:
-                    # Check if this is a post-repo sell operation for Event 4
-                    is_post_repo_trade = is_event_4 and i in post_repo_indices
-                    
-                    self.logger.info(f"[{request_id}][{account_name}] Executing step {i+1}: {step}" + 
-                                (f" (post-repo trade #{post_repo_indices.index(i)+1})" if is_post_repo_trade else ""))
-                    
-                    if step == 'open_long':
-                        response = place_order(
-                            symbol=symbol,
-                            side='BID',
-                            price=price,
-                            quantity=position_sizes[i],
-                            config_manager=self.config_manager,
-                            account_name=account_name,
-                            tif=tif  # Always use GTC
-                        )
-                        
-                        if not response:
-                            error_msg = f"Step {step} failed. Order placement error."
-                            self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
-                            
-                            # If we need all steps to execute and one fails, handle the error
-                            if sequential_required:
-                                responses.append({'step': step, 'error': error_msg})
-                            
-                        else:
-                            responses.append({'step': step, 'response': response})
-                            trades_executed += 1
-
-                        # Position verification after execution
-                        time.sleep(1)  # Wait for execution to reflect in positions
-                        position_client.refresh_positions()
-                        current_position = position_client.get_truncated_position(symbol)
-                        strict_limit = self.get_strict_limit(symbol, account_name)
-                        
-                        if current_position >= strict_limit:
-                            self.logger.warning(f"[{request_id}][{account_name}] Position limit reached after {step}: {current_position} >= {strict_limit}")
-                            if sequential_required and i < len(trade_sequence['steps']) - 1:
-                                self.logger.warning(f"[{request_id}][{account_name}] Skipping remaining steps to avoid exceeding position limits")
-                                break  # Skip remaining steps
-                        
-                    elif step == 'open_short':
-                        # For post-repo trades in Event 4, log extra debug information
-                        if is_post_repo_trade:
-                            self.logger.info(f"[{request_id}][{account_name}] Executing post-repo short #{post_repo_indices.index(i)+1} with quantity {position_sizes[i]}")
-                            # Add extra delay before post-repo sells
-                            time.sleep(2)  
-                            position_client.refresh_positions()
-                            current_position = position_client.get_truncated_position(symbol)
-                            self.logger.info(f"[{request_id}][{account_name}] Current position before post-repo sell #{post_repo_indices.index(i)+1}: {current_position}")
-                        
-                        response = place_order(
-                            symbol=symbol,
-                            side='ASK',
-                            price=price,
-                            quantity=position_sizes[i],
-                            config_manager=self.config_manager,
-                            account_name=account_name,
-                            tif=tif  # Always use GTC
-                        )
-                        
-                        if not response:
-                            error_msg = f"Step {step} failed. Order placement error."
-                            self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
-                            
-                            # If we need all steps to execute, handle the error
-                            if sequential_required:
-                                responses.append({'step': step, 'error': error_msg})
-                                if is_post_repo_trade:
-                                    self.logger.error(f"[{request_id}][{account_name}] Post-repo short #{post_repo_indices.index(i)+1} failed")
-                        else:
-                            if is_post_repo_trade:
-                                post_repo_trades_executed += 1
-                                responses.append({
-                                    'step': step, 
-                                    'response': response, 
-                                    'post_repo_index': post_repo_indices.index(i)+1
-                                })
-                                self.logger.info(f"[{request_id}][{account_name}] Post-repo short #{post_repo_indices.index(i)+1} executed successfully")
-                            else:
-                                responses.append({'step': step, 'response': response})
-                                trades_executed += 1
-                        
-                        # Position verification after execution
-                        time.sleep(1)  # Wait for execution to reflect in positions
-                        position_client.refresh_positions()
-                        if is_post_repo_trade:
-                            current_position = position_client.get_truncated_position(symbol)
-                            self.logger.info(f"[{request_id}][{account_name}] Position after post-repo sell #{post_repo_indices.index(i)+1}: {current_position}")
-                    
-                    elif step == 'open_repo':
-                        # Check for existing repo to prevent duplicates
-                        repo_details = trade_sequence.get('repo_details')
-                        if not repo_details:
-                            self.logger.error(f"[{request_id}][{account_name}] Missing repo details for open_repo step")
-                            if sequential_required:
-                                return jsonify({"success": False, "error": "Missing repo details"}), 500
-                            continue
-                            
-                        repo_symbol = repo_details['symbol']
-                        base_currency = repo_symbol.split('/')[0]
-                        
-                        # Check if we already processed a repo operation for this currency in this request
-                        if base_currency in repo_operations:
-                            self.logger.warning(f"[{request_id}][{account_name}] Already processed repo for {base_currency} in this request, skipping duplicate")
-                            responses.append({
-                                'step': step, 
-                                'skipped': True, 
-                                'reason': f'Already processed repo for {base_currency} in this request'
-                            })
-                            continue
-                        
-                        # Triple-check repo status using our comprehensive verification
-                        if self.verify_repo_status(symbol, account_name):
-                            self.logger.warning(f"[{request_id}][{account_name}] Skipping repo open - repo already exists for {symbol}")
-                            responses.append({
-                                'step': step, 
-                                'skipped': True, 
-                                'reason': 'Repo already exists'
-                            })
-                            # Mark this currency as processed to prevent duplicates
-                            repo_operations[base_currency] = 'skipped'
-                            continue
-                        
-                        # Use config-driven repo operations
-                        self.logger.info(f"[{request_id}][{account_name}] Using API key authentication for repo operation")
-                        response = place_repo_order(
-                            symbol=repo_details['symbol'],
-                            quantity=repo_details['quantity'],
-                            interest_rate=repo_details['interest_rate'],
-                            config_manager=self.config_manager,
-                            account_name=account_name,
-                            logger=self.logger
-                        )
-                        
-                        # Mark this currency as processed to prevent duplicates
-                        repo_operations[base_currency] = 'processed'
-                        
-                        # Check if step failed
-                        if not response and sequential_required:
-                            error_msg = f"Step {step} failed. Aborting subsequent steps."
-                            self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
-                            return jsonify({"success": False, "error": error_msg}), 500
-                        
-                        # Check if the response indicates an existing repo was found
-                        if isinstance(response, dict) and response.get('status') == 'skipped' and response.get('reason') == 'repo_exists':
-                            self.logger.warning(f"[{request_id}][{account_name}] Repo already exists for {repo_symbol} (direct API check)")
-                            responses.append({
-                                'step': step, 
-                                'skipped': True, 
-                                'reason': 'Repo already exists (API verification)'
-                            })
-                        else:
-                            responses.append({'step': step, 'response': response})
-                            
-                        # Special handling for Event 4 post-repo operations
-                        if is_event_4 and i == repo_index:
-                            self.logger.info(f"[{request_id}][{account_name}] Event 4 repo operation completed, preparing for post-repo sells")
-                            # Add extra delay to ensure repo is fully processed
-                            time.sleep(3)  # Longer delay after repo operation for Event 4
-                            position_client.refresh_positions()
-                            current_position = position_client.get_truncated_position(symbol)
-                            self.logger.info(f"[{request_id}][{account_name}] Position after repo: {current_position}")
-                            repo_status = self.verify_repo_status(symbol, account_name)
-                            self.logger.info(f"[{request_id}][{account_name}] Repo status after operation: {repo_status}")
-                                
-                        # Refresh position data after repo operation
-                        time.sleep(1)
-                        position_client.refresh_positions()
-                    
-                    elif step == 'close_repo':
-                        # Close repo operation
-                        self.logger.info(f"[{request_id}][{account_name}] Executing step {i+1}: {step}")
-                        repo_symbol = position_sizes[i]  # In this case, position_sizes[i] contains the repo symbol
-                        base_currency = repo_symbol.split('/')[0]
-                        
-                        # Check if we already processed a repo operation for this currency in this request
-                        if base_currency in repo_operations:
-                            self.logger.warning(f"[{request_id}][{account_name}] Already processed repo for {base_currency} in this request, proceeding with caution")
-                        
-                        # Verify repo exists before trying to close it
-                        if not self.verify_repo_status(symbol, account_name):
-                            self.logger.warning(f"[{request_id}][{account_name}] No repo exists for {symbol}, skipping close_repo")
-                            responses.append({
-                                'step': step, 
-                                'skipped': True, 
-                                'reason': 'No repo exists to close'
-                            })
-                            continue
-                        
-                        # Use config-driven repo operations
-                        success = close_repo(
-                            symbol=repo_symbol,
-                            logger=self.logger,
-                            config_manager=self.config_manager,
-                            account_name=account_name
-                        )
-                        
-                        # Mark this currency as processed
-                        repo_operations[base_currency] = 'closed'
-                        
-                        if not success and sequential_required:
-                            error_msg = f"Step {step} failed. Aborting subsequent steps."
-                            self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
-                            return jsonify({"success": False, "error": error_msg}), 500
-                            
-                        responses.append({'step': step, 'success': success})
-                        
-                        # Refresh position data after repo operation
-                        time.sleep(1)
-                        position_client.refresh_positions()
-                        
-                except OrderPlacementError as e:
-                    error_msg = f"Failed at step {step}: {str(e)}"
-                    self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
-                    
-                    if sequential_required:
-                        responses.append({'step': step, 'error': str(e)})
-                        # Note: We don't return error immediately to allow closing repo logic to execute
-                    else:
-                        responses.append({'step': step, 'error': str(e)})
-                    
-                except Exception as e:
-                    error_msg = f"Unexpected error at step {step}: {str(e)}"
-                    self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
-                    
-                    if sequential_required:
-                        responses.append({'step': step, 'error': str(e)})
-                        # Note: We don't return error immediately to allow closing repo logic to execute
-                    else:
-                        responses.append({'step': step, 'error': str(e)})
-            
-            # Event 4 execution summary (only for Event 4)
-            if is_event_4:
-                self.logger.info(f"[{request_id}][{account_name}] Event 4 execution summary:")
-                self.logger.info(f"[{request_id}][{account_name}] - Total trades executed: {trades_executed}")
-                self.logger.info(f"[{request_id}][{account_name}] - Post-repo trades executed: {post_repo_trades_executed}")
-                self.logger.info(f"[{request_id}][{account_name}] - Expected post-repo trades: {len(post_repo_indices)}")
-                
-                # Only run fallback mechanism if the main sequence didn't execute all required sells
-                if post_repo_trades_executed < len(post_repo_indices):
-                    self.logger.warning(f"[{request_id}][{account_name}] Some post-repo sells did not execute. Running fallback mechanism.")
-                    
-                    # Get min quantity from configuration
-                    base_currency = symbol.split('/')[0]
-                    min_quantity = self.config_manager.get_currency_setting(
-                        account_name, base_currency, 'min_quantity', 0.001)
-                    
-                    # Short delay to ensure proper sequence
-                    time.sleep(3)
-                    
-                    # Calculate how many sells we still need to execute
-                    remaining_sells = len(post_repo_indices) - post_repo_trades_executed
-                    self.logger.info(f"[{request_id}][{account_name}] Need to execute {remaining_sells} more sell(s)")
-                    
-                    # Make first post-repo sell if needed
-                    if remaining_sells > 0:
-                        try:
-                            self.logger.info(f"[{request_id}][{account_name}] FORCING first post-repo sell with quantity {min_quantity}")
-                            first_sell_response = place_order(
-                                symbol=symbol,
-                                side='ASK',
-                                price=price,
-                                quantity=min_quantity,
-                                config_manager=self.config_manager,
-                                account_name=account_name,
-                                tif=tif
-                            )
-                            if first_sell_response:
-                                self.logger.info(f"[{request_id}][{account_name}] FORCED first post-repo sell succeeded")
-                                responses.append({
-                                    'step': 'open_short',
-                                    'response': first_sell_response,
-                                    'forced_first_sell': True
-                                })
-                                remaining_sells -= 1
-                        except Exception as e:
-                            self.logger.error(f"[{request_id}][{account_name}] Error in FORCED first post-repo sell: {str(e)}")
-                            
-                    # Short delay between sells
-                    time.sleep(2)
-                    
-                    # Make second post-repo sell if needed
-                    if remaining_sells > 0:
-                        try:
-                            self.logger.info(f"[{request_id}][{account_name}] FORCING second post-repo sell with quantity {min_quantity}")
-                            second_sell_response = place_order(
-                                symbol=symbol,
-                                side='ASK',
-                                price=price,
-                                quantity=min_quantity,
-                                config_manager=self.config_manager,
-                                account_name=account_name,
-                                tif=tif
-                            )
-                            if second_sell_response:
-                                self.logger.info(f"[{request_id}][{account_name}] FORCED second post-repo sell succeeded")
-                                responses.append({
-                                    'step': 'open_short',
-                                    'response': second_sell_response,
-                                    'forced_second_sell': True
-                                })
-                        except Exception as e:
-                            self.logger.error(f"[{request_id}][{account_name}] Error in FORCED second post-repo sell: {str(e)}")
-
-            # Update last signal after trade execution
-            self.last_signals[account_name][symbol] = {
-                'message': message,
-                'timeFrame': timeframe,
-                'timestamp': time.time()
-            }
-
-            # Final position verification
-            time.sleep(1)
-            position_client.refresh_positions()
-            final_position = position_client.get_truncated_position(symbol)
-
+            # Process the signal for each account with this timeframe
             response_data = {
                 "success": True,
-                "account": account_name,
-                "orders": responses,
-                "message": f"Executed trade sequence: {', '.join(trade_sequence['steps'])}",
-                "final_position": final_position,
-                "event": trade_sequence.get('event', 'Unknown')
+                "message": f"Signal processed for {len(accounts_for_timeframe)} accounts",
+                "accounts": []
             }
-
-            # For Event 4, add post-repo trade summary to response
-            if is_event_4:
-                response_data["post_repo_trades"] = {
-                    "expected": len(post_repo_indices),
-                    "executed": post_repo_trades_executed
-                }
-
-            self.logger.info(f"[{request_id}][{account_name}] Trade sequence executed with {len(responses)} responses")
-            self.logger.info(f"[{request_id}][{account_name}] Final position after trade: {final_position}")
+            
+            for account_name in accounts_for_timeframe:
+                account_response = self._process_signal_for_account(
+                    request_id, account_name, symbol, message, timeframe, data
+                )
+                response_data["accounts"].append(account_response)
+            
             return jsonify(response_data), 200
             
         except Exception as e:
@@ -873,50 +453,510 @@ class TradingBot:
             
         finally:
             self.webhook_lock.release()
+
+    def _process_signal_for_account(self, request_id, account_name, symbol, message, timeframe, data):
+        """Process a trading signal for a specific account."""
+        # Check if the account is enabled
+        account = self.config_manager.get_account(account_name)
+        if not account or not account.get('enabled', False):
+            self.logger.warning(f"[{request_id}] Account {account_name} is disabled or not found")
+            return {
+                "account": account_name,
+                "success": False,
+                "error": "Account is disabled or not found"
+            }
             
-    def get_positions(self):
-            """Get current positions for all trading pairs across all accounts."""
-            try:
-                positions_data = {'accounts': {}}
+        # Check if the symbol is in the account's trading pairs
+        trading_pairs = self.config_manager.get_account_setting(account_name, 'trading_pairs', [])
+        if symbol not in trading_pairs:
+            self.logger.warning(f"[{request_id}] Symbol {symbol} not in trading pairs for account {account_name}")
+            return {
+                "account": account_name,
+                "success": False, 
+                "error": f"Symbol {symbol} not supported for this account"
+            }
+            
+        # Get the position client for this account
+        position_client = self.account_manager.get_position_client(account_name)
+        if not position_client:
+            self.logger.error(f"[{request_id}] No position client for account: {account_name}")
+            return {
+                "account": account_name,
+                "success": False,
+                "error": f"No position client for account: {account_name}"
+            }
                 
-                # Get positions for each account
-                for account_name in self.config_manager.get_enabled_accounts():
-                    account_name = account_name.get('name')
-                    position_client = self.account_manager.get_position_client(account_name)
-                    if not position_client:
+        # Initialize account signals tracking if not exists
+        if account_name not in self.last_signals:
+            self.last_signals[account_name] = {}
+            
+        # Cancel any partially filled orders from previous signals if this is a reversal
+        side = self.determine_trade_side(message)
+        if (symbol in self.last_signals[account_name] and 
+            self.last_signals[account_name][symbol].get('message') != message):
+            reversed_side = 'ASK' if side == 'BID' else 'BID'
+            self.cancel_partially_filled_orders(symbol, reversed_side, account_name)
+        
+        # Force position refresh before decision making
+        position_client.refresh_positions()
+        
+        trade_sequence = self.determine_trade_type(symbol, side, timeframe, account_name)
+        
+        # Check if trade sequence is empty (e.g., when skipping due to existing position)
+        if not trade_sequence['steps']:
+            self.logger.info(f"[{request_id}] No trade steps to execute for {account_name} - skipping order placement")
+            # Update last signal to prevent repeated processing
+            self.last_signals[account_name][symbol] = {
+                'message': message,
+                'timeFrame': timeframe,
+                'timestamp': time.time()
+            }
+            
+            return {
+                "account": account_name,
+                "success": True,
+                "message": trade_sequence.get('message', f"No action needed for {symbol} with {message} signal"),
+                "current_position": position_client.get_truncated_position(symbol)
+            }
+        
+        # Identify Event 4 scenario for special handling
+        is_event_4 = trade_sequence.get('event') == 'Event 4'
+        post_repo_indices = []
+        
+        # For Event 4, identify all post-repo sell operations
+        if is_event_4 and 'repo_step_index' in trade_sequence:
+            repo_index = trade_sequence['repo_step_index']
+            # Get all indices of open_short operations that come after the repo operation
+            post_repo_indices = [i for i, step in enumerate(trade_sequence['steps']) 
+                            if i > repo_index and step == 'open_short']
+            self.logger.info(f"[{request_id}][{account_name}] Event 4 detected with post-repo indices: {post_repo_indices}")
+        
+        price = self.format_price(data['price'], symbol, account_name)
+        position_sizes = trade_sequence['position_size']
+        
+        # Build planned changes for verification
+        planned_changes = []
+        for i, step in enumerate(trade_sequence['steps']):
+            if step == 'open_long':
+                planned_changes.append(('BID', position_sizes[i]))
+            elif step == 'open_short':
+                planned_changes.append(('ASK', position_sizes[i]))
+        
+        # Verify position limits before executing
+        if planned_changes:
+            is_safe, limit_message = self.verify_position_limits(symbol, planned_changes, account_name)
+            if not is_safe:
+                self.logger.warning(f"[{request_id}] {limit_message}")
+                self.last_signals[account_name][symbol] = {
+                    'message': message,
+                    'timeFrame': timeframe,
+                    'timestamp': time.time()
+                }
+                return {
+                    "account": account_name,
+                    "success": False, 
+                    "error": limit_message
+                }
+        
+        # Dictionary to track currency repo operations for this request
+        # This ensures we don't try to open more than one repo for the same currency 
+        # in a single request, even if logic somehow determines we should
+        repo_operations = {}
+        
+        # Check if sequential execution is required
+        sequential_required = trade_sequence.get('sequential', False)
+        
+        # Always use GTC (Good-Till-Canceled) for all orders
+        tif = 'GTC'
+        
+        # Execution tracking flags
+        trades_executed = 0
+        post_repo_trades_executed = 0
+        
+        responses = []
+        for i, step in enumerate(trade_sequence['steps']):
+            try:
+                # Check if this is a post-repo sell operation for Event 4
+                is_post_repo_trade = is_event_4 and i in post_repo_indices
+                
+                self.logger.info(f"[{request_id}][{account_name}] Executing step {i+1}: {step}" + 
+                            (f" (post-repo trade #{post_repo_indices.index(i)+1})" if is_post_repo_trade else ""))
+                
+                if step == 'open_long':
+                    response = place_order(
+                        symbol=symbol,
+                        side='BID',
+                        price=price,
+                        quantity=position_sizes[i],
+                        config_manager=self.config_manager,
+                        account_name=account_name,
+                        tif=tif  # Always use GTC
+                    )
+                    
+                    if not response:
+                        error_msg = f"Step {step} failed. Order placement error."
+                        self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
+                        
+                        # If we need all steps to execute and one fails, handle the error
+                        if sequential_required:
+                            responses.append({'step': step, 'error': error_msg})
+                        
+                    else:
+                        responses.append({'step': step, 'response': response})
+                        trades_executed += 1
+
+                    # Position verification after execution
+                    time.sleep(1)  # Wait for execution to reflect in positions
+                    position_client.refresh_positions()
+                    current_position = position_client.get_truncated_position(symbol)
+                    strict_limit = self.get_strict_limit(symbol, account_name)
+                    
+                    if current_position >= strict_limit:
+                        self.logger.warning(f"[{request_id}][{account_name}] Position limit reached after {step}: {current_position} >= {strict_limit}")
+                        if sequential_required and i < len(trade_sequence['steps']) - 1:
+                            self.logger.warning(f"[{request_id}][{account_name}] Skipping remaining steps to avoid exceeding position limits")
+                            break  # Skip remaining steps
+                    
+                elif step == 'open_short':
+                    # For post-repo trades in Event 4, log extra debug information
+                    if is_post_repo_trade:
+                        self.logger.info(f"[{request_id}][{account_name}] Executing post-repo short #{post_repo_indices.index(i)+1} with quantity {position_sizes[i]}")
+                        # Add extra delay before post-repo sells
+                        time.sleep(2)  
+                        position_client.refresh_positions()
+                        current_position = position_client.get_truncated_position(symbol)
+                        self.logger.info(f"[{request_id}][{account_name}] Current position before post-repo sell #{post_repo_indices.index(i)+1}: {current_position}")
+                    
+                    response = place_order(
+                        symbol=symbol,
+                        side='ASK',
+                        price=price,
+                        quantity=position_sizes[i],
+                        config_manager=self.config_manager,
+                        account_name=account_name,
+                        tif=tif  # Always use GTC
+                    )
+                    
+                    if not response:
+                        error_msg = f"Step {step} failed. Order placement error."
+                        self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
+                        
+                        # If we need all steps to execute, handle the error
+                        if sequential_required:
+                            responses.append({'step': step, 'error': error_msg})
+                            if is_post_repo_trade:
+                                self.logger.error(f"[{request_id}][{account_name}] Post-repo short #{post_repo_indices.index(i)+1} failed")
+                    else:
+                        if is_post_repo_trade:
+                            post_repo_trades_executed += 1
+                            responses.append({
+                                'step': step, 
+                                'response': response, 
+                                'post_repo_index': post_repo_indices.index(i)+1
+                            })
+                            self.logger.info(f"[{request_id}][{account_name}] Post-repo short #{post_repo_indices.index(i)+1} executed successfully")
+                        else:
+                            responses.append({'step': step, 'response': response})
+                            trades_executed += 1
+                    
+                    # Position verification after execution
+                    time.sleep(1)  # Wait for execution to reflect in positions
+                    position_client.refresh_positions()
+                    if is_post_repo_trade:
+                        current_position = position_client.get_truncated_position(symbol)
+                        self.logger.info(f"[{request_id}][{account_name}] Position after post-repo sell #{post_repo_indices.index(i)+1}: {current_position}")
+                
+                elif step == 'open_repo':
+                    # Check for existing repo to prevent duplicates
+                    repo_details = trade_sequence.get('repo_details')
+                    if not repo_details:
+                        self.logger.error(f"[{request_id}][{account_name}] Missing repo details for open_repo step")
+                        if sequential_required:
+                            return {"account": account_name, "success": False, "error": "Missing repo details"}
                         continue
                         
-                    # Force refresh positions before reporting
+                    repo_symbol = repo_details['symbol']
+                    base_currency = repo_symbol.split('/')[0]
+                    
+                    # Check if we already processed a repo operation for this currency in this request
+                    if base_currency in repo_operations:
+                        self.logger.warning(f"[{request_id}][{account_name}] Already processed repo for {base_currency} in this request, skipping duplicate")
+                        responses.append({
+                            'step': step, 
+                            'skipped': True, 
+                            'reason': f'Already processed repo for {base_currency} in this request'
+                        })
+                        continue
+                    
+                    # Triple-check repo status using our comprehensive verification
+                    if self.verify_repo_status(symbol, account_name):
+                        self.logger.warning(f"[{request_id}][{account_name}] Skipping repo open - repo already exists for {symbol}")
+                        responses.append({
+                            'step': step, 
+                            'skipped': True, 
+                            'reason': 'Repo already exists'
+                        })
+                        # Mark this currency as processed to prevent duplicates
+                        repo_operations[base_currency] = 'skipped'
+                        continue
+                    
+                    # Use config-driven repo operations
+                    self.logger.info(f"[{request_id}][{account_name}] Using API key authentication for repo operation")
+                    response = place_repo_order(
+                        symbol=symbol,  # Pass trading pair symbol instead of repo symbol directly
+                        quantity=repo_details['quantity'],
+                        interest_rate=repo_details['interest_rate'],
+                        config_manager=self.config_manager,
+                        account_name=account_name,
+                        logger=self.logger
+                    )
+                    
+                    # Mark this currency as processed to prevent duplicates
+                    repo_operations[base_currency] = 'processed'
+                    
+                    # Check if step failed
+                    if not response and sequential_required:
+                        error_msg = f"Step {step} failed. Aborting subsequent steps."
+                        self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
+                        return {"account": account_name, "success": False, "error": error_msg}
+                    
+                    # Check if the response indicates an existing repo was found
+                    if isinstance(response, dict) and response.get('status') == 'skipped' and response.get('reason') == 'repo_exists':
+                        self.logger.warning(f"[{request_id}][{account_name}] Repo already exists for {repo_symbol} (direct API check)")
+                        responses.append({
+                            'step': step, 
+                            'skipped': True, 
+                            'reason': 'Repo already exists (API verification)'
+                        })
+                    else:
+                        responses.append({'step': step, 'response': response})
+                        
+                    # Special handling for Event 4 post-repo operations
+                    if is_event_4 and i == repo_index:
+                        self.logger.info(f"[{request_id}][{account_name}] Event 4 repo operation completed, preparing for post-repo sells")
+                        # Add extra delay to ensure repo is fully processed
+                        time.sleep(3)  # Longer delay after repo operation for Event 4
+                        position_client.refresh_positions()
+                        current_position = position_client.get_truncated_position(symbol)
+                        self.logger.info(f"[{request_id}][{account_name}] Position after repo: {current_position}")
+                        repo_status = self.verify_repo_status(symbol, account_name)
+                        self.logger.info(f"[{request_id}][{account_name}] Repo status after operation: {repo_status}")
+                            
+                    # Refresh position data after repo operation
+                    time.sleep(1)
+                    position_client.refresh_positions()
+                
+                elif step == 'close_repo':
+                    # Close repo operation
+                    self.logger.info(f"[{request_id}][{account_name}] Executing step {i+1}: {step}")
+                    repo_symbol = position_sizes[i]  # In this case, position_sizes[i] contains the repo symbol
+                    base_currency = repo_symbol.split('/')[0]
+                    
+                    # Check if we already processed a repo operation for this currency in this request
+                    if base_currency in repo_operations:
+                        self.logger.warning(f"[{request_id}][{account_name}] Already processed repo for {base_currency} in this request, proceeding with caution")
+                    
+                    # Verify repo exists before trying to close it
+                    if not self.verify_repo_status(symbol, account_name):
+                        self.logger.warning(f"[{request_id}][{account_name}] No repo exists for {symbol}, skipping close_repo")
+                        responses.append({
+                            'step': step, 
+                            'skipped': True, 
+                            'reason': 'No repo exists to close'
+                        })
+                        continue
+                    
+                    # Use config-driven repo operations
+                    success = close_repo(
+                        symbol=symbol,  # Pass trading pair symbol instead of repo_symbol directly
+                        logger=self.logger,
+                        config_manager=self.config_manager,
+                        account_name=account_name
+                    )
+                    
+                    # Mark this currency as processed
+                    repo_operations[base_currency] = 'closed'
+                    
+                    if not success and sequential_required:
+                        error_msg = f"Step {step} failed. Aborting subsequent steps."
+                        self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
+                        return {"account": account_name, "success": False, "error": error_msg}
+                        
+                    responses.append({'step': step, 'success': success})
+                    
+                    # Refresh position data after repo operation
+                    time.sleep(1)
                     position_client.refresh_positions()
                     
-                    # Get trading pairs for this account
-                    trading_pairs = self.config_manager.get_account_setting(
-                        account_name, 'trading_pairs', [])
-                    
-                    # Get positions for all trading pairs for this account
-                    account_positions = {}
-                    for symbol in trading_pairs:
-                        account_positions[symbol] = {
-                            'raw_quantity': position_client.get_position(symbol),
-                            'truncated_quantity': position_client.get_truncated_position(symbol),
-                            'has_repo': self.verify_repo_status(symbol, account_name)
-                        }
-                    
-                    positions_data['accounts'][account_name] = {
-                        'positions': account_positions,
-                        'timeframes': self.config_manager.get_account_setting(
-                            account_name, 'timeframes', [])
-                    }
+            except OrderPlacementError as e:
+                error_msg = f"Failed at step {step}: {str(e)}"
+                self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
                 
-                positions_data['timestamp'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                
-                self.logger.info(f"Position status request: {json.dumps(positions_data, indent=2)}")
-                return jsonify(positions_data), 200
+                if sequential_required:
+                    responses.append({'step': step, 'error': str(e)})
+                    # Note: We don't return error immediately to allow closing repo logic to execute
+                else:
+                    responses.append({'step': step, 'error': str(e)})
                 
             except Exception as e:
-                error_msg = f"Failed to get positions: {str(e)}"
-                self.logger.error(error_msg)
-                return jsonify({"success": False, "error": error_msg}), 500
+                error_msg = f"Unexpected error at step {step}: {str(e)}"
+                self.logger.error(f"[{request_id}][{account_name}] {error_msg}")
+                
+                if sequential_required:
+                    responses.append({'step': step, 'error': str(e)})
+                    # Note: We don't return error immediately to allow closing repo logic to execute
+                else:
+                    responses.append({'step': step, 'error': str(e)})
+        
+        # Event 4 execution summary (only for Event 4)
+        if is_event_4:
+            self.logger.info(f"[{request_id}][{account_name}] Event 4 execution summary:")
+            self.logger.info(f"[{request_id}][{account_name}] - Total trades executed: {trades_executed}")
+            self.logger.info(f"[{request_id}][{account_name}] - Post-repo trades executed: {post_repo_trades_executed}")
+            self.logger.info(f"[{request_id}][{account_name}] - Expected post-repo trades: {len(post_repo_indices)}")
+            
+            # Only run fallback mechanism if the main sequence didn't execute all required sells
+            if post_repo_trades_executed < len(post_repo_indices):
+                self.logger.warning(f"[{request_id}][{account_name}] Some post-repo sells did not execute. Running fallback mechanism.")
+                
+                # Get min quantity from configuration
+                base_currency = symbol.split('/')[0]
+                min_quantity = self.config_manager.get_currency_setting(
+                    account_name, base_currency, 'min_quantity', 0.001)
+                
+                # Short delay to ensure proper sequence
+                time.sleep(3)
+                
+                # Calculate how many sells we still need to execute
+                remaining_sells = len(post_repo_indices) - post_repo_trades_executed
+                self.logger.info(f"[{request_id}][{account_name}] Need to execute {remaining_sells} more sell(s)")
+                
+                # Make first post-repo sell if needed
+                if remaining_sells > 0:
+                    try:
+                        self.logger.info(f"[{request_id}][{account_name}] FORCING first post-repo sell with quantity {min_quantity}")
+                        first_sell_response = place_order(
+                            symbol=symbol,
+                            side='ASK',
+                            price=price,
+                            quantity=min_quantity,
+                            config_manager=self.config_manager,
+                            account_name=account_name,
+                            tif=tif
+                        )
+                        if first_sell_response:
+                            self.logger.info(f"[{request_id}][{account_name}] FORCED first post-repo sell succeeded")
+                            responses.append({
+                                'step': 'open_short',
+                                'response': first_sell_response,
+                                'forced_first_sell': True
+                            })
+                            remaining_sells -= 1
+                    except Exception as e:
+                        self.logger.error(f"[{request_id}][{account_name}] Error in FORCED first post-repo sell: {str(e)}")
+                        
+                # Short delay between sells
+                time.sleep(2)
+                
+                # Make second post-repo sell if needed
+                if remaining_sells > 0:
+                    try:
+                        self.logger.info(f"[{request_id}][{account_name}] FORCING second post-repo sell with quantity {min_quantity}")
+                        second_sell_response = place_order(
+                            symbol=symbol,
+                            side='ASK',
+                            price=price,
+                            quantity=min_quantity,
+                            config_manager=self.config_manager,
+                            account_name=account_name,
+                            tif=tif
+                        )
+                        if second_sell_response:
+                            self.logger.info(f"[{request_id}][{account_name}] FORCED second post-repo sell succeeded")
+                            responses.append({
+                                'step': 'open_short',
+                                'response': second_sell_response,
+                                'forced_second_sell': True
+                            })
+                    except Exception as e:
+                        self.logger.error(f"[{request_id}][{account_name}] Error in FORCED second post-repo sell: {str(e)}")
+
+        # Update last signal after trade execution
+        self.last_signals[account_name][symbol] = {
+            'message': message,
+            'timeFrame': timeframe,
+            'timestamp': time.time()
+        }
+
+        # Final position verification
+        time.sleep(1)
+        position_client.refresh_positions()
+        final_position = position_client.get_truncated_position(symbol)
+
+        account_response = {
+            "account": account_name,
+            "success": True,
+            "orders": responses,
+            "message": f"Executed trade sequence: {', '.join(trade_sequence['steps'])}",
+            "final_position": final_position,
+            "event": trade_sequence.get('event', 'Unknown')
+        }
+
+        # For Event 4, add post-repo trade summary to response
+        if is_event_4:
+            account_response["post_repo_trades"] = {
+                "expected": len(post_repo_indices),
+                "executed": post_repo_trades_executed
+            }
+
+        self.logger.info(f"[{request_id}][{account_name}] Trade sequence executed with {len(responses)} responses")
+        self.logger.info(f"[{request_id}][{account_name}] Final position after trade: {final_position}")
+        
+        return account_response
+
+    def get_positions(self):
+        """Get current positions for all trading pairs across all accounts."""
+        try:
+            positions_data = {'accounts': {}}
+            
+            # Get positions for each account
+            for account_name in self.config_manager.get_enabled_accounts():
+                account_name = account_name.get('name')
+                position_client = self.account_manager.get_position_client(account_name)
+                if not position_client:
+                    continue
+                    
+                # Force refresh positions before reporting
+                position_client.refresh_positions()
+                
+                # Get trading pairs for this account
+                trading_pairs = self.config_manager.get_account_setting(
+                    account_name, 'trading_pairs', [])
+                
+                # Get positions for all trading pairs for this account
+                account_positions = {}
+                for symbol in trading_pairs:
+                    account_positions[symbol] = {
+                        'raw_quantity': position_client.get_position(symbol),
+                        'truncated_quantity': position_client.get_truncated_position(symbol),
+                        'has_repo': self.verify_repo_status(symbol, account_name)
+                    }
+                
+                positions_data['accounts'][account_name] = {
+                    'positions': account_positions,
+                    'timeframes': self.config_manager.get_account_setting(
+                        account_name, 'timeframes', [])
+                }
+            
+            positions_data['timestamp'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            
+            self.logger.info(f"Position status request: {json.dumps(positions_data, indent=2)}")
+            return jsonify(positions_data), 200
+            
+        except Exception as e:
+            error_msg = f"Failed to get positions: {str(e)}"
+            self.logger.error(error_msg)
+            return jsonify({"success": False, "error": error_msg}), 500
 
     def health_check(self):
         """Basic health check endpoint for all accounts."""
@@ -947,7 +987,8 @@ class TradingBot:
             repo_status = {}
             for symbol in trading_pairs:
                 base_currency = symbol.split('/')[0]
-                repo_symbol = f"{base_currency}/USDC110"
+                quote_currency = symbol.split('/')[1]
+                repo_symbol = f"{base_currency}/{quote_currency}110"
                 repo_status[repo_symbol] = self.verify_repo_status(symbol, account_name)
             
             # Add position limit status
@@ -1079,3 +1120,30 @@ def create_app(config_path=None):
     """Create a new trading bot instance with multi-account support."""
     bot = TradingBot(config_path)
     return bot
+
+
+# Add this method to ConfigurationManager class in config_manager.py
+def get_all_accounts_for_timeframe(self, timeframe):
+    """
+    Get all accounts configured for a specific timeframe.
+    
+    Args:
+        timeframe: Timeframe to look for (e.g., '1h', '5m')
+        
+    Returns:
+        List of account names that support this timeframe
+    """
+    accounts = []
+    
+    # Get all enabled accounts
+    enabled_accounts = self.get_enabled_accounts()
+    
+    # Check each account if timeframe is supported
+    for account in enabled_accounts:
+        account_name = account.get('name')
+        account_timeframes = self.get_account_setting(account_name, 'timeframes', [])
+        
+        if timeframe in account_timeframes:
+            accounts.append(account_name)
+    
+    return accounts
