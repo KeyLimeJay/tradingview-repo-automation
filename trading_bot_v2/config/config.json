@@ -59,7 +59,7 @@
       "name": "TM6",
       "credentials_file": "credentials/tm6.json",
       "timeframes": ["1m"],
-      "trading_pairs": ["BTC/USDC", "ETH/USDC"],
+      "trading_pairs": ["BTC/USDT", "ETH/USDT"],
       "enabled": true,
       "trading": {
         "default_tif": "GTC",
