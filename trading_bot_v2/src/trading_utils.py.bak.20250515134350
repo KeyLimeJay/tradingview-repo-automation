@@ -1098,9 +1098,9 @@ def api_debug_wrapper(func):
         call_id = f"{time.time():.6f}"
         
         # Log function entry with arguments
-        arg_str = ', '.join([repr(a) for a in args])
-        kwarg_str = ', '.join([f"{k}={repr(v)}" for k, v in kwargs.items() if k != "logger"])
-        logger.info(f"API DEBUG [{call_id}] - CALL START: {func.__name__}({arg_str}{', ' if arg_str and kwarg_str else ''}{kwarg_str})")
+        arg_str = ", ".join([repr(a) for a in args])
+        kwarg_str = ", ".join([f"{k}={repr(v)}" for k, v in kwargs.items() if k != "logger"])
+        logger.info(f"API DEBUG [{call_id}] - CALL START: {func.__name__}({arg_str}{", " if arg_str and kwarg_str else ""}{kwarg_str})")
         
         # Track timing
         start_time = time.time()
