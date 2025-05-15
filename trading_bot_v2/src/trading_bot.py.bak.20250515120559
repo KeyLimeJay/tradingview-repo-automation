@@ -461,95 +461,6 @@ class TradingBot:
         finally:
             self.webhook_lock.release()
 
-    def _handle_event4(self, request_id, account_name, symbol, price, close_position_quantity, repo_quantity, short_position_quantity, repo_details):
-        """Dedicated handler for Event 4 with explicit sequencing."""
-        self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - DEDICATED HANDLER STARTED")
-        
-        position_client = self.account_manager.get_position_client(account_name)
-        if not position_client:
-            self.logger.error(f"[{request_id}][{account_name}] No position client for account")
-            return [], "No position client for account"
-        
-        responses = []
-        tif = "GTC"
-        
-        # Step 1: First sell - close the existing long position
-        try:
-            self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 1: First sell to close position with quantity {close_position_quantity}")
-            first_sell_response = place_order(
-                symbol=symbol,
-                side="ASK",
-                price=price,
-                quantity=close_position_quantity,
-                config_manager=self.config_manager,
-                account_name=account_name,
-                tif=tif
-            )
-            
-            if first_sell_response:
-                responses.append({"step": "first_sell", "response": first_sell_response})
-                self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 1: First sell succeeded")
-            else:
-                self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 1: First sell failed")
-                return responses, "First sell failed"
-        except Exception as e:
-            self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 1: Error: {str(e)}")
-            return responses, f"First sell error: {str(e)}"
-        
-        # Wait for the position to update
-        time.sleep(5)
-        position_client.refresh_positions()
-        
-        # Step 2: Open repo
-        try:
-            self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 2: Open repo with quantity {repo_quantity}")
-            repo_response = place_repo_order(
-                symbol=symbol,
-                quantity=repo_quantity,
-                interest_rate=repo_details.get("interest_rate", 10.0),
-                config_manager=self.config_manager,
-                account_name=account_name,
-                logger=self.logger
-            )
-            
-            if repo_response:
-                responses.append({"step": "open_repo", "response": repo_response})
-                self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 2: Open repo succeeded")
-            else:
-                self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 2: Open repo failed")
-                return responses, "Open repo failed"
-        except Exception as e:
-            self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 2: Error: {str(e)}")
-            return responses, f"Open repo error: {str(e)}"
-        
-        # Wait for the repo to be processed
-        time.sleep(10)
-        position_client.refresh_positions()
-        
-        # Step 3: Second sell - open short position
-        try:
-            self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 3: Second sell to open short with quantity {short_position_quantity}")
-            second_sell_response = place_order(
-                symbol=symbol,
-                side="ASK",
-                price=price,
-                quantity=short_position_quantity,
-                config_manager=self.config_manager,
-                account_name=account_name,
-                tif=tif
-            )
-            
-            if second_sell_response:
-                responses.append({"step": "second_sell", "response": second_sell_response})
-                self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 3: Second sell succeeded")
-            else:
-                self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 3: Second sell failed")
-        except Exception as e:
-            self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 3: Error: {str(e)}")
-        
-        self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - DEDICATED HANDLER COMPLETED with {len(responses)} responses")
-        return responses, None
-
     def _process_signal_for_account(self, request_id, account_name, symbol, message, timeframe, data):
         """Process a trading signal for a specific account."""
         # Check if the account is enabled
@@ -600,36 +511,92 @@ class TradingBot:
 #End of Part 5: Webhook Handler and Beginning of Signal Processing################################################
 #Start of Part 6: Signal Processing - Direct Execution and Empty Sequence Handling###############################################        
         # Check for direct execution (Event 4 special case)
-        if trade_sequence.get("direct_execution", False):
+        if trade_sequence.get('direct_execution', False):
             self.logger.info(f"[{request_id}][{account_name}] Using direct execution for Event 4")
             
-            execution_data = trade_sequence.get("execution_data", {})
-            symbol = execution_data.get("symbol")
-            close_position_quantity = execution_data.get("close_position_quantity")
-            repo_quantity = execution_data.get("repo_quantity")
-            short_position_quantity = execution_data.get("short_position_quantity")
-            price = self.format_price(data["price"], symbol, account_name)
+            execution_data = trade_sequence.get('execution_data', {})
+            symbol = execution_data.get('symbol')
+            close_position_quantity = execution_data.get('close_position_quantity')
+            repo_quantity = execution_data.get('repo_quantity')
+            short_position_quantity = execution_data.get('short_position_quantity')
+            price = self.format_price(data['price'], symbol, account_name)
+            tif = 'GTC'
             
-            # Use dedicated Event 4 handler
-            responses, error = self._handle_event4(
-                request_id,
-                account_name,
-                symbol,
-                price,
-                close_position_quantity,
-                repo_quantity,
-                short_position_quantity,
-                trade_sequence.get("repo_details", {})
-            )
+            responses = []
             
-            if error:
-                self.logger.error(f"[{request_id}][{account_name}] Event 4 execution failed: {error}")
+            # Step 1: Sell to close the existing position
+            self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 1: Close position with quantity {close_position_quantity}")
+            try:
+                close_position_response = place_order(
+                    symbol=symbol,
+                    side='ASK',
+                    price=price,
+                    quantity=close_position_quantity,
+                    config_manager=self.config_manager,
+                    account_name=account_name,
+                    tif=tif
+                )
+                if close_position_response:
+                    responses.append({'step': 'close_position', 'response': close_position_response})
+                    self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 1: Close position succeeded")
+                else:
+                    self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 1: Failed to close position")
+            except Exception as e:
+                self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 1: Error: {str(e)}")
             
-            # Update last signal regardless of success/failure
+            # Short delay to ensure position is updated
+            time.sleep(2)
+            position_client.refresh_positions()
+            
+            # Step 2: Open repo
+            self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 2: Open repo with quantity {repo_quantity}")
+            repo_details = trade_sequence.get('repo_details')
+            try:
+                repo_response = place_repo_order(
+                    symbol=symbol,
+                    quantity=repo_quantity,
+                    interest_rate=repo_details.get('interest_rate', 10.0),
+                    config_manager=self.config_manager,
+                    account_name=account_name,
+                    logger=self.logger
+                )
+                if repo_response:
+                    responses.append({'step': 'open_repo', 'response': repo_response})
+                    self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 2: Open repo succeeded")
+                else:
+                    self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 2: Failed to open repo")
+            except Exception as e:
+                self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 2: Error: {str(e)}")
+            
+            # Longer delay to ensure repo is fully processed
+            time.sleep(3)
+            position_client.refresh_positions()
+            
+            # Step 3: Sell to open short position
+            self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 3: Open short with quantity {short_position_quantity}")
+            try:
+                short_position_response = place_order(
+                    symbol=symbol,
+                    side='ASK',
+                    price=price,
+                    quantity=short_position_quantity,
+                    config_manager=self.config_manager,
+                    account_name=account_name,
+                    tif=tif
+                )
+                if short_position_response:
+                    responses.append({'step': 'open_short', 'response': short_position_response})
+                    self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 3: Open short succeeded")
+                else:
+                    self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 3: Failed to open short")
+            except Exception as e:
+                self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 3: Error: {str(e)}")
+            
+            # Update last signal and return response
             self.last_signals[account_name][symbol] = {
-                "message": message,
-                "timeFrame": timeframe,
-                "timestamp": time.time()
+                'message': message,
+                'timeFrame': timeframe,
+                'timestamp': time.time()
             }
             
             # Final position verification
@@ -639,13 +606,13 @@ class TradingBot:
             
             return {
                 "account": account_name,
-                "success": error is None,
+                "success": True,
                 "orders": responses,
-                "message": "Executed Event 4 with direct execution" if error is None else f"Event 4 execution error: {error}",
+                "message": "Executed Event 4 with direct execution",
                 "final_position": final_position,
-                "event": "Event 4"
+                "event": 'Event 4'
             }
-                
+        
         # Check if trade sequence is empty (e.g., when skipping due to existing position)
         if not trade_sequence['steps']:
             self.logger.info(f"[{request_id}] No trade steps to execute for {account_name} - skipping order placement")
