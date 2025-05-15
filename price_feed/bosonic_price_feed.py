@@ -268,6 +268,7 @@ class PriceFeedApplication(fix.Application):
             no_md_entries = fix.NoMDEntries()
             if not message.isSetField(no_md_entries):
                 logger.warning(f"Market data message for {symbol_value} missing NoMDEntries field")
+                logger.warning(f"Message: {message}") 
                 return
                 
             message.getField(no_md_entries)

@@ -1,3 +1,4 @@
+#Start of Part 1: Imports and Class Definition###############################################
 #!/usr/bin/env python3
 from flask import Flask, request, jsonify
 import json
@@ -58,7 +59,8 @@ class TradingBot:
         
         # Set up Flask routes
         self.setup_routes()
-    
+#End of Part 1: Imports and Class Definition################################################
+#Start of Part 2: Utility Methods###############################################
     def setup_logging(self):
         """Set up logging configuration."""
         log_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs')
@@ -104,6 +106,19 @@ class TradingBot:
         return self.config_manager.get_currency_setting(
             account_name, base_currency, 'strict_limit', 0.001)
     
+    def determine_trade_side(self, message):
+        """Determine trade side from message."""
+        if message == 'Trend Buy!':
+            return 'BID'
+        elif message == 'Trend Sell!':
+            return 'ASK'
+        raise ValueError(f"Cannot determine trade side from message: {message}")
+    
+    def verify_repo_status(self, symbol, account_name):
+        """Verify repo status for a specific account."""
+        return self.account_manager.verify_repo_status(symbol, account_name)
+#End of Part 2: Utility Methods################################################
+#Start of Part 3: More Utility Methods and Request Validation###############################################
     def validate_request_data(self, data):
         """Validate incoming webhook data from TradingView."""
         if not isinstance(data, dict):
@@ -176,18 +191,73 @@ class TradingBot:
         self.logger.info(f"Received valid trading signal: {json.dumps(data, indent=2)}")
         return True
     
-    def determine_trade_side(self, message):
-        """Determine trade side from message."""
-        if message == 'Trend Buy!':
-            return 'BID'
-        elif message == 'Trend Sell!':
-            return 'ASK'
-        raise ValueError(f"Cannot determine trade side from message: {message}")
+    def format_price(self, price, symbol, account_name='default'):
+        """Format price according to symbol's decimal precision from configuration."""
+        try:
+            price_float = float(str(price).replace(',', ''))
+            if price_float <= 0:
+                raise ValueError("Price must be greater than 0")
+            
+            base_currency = symbol.split('/')[0]
+            price_decimals = self.config_manager.get_currency_setting(
+                account_name, base_currency, 'price_decimals', 2)
+            return round(price_float, price_decimals)
+        except (ValueError, TypeError) as e:
+            raise ValueError(f"Invalid price value: {price}. Error: {e}")
     
-    def verify_repo_status(self, symbol, account_name):
-        """Verify repo status for a specific account."""
-        return self.account_manager.verify_repo_status(symbol, account_name)
+    def cancel_partially_filled_orders(self, symbol, reversed_side, account_name='default'):
+        """Cancel any partially filled orders that might be left in the order book."""
+        self.logger.info(f"[{account_name}] Checking for partially filled orders to cancel for {symbol}")
+        # Placeholder for actual implementation
+        self.logger.info(f"[{account_name}] Would cancel any partially filled {reversed_side} orders for {symbol}")
+        return True
     
+    def verify_position_limits(self, symbol, planned_changes, account_name='default', strict_limit=None):
+        """
+        Verify that planned position changes won't exceed position limits.
+        
+        Args:
+            symbol: Trading pair symbol
+            planned_changes: List of operations and quantities [(operation, quantity), ...]
+            account_name: Account to check positions for
+            strict_limit: Optional override for the strict limit
+            
+        Returns:
+            tuple: (is_safe, message)
+        """
+        position_client = self.account_manager.get_position_client(account_name)
+        if not position_client:
+            return (False, f"No position client for account: {account_name}")
+            
+        current_position = position_client.get_truncated_position(symbol)
+        
+        if strict_limit is None:
+            strict_limit = self.get_strict_limit(symbol, account_name)
+        
+        # Calculate estimated final position
+        estimated_position = current_position
+        for op, qty in planned_changes:
+            if op == 'BID':
+                estimated_position += qty
+            elif op == 'ASK':
+                estimated_position -= qty
+        
+        # For Event 4 specifically, always allow the full sequence to execute
+        # Check if we're executing Event 4 by seeing if there are multiple sells
+        sell_count = sum(1 for op, _ in planned_changes if op == 'ASK')
+        if sell_count >= 2:
+            # This is likely an Event 4 sequence, allow it to proceed
+            self.logger.info(f"[{account_name}] Event 4 sequence with {sell_count} sells detected - allowing to proceed")
+            return (True, "Event 4 sequence allowed to proceed")
+        
+        # Check if estimated position exceeds limit - ONLY for LONG positions
+        # For short positions, we don't want to block further shorts
+        if estimated_position > 0 and estimated_position >= strict_limit:
+            return (False, f"Planned operations would result in position {estimated_position}, exceeding limit {strict_limit}")
+        
+        return (True, "Position within limits")
+#End of Part 3: More Utility Methods and Request Validation################################################
+#Start of Part 4: Trade Type Determination Method###############################################
     def determine_trade_type(self, symbol, side, timeframe='1h', account_name='default'):
         """
         Determines the trade to execute based on current position, signal and event sequence.
@@ -312,19 +382,20 @@ class TradingBot:
                 # Ensure we're selling a non-zero amount
                 units_to_close = max(current_position, min_quantity)
                 self.logger.info(f"[{account_name}] Event 4: Sell Signal with long position {current_position} and no repo - "
-                            f"First sell to close position, then open repo, then sell to open short")
-                self.logger.info(f"Using sell quantity of {units_to_close} for first sell")
+                            f"Using direct execution approach")
                 return {
-                    'steps': ['open_short', 'open_repo', 'open_short'],  # First sell, then repo, then second sell
-                    'position_size': [units_to_close, min_quantity, min_quantity],  # First sell uses current position quantity
+                    'steps': [],  # No steps in the regular sequence
+                    'position_size': [],
                     'repo_details': repo_details,
-                    'sequential': True,
                     'event': 'Event 4',
-                    'trade_step_index': 0,  # First trade step index is now 0
-                    'repo_step_index': 1,   # Repo step is now in the middle (index 1)
-                    'post_repo_steps': [2]  # Only the last step is post-repo now
+                    'direct_execution': True,
+                    'execution_data': {
+                        'symbol': symbol,
+                        'close_position_quantity': units_to_close,
+                        'repo_quantity': min_quantity,
+                        'short_position_quantity': min_quantity
                     }
-                    }
+                }
             
             # Invalid state for this strategy
             else:
@@ -337,73 +408,8 @@ class TradingBot:
         
         # Should never get here
         return {'steps': [], 'position_size': [], 'message': f"Unknown side: {side}"}
-    
-    def format_price(self, price, symbol, account_name='default'):
-        """Format price according to symbol's decimal precision from configuration."""
-        try:
-            price_float = float(str(price).replace(',', ''))
-            if price_float <= 0:
-                raise ValueError("Price must be greater than 0")
-            
-            base_currency = symbol.split('/')[0]
-            price_decimals = self.config_manager.get_currency_setting(
-                account_name, base_currency, 'price_decimals', 2)
-            return round(price_float, price_decimals)
-        except (ValueError, TypeError) as e:
-            raise ValueError(f"Invalid price value: {price}. Error: {e}")
-    
-    def cancel_partially_filled_orders(self, symbol, reversed_side, account_name='default'):
-        """Cancel any partially filled orders that might be left in the order book."""
-        self.logger.info(f"[{account_name}] Checking for partially filled orders to cancel for {symbol}")
-        # Placeholder for actual implementation
-        self.logger.info(f"[{account_name}] Would cancel any partially filled {reversed_side} orders for {symbol}")
-        return True
-    
-    def verify_position_limits(self, symbol, planned_changes, account_name='default', strict_limit=None):
-        """
-        Verify that planned position changes won't exceed position limits.
-        
-        Args:
-            symbol: Trading pair symbol
-            planned_changes: List of operations and quantities [(operation, quantity), ...]
-            account_name: Account to check positions for
-            strict_limit: Optional override for the strict limit
-            
-        Returns:
-            tuple: (is_safe, message)
-        """
-        position_client = self.account_manager.get_position_client(account_name)
-        if not position_client:
-            return (False, f"No position client for account: {account_name}")
-            
-        current_position = position_client.get_truncated_position(symbol)
-        
-        if strict_limit is None:
-            strict_limit = self.get_strict_limit(symbol, account_name)
-        
-        # Calculate estimated final position
-        estimated_position = current_position
-        for op, qty in planned_changes:
-            if op == 'BID':
-                estimated_position += qty
-            elif op == 'ASK':
-                estimated_position -= qty
-        
-        # For Event 4 specifically, always allow the full sequence to execute
-        # Check if we're executing Event 4 by seeing if there are multiple sells
-        sell_count = sum(1 for op, _ in planned_changes if op == 'ASK')
-        if sell_count >= 2:
-            # This is likely an Event 4 sequence, allow it to proceed
-            self.logger.info(f"[{account_name}] Event 4 sequence with {sell_count} sells detected - allowing to proceed")
-            return (True, "Event 4 sequence allowed to proceed")
-        
-        # Check if estimated position exceeds limit - ONLY for LONG positions
-        # For short positions, we don't want to block further shorts
-        if estimated_position > 0 and estimated_position >= strict_limit:
-            return (False, f"Planned operations would result in position {estimated_position}, exceeding limit {strict_limit}")
-        
-        return (True, "Position within limits")
-
+#End of Part 4: Trade Type Determination Method################################################
+#Start of Part 5: Webhook Handler and Beginning of Signal Processing###############################################
     def webhook(self):
         """Handle incoming webhook requests from TradingView."""
         request_id = str(time.time())
@@ -502,6 +508,110 @@ class TradingBot:
         position_client.refresh_positions()
         
         trade_sequence = self.determine_trade_type(symbol, side, timeframe, account_name)
+#End of Part 5: Webhook Handler and Beginning of Signal Processing################################################
+#Start of Part 6: Signal Processing - Direct Execution and Empty Sequence Handling###############################################        
+        # Check for direct execution (Event 4 special case)
+        if trade_sequence.get('direct_execution', False):
+            self.logger.info(f"[{request_id}][{account_name}] Using direct execution for Event 4")
+            
+            execution_data = trade_sequence.get('execution_data', {})
+            symbol = execution_data.get('symbol')
+            close_position_quantity = execution_data.get('close_position_quantity')
+            repo_quantity = execution_data.get('repo_quantity')
+            short_position_quantity = execution_data.get('short_position_quantity')
+            price = self.format_price(data['price'], symbol, account_name)
+            tif = 'GTC'
+            
+            responses = []
+            
+            # Step 1: Sell to close the existing position
+            self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 1: Close position with quantity {close_position_quantity}")
+            try:
+                close_position_response = place_order(
+                    symbol=symbol,
+                    side='ASK',
+                    price=price,
+                    quantity=close_position_quantity,
+                    config_manager=self.config_manager,
+                    account_name=account_name,
+                    tif=tif
+                )
+                if close_position_response:
+                    responses.append({'step': 'close_position', 'response': close_position_response})
+                    self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 1: Close position succeeded")
+                else:
+                    self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 1: Failed to close position")
+            except Exception as e:
+                self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 1: Error: {str(e)}")
+            
+            # Short delay to ensure position is updated
+            time.sleep(2)
+            position_client.refresh_positions()
+            
+            # Step 2: Open repo
+            self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 2: Open repo with quantity {repo_quantity}")
+            repo_details = trade_sequence.get('repo_details')
+            try:
+                repo_response = place_repo_order(
+                    symbol=symbol,
+                    quantity=repo_quantity,
+                    interest_rate=repo_details.get('interest_rate', 10.0),
+                    config_manager=self.config_manager,
+                    account_name=account_name,
+                    logger=self.logger
+                )
+                if repo_response:
+                    responses.append({'step': 'open_repo', 'response': repo_response})
+                    self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 2: Open repo succeeded")
+                else:
+                    self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 2: Failed to open repo")
+            except Exception as e:
+                self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 2: Error: {str(e)}")
+            
+            # Longer delay to ensure repo is fully processed
+            time.sleep(3)
+            position_client.refresh_positions()
+            
+            # Step 3: Sell to open short position
+            self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 3: Open short with quantity {short_position_quantity}")
+            try:
+                short_position_response = place_order(
+                    symbol=symbol,
+                    side='ASK',
+                    price=price,
+                    quantity=short_position_quantity,
+                    config_manager=self.config_manager,
+                    account_name=account_name,
+                    tif=tif
+                )
+                if short_position_response:
+                    responses.append({'step': 'open_short', 'response': short_position_response})
+                    self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 3: Open short succeeded")
+                else:
+                    self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 3: Failed to open short")
+            except Exception as e:
+                self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 3: Error: {str(e)}")
+            
+            # Update last signal and return response
+            self.last_signals[account_name][symbol] = {
+                'message': message,
+                'timeFrame': timeframe,
+                'timestamp': time.time()
+            }
+            
+            # Final position verification
+            time.sleep(1)
+            position_client.refresh_positions()
+            final_position = position_client.get_truncated_position(symbol)
+            
+            return {
+                "account": account_name,
+                "success": True,
+                "orders": responses,
+                "message": "Executed Event 4 with direct execution",
+                "final_position": final_position,
+                "event": 'Event 4'
+            }
         
         # Check if trade sequence is empty (e.g., when skipping due to existing position)
         if not trade_sequence['steps']:
@@ -523,15 +633,24 @@ class TradingBot:
         # Identify Event 4 scenario for special handling
         is_event_4 = trade_sequence.get('event') == 'Event 4'
         post_repo_indices = []
-        
+
         # For Event 4, identify all post-repo sell operations
         if is_event_4 and 'repo_step_index' in trade_sequence:
             repo_index = trade_sequence['repo_step_index']
             # Get all indices of open_short operations that come after the repo operation
             post_repo_indices = [i for i, step in enumerate(trade_sequence['steps']) 
                             if i > repo_index and step == 'open_short']
-            self.logger.info(f"[{request_id}][{account_name}] Event 4 detected with post-repo indices: {post_repo_indices}")
-        
+            self.logger.info(f"[{request_id}][{account_name}] Event 4 detected with sequence: {trade_sequence['steps']}")
+            self.logger.info(f"[{request_id}][{account_name}] Event 4 repo_index: {repo_index}")
+            self.logger.info(f"[{request_id}][{account_name}] Event 4 post-repo indices: {post_repo_indices}")
+            
+            # Ensure post_repo_steps from trade_sequence matches our calculation
+            if 'post_repo_steps' in trade_sequence:
+                self.logger.info(f"[{request_id}][{account_name}] Event 4 post_repo_steps from config: {trade_sequence['post_repo_steps']}")
+                # Use the explicitly provided post_repo_steps if available
+                post_repo_indices = trade_sequence['post_repo_steps']
+#End of Part 6: Signal Processing - Direct Execution and Empty Sequence Handling################################################
+#Start of Part 7: Signal Processing - Regular Sequence Execution###############################################
         price = self.format_price(data['price'], symbol, account_name)
         position_sizes = trade_sequence['position_size']
         
@@ -666,7 +785,8 @@ class TradingBot:
                     if is_post_repo_trade:
                         current_position = position_client.get_truncated_position(symbol)
                         self.logger.info(f"[{request_id}][{account_name}] Position after post-repo sell #{post_repo_indices.index(i)+1}: {current_position}")
-                
+#End of Part 7: Signal Processing - Regular Sequence Execution################################################
+#Start of Part 8: Signal Processing - Repo Operations and Exception Handling###############################################                
                 elif step == 'open_repo':
                     # Check for existing repo to prevent duplicates
                     repo_details = trade_sequence.get('repo_details')
@@ -808,79 +928,6 @@ class TradingBot:
                     # Note: We don't return error immediately to allow closing repo logic to execute
                 else:
                     responses.append({'step': step, 'error': str(e)})
-        
-        # Event 4 execution summary (only for Event 4)
-        if is_event_4:
-            self.logger.info(f"[{request_id}][{account_name}] Event 4 execution summary:")
-            self.logger.info(f"[{request_id}][{account_name}] - Total trades executed: {trades_executed}")
-            self.logger.info(f"[{request_id}][{account_name}] - Post-repo trades executed: {post_repo_trades_executed}")
-            self.logger.info(f"[{request_id}][{account_name}] - Expected post-repo trades: {len(post_repo_indices)}")
-            
-            # Only run fallback mechanism if the main sequence didn't execute all required sells
-            if post_repo_trades_executed < len(post_repo_indices):
-                self.logger.warning(f"[{request_id}][{account_name}] Some post-repo sells did not execute. Running fallback mechanism.")
-                
-                # Get min quantity from configuration
-                base_currency = symbol.split('/')[0]
-                min_quantity = self.config_manager.get_currency_setting(
-                    account_name, base_currency, 'min_quantity', 0.001)
-                
-                # Short delay to ensure proper sequence
-                time.sleep(3)
-                
-                # Calculate how many sells we still need to execute
-                remaining_sells = len(post_repo_indices) - post_repo_trades_executed
-                self.logger.info(f"[{request_id}][{account_name}] Need to execute {remaining_sells} more sell(s)")
-                
-                # Make first post-repo sell if needed
-                if remaining_sells > 0:
-                    try:
-                        self.logger.info(f"[{request_id}][{account_name}] FORCING first post-repo sell with quantity {min_quantity}")
-                        first_sell_response = place_order(
-                            symbol=symbol,
-                            side='ASK',
-                            price=price,
-                            quantity=min_quantity,
-                            config_manager=self.config_manager,
-                            account_name=account_name,
-                            tif=tif
-                        )
-                        if first_sell_response:
-                            self.logger.info(f"[{request_id}][{account_name}] FORCED first post-repo sell succeeded")
-                            responses.append({
-                                'step': 'open_short',
-                                'response': first_sell_response,
-                                'forced_first_sell': True
-                            })
-                            remaining_sells -= 1
-                    except Exception as e:
-                        self.logger.error(f"[{request_id}][{account_name}] Error in FORCED first post-repo sell: {str(e)}")
-                        
-                # Short delay between sells
-                time.sleep(2)
-                
-                # Make second post-repo sell if needed
-                if remaining_sells > 0:
-                    try:
-                        self.logger.info(f"[{request_id}][{account_name}] FORCING second post-repo sell with quantity {min_quantity}")
-                        second_sell_response = place_order(
-                            symbol=symbol,
-                            side='ASK',
-                            price=price,
-                            quantity=min_quantity,
-                            config_manager=self.config_manager,
-                            account_name=account_name,
-                            tif=tif
-                        )
-                        if second_sell_response:
-                            self.logger.info(f"[{request_id}][{account_name}] FORCED second post-repo sell succeeded")
-                            responses.append({
-                                'step': 'open_short',
-                                'response': second_sell_response,
-                                'forced_second_sell': True
-                            })
-                    except Exception as e:
-                        self.logger.error(f"[{request_id}][{account_name}] Error in FORCED second post-repo sell: {str(e)}")
 
         # Update last signal after trade execution
         self.last_signals[account_name][symbol] = {
@@ -914,7 +961,8 @@ class TradingBot:
         self.logger.info(f"[{request_id}][{account_name}] Final position after trade: {final_position}")
         
         return account_response
-
+#End of Part 8: Signal Processing - Repo Operations and Exception Handling################################################
+#Start of Part 9: API Endpoints###############################################
     def get_positions(self):
         """Get current positions for all trading pairs across all accounts."""
         try:
@@ -1021,7 +1069,8 @@ class TradingBot:
             }
         
         return jsonify(health_data), 200
-        
+#End of Part 9: API Endpoints################################################
+#Start of Part 10: Auto-Short, Run Methods and Create App Function###############################################        
     def trigger_auto_short(self):
         """Manually trigger auto-short for testing and emergencies."""
         try:
@@ -1148,3 +1197,4 @@ def get_all_accounts_for_timeframe(self, timeframe):
             accounts.append(account_name)
     
     return accounts
+#End of Part 10: Auto-Short, Run Methods and Create App Function################################################
