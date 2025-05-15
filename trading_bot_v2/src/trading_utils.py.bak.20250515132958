@@ -1081,26 +1081,21 @@ ENABLE_API_DEBUG = True
 
 def api_debug_wrapper(func):
     """Decorator to add extensive API debugging."""
-    # Check if function is already wrapped to prevent double-wrapping
-    if hasattr(func, "_is_api_debug_wrapped") and func._is_api_debug_wrapped:
-        print(f"WARNING: Function {func.__name__} is already wrapped, skipping redundant wrapping")
-        return func
-        
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         if not ENABLE_API_DEBUG:
             return func(*args, **kwargs)
             
         # Get logger
-        logger = kwargs.get("logger", logging.getLogger("system"))
+        logger = kwargs.get('logger', logging.getLogger('system'))
         
         # Create a unique call ID
         call_id = f"{time.time():.6f}"
         
         # Log function entry with arguments
         arg_str = ", ".join([repr(a) for a in args])
-        kwarg_str = ", ".join([f"{k}={repr(v)}" for k, v in kwargs.items() if k != "logger"])
-        logger.info(f"API DEBUG [{call_id}] - CALL START: {func.__name__}({arg_str}{", " if arg_str and kwarg_str else ""}{kwarg_str})")
+        kwarg_str = ", ".join([f"{k}={repr(v)}" for k, v in kwargs.items() if k != 'logger'])
+        logger.info(f"API DEBUG [{call_id}] - CALL START: {func.__name__}({arg_str}{', ' if arg_str and kwarg_str else ''}{kwarg_str})")
         
         # Track timing
         start_time = time.time()
@@ -1123,16 +1118,13 @@ def api_debug_wrapper(func):
             logger.error(f"API DEBUG [{call_id}] - CALL FAILED: {func.__name__} failed after {elapsed:.3f}s")
             logger.error(f"API DEBUG [{call_id}] - CALL ERROR: {str(e)}")
             raise
-    
-    # Mark as wrapped to prevent double-wrapping
-    wrapper._is_api_debug_wrapped = True
     return wrapper
 
 # Apply the debug wrapper to the API functions
-# Save references to the *unwrapped* functions - use _underscore prefix naming convention
-_original_place_order = place_order
-_original_place_repo_order = place_repo_order
+# We need to keep references to the original functions first
+original_place_order = place_order
+original_place_repo_order = place_repo_order
 
-# Then replace them with the wrapped versions (only wrap once)
-place_order = api_debug_wrapper(_original_place_order)
-place_repo_order = api_debug_wrapper(_original_place_repo_order)
+# Then replace them with the wrapped versions
+place_order = api_debug_wrapper(original_place_order)
+place_repo_order = api_debug_wrapper(original_place_repo_order)

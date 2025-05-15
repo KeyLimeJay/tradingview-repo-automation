@@ -1,5 +1,5 @@
-#!/usr/bin/env python3
 from datetime import datetime
+#!/usr/bin/env python3
 from flask import Flask, request, jsonify
 import json
 import os
@@ -59,6 +59,399 @@ class TradingBot:
         
         # Set up Flask routes
         self.setup_routes()
+    def setup_logging(self):
+        """Set up logging configuration."""
+        log_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs')
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+            
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        
+        # Get logging configuration from config
+        log_level = self.config_manager.get_global_setting('log_level', 'INFO')
+        max_bytes = int(self.config_manager.get_global_setting('log_max_bytes', 10000000))
+        backup_count = int(self.config_manager.get_global_setting('log_backup_count', 5))
+        
+        file_handler = RotatingFileHandler(
+            os.path.join(log_dir, 'trading_bot.log'),
+            maxBytes=max_bytes,
+            backupCount=backup_count
+        )
+        file_handler.setFormatter(formatter)
+        
+        console_handler = logging.StreamHandler()
+        console_handler.setFormatter(formatter)
+        
+        logger = logging.getLogger('system')
+        logger.setLevel(log_level)
+        logger.handlers = []
+        logger.addHandler(file_handler)
+        logger.addHandler(console_handler)
+        
+        return logger
+    
+    def setup_routes(self):
+        """Set up Flask routes."""
+        self.app.add_url_rule('/webhook', view_func=self.webhook, methods=['POST'])
+        self.app.add_url_rule('/positions', view_func=self.get_positions, methods=['GET'])
+        self.app.add_url_rule('/health', view_func=self.health_check, methods=['GET'])
+        # New endpoint for manually triggering auto-short
+        self.app.add_url_rule('/auto-short', view_func=self.trigger_auto_short, methods=['POST'])
+    
+    def get_strict_limit(self, symbol, account_name='default'):
+        """Get the strict position limit for a symbol from configuration."""
+        base_currency = symbol.split('/')[0]
+        return self.config_manager.get_currency_setting(
+            account_name, base_currency, 'strict_limit', 0.001)
+    
+    def determine_trade_side(self, message):
+        """Determine trade side from message."""
+        if message == 'Trend Buy!':
+            return 'BID'
+        elif message == 'Trend Sell!':
+            return 'ASK'
+        raise ValueError(f"Cannot determine trade side from message: {message}")
+    
+    def verify_repo_status(self, symbol, account_name):
+        """Verify repo status for a specific account."""
+        return self.account_manager.verify_repo_status(symbol, account_name)
+    def validate_request_data(self, data):
+        """Validate incoming webhook data from TradingView."""
+        if not isinstance(data, dict):
+            raise ValueError(f"Invalid data format. Expected dict, got {type(data)}")
+            
+        required_fields = ['symbol', 'message', 'price']
+        missing_fields = [field for field in required_fields if field not in data]
+        
+        if missing_fields:
+            raise ValueError(f"Missing required fields: {missing_fields}")
+            
+        # Get all trading pairs from configuration
+        trading_pairs = self.config_manager.get_all_trading_pairs()
+        if data['symbol'] not in trading_pairs:
+            self.logger.warning(f"Received signal for unsupported symbol: {data['symbol']}")
+            raise ValueError(f"Invalid symbol: {data['symbol']}. Supported symbols: {', '.join(trading_pairs)}")
+            
+        # Get valid messages from configuration
+        valid_messages = self.config_manager.get_global_setting(
+            'valid_messages', ['Trend Buy!', 'Trend Sell!'])
+        if data['message'] not in valid_messages:
+            self.logger.warning(f"Received invalid message type: {data['message']}")
+            raise ValueError(f"Invalid message format. Expected one of {valid_messages}")
+        
+        # Handle and validate timeframe
+        if 'timeFrame' not in data:
+            default_timeframe = self.config_manager.get_global_setting('default_timeframe', '1h')
+            data['timeFrame'] = default_timeframe
+            self.logger.info(f"No timeFrame provided, using default: {data['timeFrame']}")
+        else:
+            valid_timeframes = self.config_manager.get_global_setting(
+                'valid_timeframes', ['1m', '5m', '15m', '30m', '1h', '4h', '1d'])
+            if data['timeFrame'] not in valid_timeframes:
+                self.logger.warning(f"Received invalid timeFrame: {data['timeFrame']}")
+                raise ValueError(f"Invalid timeFrame: {data['timeFrame']}. Expected one of {valid_timeframes}")
+                
+        # Get all accounts for this timeframe
+        accounts_for_timeframe = self.config_manager.get_all_accounts_for_timeframe(data['timeFrame'])
+        
+        # Enhanced duplicate signal detection with time-based threshold
+        current_time = time.time()
+        signal_key = f"{data['symbol']}:{data['message']}:{data['timeFrame']}"
+        
+        if signal_key in self._signal_timestamps:
+            last_time = self._signal_timestamps[signal_key]
+            time_diff = current_time - last_time
+            
+            # Check for repeated signals (exact match) by account
+            for account_name in accounts_for_timeframe:
+                if account_name not in self.last_signals:
+                    self.last_signals[account_name] = {}
+                    
+                account_signals = self.last_signals[account_name]
+                
+                if (data['symbol'] in account_signals and 
+                    account_signals[data['symbol']].get('message') == data['message'] and
+                    account_signals[data['symbol']].get('timeFrame') == data['timeFrame']):
+                    self.logger.warning(f"Rejected repeated {data['message']} signal for {data['symbol']} on {data['timeFrame']} (account: {account_name})")
+                    raise ValueError(f"Duplicate signal rejected: {data['message']}")
+                
+            # Reject signals that arrive too quickly
+            min_signal_interval = float(self.config_manager.get_global_setting('min_signal_interval', 5.0))
+            if time_diff < min_signal_interval:
+                self.logger.warning(f"Signal arrived too quickly after previous signal: {time_diff:.2f}s < {min_signal_interval}s")
+                raise ValueError(f"Signal throttled: minimum interval is {min_signal_interval}s (received after {time_diff:.2f}s)")
+        
+        # Track this signal's timestamp
+        self._signal_timestamps[signal_key] = current_time
+        
+        self.logger.info(f"Received valid trading signal: {json.dumps(data, indent=2)}")
+        return True
+    
+    def format_price(self, price, symbol, account_name='default'):
+        """Format price according to symbol's decimal precision from configuration."""
+        try:
+            price_float = float(str(price).replace(',', ''))
+            if price_float <= 0:
+                raise ValueError("Price must be greater than 0")
+            
+            base_currency = symbol.split('/')[0]
+            price_decimals = self.config_manager.get_currency_setting(
+                account_name, base_currency, 'price_decimals', 2)
+            return round(price_float, price_decimals)
+        except (ValueError, TypeError) as e:
+            raise ValueError(f"Invalid price value: {price}. Error: {e}")
+    def cancel_partially_filled_orders(self, symbol, reversed_side, account_name='default'):
+        """Cancel any partially filled orders that might be left in the order book."""
+        self.logger.info(f"[{account_name}] Checking for partially filled orders to cancel for {symbol}")
+        # Placeholder for actual implementation
+        self.logger.info(f"[{account_name}] Would cancel any partially filled {reversed_side} orders for {symbol}")
+        return True
+    
+    def verify_position_limits(self, symbol, planned_changes, account_name='default', strict_limit=None):
+        """
+        Verify that planned position changes won't exceed position limits.
+        
+        Args:
+            symbol: Trading pair symbol
+            planned_changes: List of operations and quantities [(operation, quantity), ...]
+            account_name: Account to check positions for
+            strict_limit: Optional override for the strict limit
+            
+        Returns:
+            tuple: (is_safe, message)
+        """
+        position_client = self.account_manager.get_position_client(account_name)
+        if not position_client:
+            return (False, f"No position client for account: {account_name}")
+            
+        current_position = position_client.get_truncated_position(symbol)
+        
+        if strict_limit is None:
+            strict_limit = self.get_strict_limit(symbol, account_name)
+        
+        # Calculate estimated final position
+        estimated_position = current_position
+        for op, qty in planned_changes:
+            if op == 'BID':
+                estimated_position += qty
+            elif op == 'ASK':
+                estimated_position -= qty
+        
+        # For Event 4 specifically, always allow the full sequence to execute
+        # Check if we're executing Event 4 by seeing if there are multiple sells
+        sell_count = sum(1 for op, _ in planned_changes if op == 'ASK')
+        if sell_count >= 2:
+            # This is likely an Event 4 sequence, allow it to proceed
+            self.logger.info(f"[{account_name}] Event 4 sequence with {sell_count} sells detected - allowing to proceed")
+            return (True, "Event 4 sequence allowed to proceed")
+        
+        # Check if estimated position exceeds limit - ONLY for LONG positions
+        # For short positions, we don't want to block further shorts
+        if estimated_position > 0 and estimated_position >= strict_limit:
+            return (False, f"Planned operations would result in position {estimated_position}, exceeding limit {strict_limit}")
+        
+        return (True, "Position within limits")
+    def determine_trade_type(self, symbol, side, timeframe='1h', account_name='default'):
+        """
+        Determines the trade to execute based on current position, signal and event sequence.
+        Implements the new event sequence-based strategy logic.
+        """
+        # Add a short delay to ensure WebSocket data is up-to-date
+        time.sleep(0.5)
+        
+        # Get the position client for this account
+        position_client = self.account_manager.get_position_client(account_name)
+        if not position_client:
+            self.logger.error(f"No position client for account: {account_name}")
+            return {'steps': [], 'position_size': [], 'message': f"No position client for account: {account_name}"}
+        
+        # Force a position refresh before making decisions
+        position_client.refresh_positions()
+        
+        # Get current position 
+        current_position = position_client.get_truncated_position(symbol)
+        
+        # Get trading settings from configuration
+        base_currency = symbol.split('/')[0]
+        quote_currency = symbol.split('/')[1]
+        # Dynamic repo symbol based on quote currency
+        repo_symbol = get_repo_symbol(symbol)
+        
+        # Get min quantity from configuration
+        min_quantity = self.config_manager.get_currency_setting(
+            account_name, base_currency, 'min_quantity', 0.001)
+        
+        # Get repo interest rate from configuration
+        repo_interest = float(self.config_manager.get_trading_setting(
+            account_name, 'repo_interest_rate', 10.0))
+        
+        # Double-check repo status both locally and via API for this account
+        has_open_repo = self.verify_repo_status(symbol, account_name)
+        
+        # Get strict position limit from configuration
+        strict_limit = self.get_strict_limit(symbol, account_name)
+        
+        # Force detection of long position for ETH/USDC
+        if symbol == "ETH/USDC" and side == "ASK":
+            self.logger.info(f"*** FORCING LONG POSITION DETECTION FOR ETH/USDC ***")
+            self.logger.info(f"Original position: {current_position}")
+            is_long = True
+            is_short = False
+            no_position = False
+            has_one_unit = True
+            self.logger.info(f"Forced position status: is_long={is_long}, is_short={is_short}, no_position={no_position}")
+        else:
+            # Determine position status
+            is_long = current_position > 0.0001  # Position is long if positive and significant
+            is_short = current_position < -0.0001  # Position is short if negative and significant
+            no_position = abs(current_position) < 0.0001  # Nearly zero
+            has_one_unit = abs(current_position - min_quantity) < 0.0001  # Approximately one unit
+        
+        self.logger.info(f"[{account_name}] Position analysis for {symbol}: position={current_position}, " +
+                    f"is_long={is_long}, is_short={is_short}, no_position={no_position}, " +
+                    f"has_one_unit={has_one_unit}, has_repo={has_open_repo}, strict_limit={strict_limit}")
+        
+        # Check if position exceeds limits
+        if current_position >= strict_limit:
+            self.logger.warning(f"[{account_name}] Position {current_position} equals or exceeds strict limit {strict_limit} for {symbol}")
+            return {'steps': [], 'position_size': [], 'message': f"Position {current_position} exceeds limit {strict_limit}"}
+        
+        # Create repo details dictionary for reuse
+        repo_details = {
+            'symbol': repo_symbol,
+            'quantity': min_quantity,
+            'interest_rate': repo_interest
+        }
+        
+        # BUY SIGNAL LOGIC
+        if side == 'BID':
+            # Event 1: Buy Signal with 0 units and 0 repos (Buy Start Sequence)
+            if no_position and not has_open_repo:
+                self.logger.info(f"[{account_name}] Event 1: Buy Signal with 0 units and 0 repos - Buy 1 unit")
+                return {
+                    'steps': ['open_long'],
+                    'position_size': [min_quantity],
+                    'event': 'Event 1'
+                }
+            
+            # Event 3: Buy Signal with repo open (Both sequences)
+            elif has_open_repo:
+                self.logger.info(f"[{account_name}] Event 3: Buy Signal with repo open - Buy 2 units, Close Repo")
+                return {
+                    'steps': ['open_long', 'open_long', 'close_repo'],
+                    'position_size': [min_quantity, min_quantity, repo_symbol],
+                    'repo_details': {'symbol': repo_symbol},
+                    'sequential': True,
+                    'event': 'Event 3',
+                    'trade_step_index': 0,  # First trade step index
+                    'repo_step_index': 2    # Index of repo close operation
+                }
+            
+            # Invalid state for this strategy
+            else:
+                self.logger.warning(f"[{account_name}] Unexpected state for Buy signal: position={current_position}, repo={has_open_repo}")
+                return {
+                    'steps': [],
+                    'position_size': [],
+                    'message': f"Unexpected state for Buy signal: position={current_position}, repo={has_open_repo}"
+                }
+        
+        # SELL SIGNAL LOGIC
+        elif side == 'ASK':
+            # Event 2: Sell Signal with 0 units and 0 repos (Sell Start Sequence)
+            if no_position and not has_open_repo:
+                self.logger.info(f"[{account_name}] Event 2: Sell Signal with 0 units and 0 repos - Open Repo, Sell 1 unit")
+                return {
+                    'steps': ['open_repo', 'open_short'],
+                    'position_size': [min_quantity, min_quantity],
+                    'repo_details': repo_details,
+                    'sequential': True,
+                    'event': 'Event 2',
+                    'trade_step_index': 1  # Index of first trade step (after repo ops)
+                }
+
+            # Event 4: Sell Signal with long position (any size) and no repo
+            elif is_long and not has_open_repo:
+                # Ensure we're selling a non-zero amount
+                units_to_close = max(current_position, min_quantity)
+                self.logger.info(f"[{account_name}] Event 4: Sell Signal with long position {current_position} and no repo - "
+                            f"Using direct execution approach")
+                return {
+                    'steps': [],  # No steps in the regular sequence
+                    'position_size': [],
+                    'repo_details': repo_details,
+                    'event': 'Event 4',
+                    'direct_execution': True,
+                    'execution_data': {
+                        'symbol': symbol,
+                        'close_position_quantity': units_to_close,
+                        'repo_quantity': min_quantity,
+                        'short_position_quantity': min_quantity
+                    }
+                }
+            
+            # Invalid state for this strategy
+            else:
+                self.logger.warning(f"[{account_name}] Unexpected state for Sell signal: position={current_position}, repo={has_open_repo}")
+                return {
+                    'steps': [],
+                    'position_size': [],
+                    'message': f"Unexpected state for Sell signal: position={current_position}, repo={has_open_repo}"
+                }
+        
+        # Should never get here
+        return {'steps': [], 'position_size': [], 'message': f"Unknown side: {side}"}
+    def webhook(self):
+        """Handle incoming webhook requests from TradingView."""
+        request_id = str(time.time())
+        
+        if not self.webhook_lock.acquire(blocking=False):
+            self.logger.warning(f"[{request_id}] Request blocked by lock")
+            return jsonify({"success": False, "error": "Request already being processed"}), 429
+        
+        try:
+            data = request.json
+            self.logger.info(f"[{request_id}] Processing webhook data: {json.dumps(data, indent=2)}")
+
+            try:
+                self.validate_request_data(data)
+            except ValueError as e:
+                self.logger.error(f"[{request_id}] Validation error: {str(e)}")
+                return jsonify({"success": False, "error": str(e)}), 400
+
+            symbol = data['symbol']
+            message = data['message']
+            timeframe = data['timeFrame']
+            
+            # Get all accounts for this timeframe - MODIFIED TO SUPPORT MULTIPLE ACCOUNTS
+            accounts_for_timeframe = self.config_manager.get_all_accounts_for_timeframe(timeframe)
+            
+            if not accounts_for_timeframe:
+                self.logger.error(f"[{request_id}] No accounts configured for timeframe: {timeframe}")
+                return jsonify({"success": False, "error": f"No accounts configured for timeframe: {timeframe}"}), 400
+            
+            # Process the signal for each account with this timeframe
+            response_data = {
+                "success": True,
+                "message": f"Signal processed for {len(accounts_for_timeframe)} accounts",
+                "accounts": []
+            }
+            
+            for account_name in accounts_for_timeframe:
+                account_response = self._process_signal_for_account(
+                    request_id, account_name, symbol, message, timeframe, data
+                )
+                response_data["accounts"].append(account_response)
+            
+            return jsonify(response_data), 200
+            
+        except Exception as e:
+            self.logger.error(f"[{request_id}] Unexpected error: {str(e)}")
+            return jsonify({"success": False, "error": str(e)}), 500
+            
+        finally:
+            self.webhook_lock.release()
+
     def _handle_event4(self, request_id, account_name, symbol, price, close_position_quantity, repo_quantity, short_position_quantity, repo_details):
         """Dedicated handler for Event 4 with explicit sequencing."""
         self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - DEDICATED HANDLER STARTED")
@@ -107,7 +500,53 @@ class TradingBot:
         # Wait for the position to update
         time.sleep(5)
         position_client.refresh_positions()
+        """Dedicated handler for Event 4 with explicit sequencing."""
+        self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - DEDICATED HANDLER STARTED")
         
+        # Add timestamp logging
+        start_time = time.time()
+        self.logger.info(f"[{request_id}][{account_name}] EVENT 4 START TIME: {datetime.datetime.fromtimestamp(start_time).strftime('%Y-%m-%d %H:%M:%S.%f')}")
+        
+        position_client = self.account_manager.get_position_client(account_name)
+        if not position_client:
+            self.logger.error(f"[{request_id}][{account_name}] No position client for account")
+            return [], "No position client for account"
+        
+        responses = []
+        tif = "GTC"
+        
+        # Step 1: First sell - close the existing long position
+        try:
+            self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 1: First sell to close position with quantity {close_position_quantity}")
+            self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 1 START TIME: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')}")
+            self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 1 API PARAMS: symbol={symbol}, side=ASK, price={price}, quantity={close_position_quantity}, tif={tif}")
+            
+            first_sell_response = place_order(
+                symbol=symbol,
+                side="ASK",
+                price=price,
+                quantity=close_position_quantity,
+                config_manager=self.config_manager,
+                account_name=account_name,
+                tif=tif
+            )
+            
+            self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 1 API RESPONSE: {json.dumps(first_sell_response, default=str, indent=2) if first_sell_response else 'None'}")
+            self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 1 END TIME: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')}")
+            
+            if first_sell_response:
+                responses.append({"step": "first_sell", "response": first_sell_response})
+                self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 1: First sell succeeded")
+            else:
+                self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 1: First sell failed")
+                return responses, "First sell failed"
+        except Exception as e:
+            self.logger.error(f"[{request_id}][{account_name}] EVENT 4 - STEP 1: Error: {str(e)}")
+            return responses, f"First sell error: {str(e)}"
+        
+        # Wait for the position to update
+        time.sleep(5)
+        position_client.refresh_positions()
         # Step 2: Open repo
         try:
             self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 2: Open repo with quantity {repo_quantity}")
@@ -139,7 +578,6 @@ class TradingBot:
         # Wait for the repo to be processed
         time.sleep(10)
         position_client.refresh_positions()
-        
         # Step 3: Second sell - open short position
         try:
             self.logger.info(f"[{request_id}][{account_name}] EVENT 4 - STEP 3: Second sell to open short with quantity {short_position_quantity}")

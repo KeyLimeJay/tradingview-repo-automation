@@ -1,0 +1,2296 @@
+API FUNCTIONS ANALYSIS - 2025-05-15 13:22:52
+================================================================================
+
+All functions in trading_utils module (14):
+   1. adjust_price
+   2. api_debug_wrapper
+   3. close_repo
+   4. create_signature
+   5. generate_clordid
+   6. generate_repo_clordid
+   7. get_jwt_token
+   8. get_price_precision
+   9. get_repo_details
+  10. get_repo_symbol
+  11. original_place_order
+  12. original_place_repo_order
+  13. place_order
+  14. place_repo_order
+
+Checking for function wrapping...
+  place_order is wrapped with a decorator
+  place_repo_order is wrapped with a decorator
+
+==================================================
+FUNCTION: place_order
+==================================================
+
+PARAMETERS (11):
+  - api_key = None
+  - api_secret = None
+  - symbol = None
+  - side = None
+  - price = None
+  - quantity = None
+  - custodian_id = None
+  - tif = None
+  - max_retries = None
+  - config_manager = None
+  - account_name = None
+
+DOCSTRING:
+  Place a trading order with robust retry logic
+
+  Args:
+      api_key: API key for authentication
+      api_secret: API secret for signing requests
+      symbol: Trading pair symbol (e.g., "BTC/USDC")
+      side: Order side - "BID" for buy, "ASK" for sell
+      price: Order price
+      quantity: Order quantity
+      custodian_id: Custodian ID
+      tif: Time in force (IOC, GTC, etc.)
+      max_retries: Maximum number of retry attempts
+      config_manager: Optional ConfigurationManager instance
+      account_name: Optional account name for account-specific settings
+    
+  Returns:
+      Response dict with additional fill information for IOC orders
+      or None if the order failed to be placed/filled
+
+PARAMETER DESCRIPTIONS:
+  - api_key: API key for authentication
+  - api_secret: API secret for signing requests
+  - symbol: Trading pair symbol (e.g., "BTC/USDC")
+  - side: Order side - "BID" for buy, "ASK" for sell
+  - price: Order price
+  - quantity: Order quantity
+  - custodian_id: Custodian ID
+  - tif: Time in force (IOC, GTC, etc.)
+  - max_retries: Maximum number of retry attempts
+  - config_manager: Optional ConfigurationManager instance
+  - account_name: Optional account name for account-specific settings
+
+POTENTIAL FUNCTION CALLS:
+  - OrderPlacementError()
+  - adjust_price()
+  - b64encode()
+  - debug()
+  - decode()
+  - digest()
+  - dumps()
+  - encode()
+  - error()
+  - generate_clordid()
+  - get()
+  - get_account_credentials()
+  - get_trading_setting()
+  - getenv()
+  - info()
+  - json()
+  - md5()
+  - new()
+  - place_order()
+  - post()
+  - range()
+  - sleep()
+  - split()
+  - warning()
+
+SOURCE CODE:
+  def place_order(api_key=None, api_secret=None, symbol=None, side=None, price=None, 
+                  quantity=None, custodian_id=None, tif=None, max_retries=None,
+                  config_manager=None, account_name=None):
+      """
+      Place a trading order with robust retry logic
+    
+      Args:
+          api_key: API key for authentication
+          api_secret: API secret for signing requests
+          symbol: Trading pair symbol (e.g., "BTC/USDC")
+          side: Order side - "BID" for buy, "ASK" for sell
+          price: Order price
+          quantity: Order quantity
+          custodian_id: Custodian ID
+          tif: Time in force (IOC, GTC, etc.)
+          max_retries: Maximum number of retry attempts
+          config_manager: Optional ConfigurationManager instance
+          account_name: Optional account name for account-specific settings
+        
+      Returns:
+          Response dict with additional fill information for IOC orders
+          or None if the order failed to be placed/filled
+      """
+      # Get credentials from config if provided
+      if config_manager and account_name:
+          credentials = config_manager.get_account_credentials(account_name)
+          api_key = api_key or credentials.get('api_key')
+          api_secret = api_secret or credentials.get('api_secret')
+          custodian_id = custodian_id or credentials.get('custodian_id')
+          api_url = credentials.get('api_url')
+        
+          # Get trading settings from config
+          tif = tif or config_manager.get_trading_setting(account_name, 'default_tif', 'GTC')
+          max_retries = max_retries or int(config_manager.get_trading_setting(
+              account_name, 'max_retries', 3))
+          retry_delay = int(config_manager.get_trading_setting(
+              account_name, 'retry_delay', 1))
+      else:
+          # Use environment variables when parameters are not provided
+          api_key = api_key or os.getenv('API_KEY')
+          api_secret = api_secret or os.getenv('API_SECRET')
+          custodian_id = custodian_id or os.getenv('CUSTODIAN_ID')
+          api_url = os.getenv('API_URL')
+          tif = tif or os.getenv('DEFAULT_TIF', 'GTC')
+          max_retries = max_retries or int(os.getenv('MAX_RETRIES', 3))
+          retry_delay = int(os.getenv('RETRY_DELAY', 1))
+    
+      # Check if credentials are valid
+      if not all([api_key, api_secret, custodian_id, api_url]):
+          logger.error("Missing required credentials for order placement")
+          raise OrderPlacementError("Missing required credentials for order placement")
+    
+      # Set up URL
+      url = f"{api_url}/rest/orders"
+      endpoint = "/rest/orders"
+      method = "POST"
+    
+      logger.info(f"Placing Order - Symbol: {symbol}, Side: {side}, Price: {price}, Quantity: {quantity}, TIF: {tif}")
+    
+      try:
+          # Adjust price according to our strategy
+          adjusted_price = adjust_price(price, side, symbol, config_manager, account_name)
+        
+          # Generate a unique client order ID
+          clordid = generate_clordid()
+        
+          # Create order data
+          order_data = {
+              "side": side,
+              "price": adjusted_price,
+              "custodianId": custodian_id,
+              "symbol": symbol,
+              "orderQty": quantity,
+              "clOrdId": clordid,
+              "orderType": "LIMIT",
+              "tif": tif,
+              "dark": False,
+              "isAvgPrice": False,
+              "venue": "LIT"
+          }
+        
+          # Extract currencies from symbol
+          if '/' in symbol:
+              currencies = symbol.split('/')
+              if len(currencies) == 2:
+                  order_data["currency"] = currencies[0]
+                  order_data["currency2"] = currencies[1]
+        
+          # Convert order data to JSON
+          body = json.dumps(order_data)
+        
+          for attempt in range(max_retries):
+              try:
+                  logger.debug(f"Order placement attempt {attempt + 1}/{max_retries}")
+                
+                  # Create signature using body hash method
+                  body_hash = base64.b64encode(hashlib.md5(body.encode()).digest()).decode()
+                  string_to_sign = f"{method}\n{endpoint}\n{body_hash}"
+                  signature = base64.b64encode(
+                      hmac.new(api_secret.encode(), string_to_sign.encode(), hashlib.sha256).digest()
+                  ).decode()
+                
+                  # Set up headers
+                  headers = {
+                      'api-key': api_key,
+                      'api-sign': signature,
+                      'Content-Type': 'application/json'
+                  }
+                
+                  logger.debug(f"Order request: {url}")
+                  logger.debug(f"Order body: {body}")
+                
+                  # Make the API request
+                  response = requests.post(url, headers=headers, data=body, timeout=30)
+                
+                  if response.ok:
+                      logger.info(f"Order placed successfully: Status {response.status_code}")
+                    
+                      # For IOC orders, specifically check fill status
+                      if tif == 'IOC':
+                          response_data = response.json() if response.text else {}
+                        
+                          # Try to get fill information
+                          if response_data:
+                              # Check if the order was filled
+                              ord_status = response_data.get('ordStatus', '')
+                              leaves_qty = float(response_data.get('leavesQty', 0))
+                              cum_qty = float(response_data.get('cumQty', 0))
+                            
+                              # Add fill information to response
+                              response_data['fill_complete'] = (
+                                  ord_status == 'FILLED' or 
+                                  (cum_qty > 0 and leaves_qty == 0)
+                              )
+                            
+                              # If not filled, treat as failure for IOC
+                              if not response_data['fill_complete']:
+                                  logger.warning(f"IOC order not filled: {ord_status}, leaves_qty={leaves_qty}, cum_qty={cum_qty}")
+                                  if ord_status in ['EXPIRED', 'REJECTED', 'CANCELLED']:
+                                      return None  # Order failed to fill
+                            
+                              logger.info(f"IOC order fill status: {response_data['fill_complete']}")
+                              return response_data
+                    
+                      # For non-IOC orders, just return the response
+                      if response.text:
+                          return response.json()
+                      return {}
+                
+                  # Get the list of retriable errors from config if possible
+                  retry_conditions = [
+                      "No custodian isos",
+                      "No liquidity",
+                      "IOC expired",
+                      "Insufficient funds"
+                  ]
+                
+                  if any(error in response.text for error in retry_conditions) and attempt < max_retries - 1:
+                      logger.warning(f"Retriable error detected: {response.text}")
+                      time.sleep(retry_delay * (attempt + 1))
+                      continue
+                
+                  # Non-retriable error
+                  error_msg = f"Order placement failed: Status {response.status_code}, Details: {response.text}"
+                  logger.error(error_msg)
+                  raise OrderPlacementError(error_msg)
+                
+              except requests.exceptions.RequestException as e:
+                  if attempt < max_retries - 1:
+                      logger.warning(f"Network error on attempt {attempt + 1}: {str(e)}")
+                      time.sleep(retry_delay * (attempt + 1))
+                      continue
+                  raise OrderPlacementError(f"Network error: {str(e)}")
+                
+          raise OrderPlacementError(f"Failed to place order after {max_retries} attempts")
+    
+      except Exception as e:
+          logger.error(f"Error in order placement: {str(e)}")
+          raise
+
+
+==================================================
+FUNCTION: place_repo_order
+==================================================
+
+PARAMETERS (11):
+  - jwt_token = None
+  - symbol = None
+  - quantity = None
+  - interest_rate = None
+  - custodian_id = None
+  - side = BID
+  - api_key = None
+  - api_secret = None
+  - logger = None
+  - account_name = None
+  - config_manager = None
+
+DOCSTRING:
+  Place a repo order (borrow/lend) using API key authentication
+
+  Args:
+      jwt_token: JWT token (not used, kept for compatibility)
+      symbol: Trading pair symbol (e.g., "BTC/USDC" or "BTC/USDT")
+      quantity: Amount to borrow
+      interest_rate: Interest rate (e.g., 10%)
+      custodian_id: Custodian ID
+      side: Order side (default: "BID" for borrowing)
+      api_key: API key for authentication
+      api_secret: API secret for signing requests
+      logger: Logger object for logging
+      account_name: Optional account name to get settings from
+      config_manager: Optional ConfigurationManager instance
+    
+  Returns:
+      Response from the API
+
+PARAMETER DESCRIPTIONS:
+  - jwt_token: JWT token (not used, kept for compatibility)
+  - symbol: Trading pair symbol (e.g., "BTC/USDC" or "BTC/USDT")
+  - quantity: Amount to borrow
+  - interest_rate: Interest rate (e.g., 10%)
+  - custodian_id: Custodian ID
+  - side: Order side (default: "BID" for borrowing)
+  - api_key: API key for authentication
+  - api_secret: API secret for signing requests
+  - logger: Logger object for logging
+  - account_name: Optional account name to get settings from
+  - config_manager: Optional ConfigurationManager instance
+
+POTENTIAL FUNCTION CALLS:
+  - ValueError()
+  - b64encode()
+  - debug()
+  - decode()
+  - digest()
+  - dumps()
+  - encode()
+  - endswith()
+  - error()
+  - generate_repo_clordid()
+  - get()
+  - getLogger()
+  - get_account_credentials()
+  - get_jwt_token()
+  - get_repo_details()
+  - get_repo_symbol()
+  - get_trading_setting()
+  - getenv()
+  - info()
+  - json()
+  - md5()
+  - new()
+  - place_repo_order()
+  - post()
+  - split()
+  - warning()
+
+SOURCE CODE:
+  def place_repo_order(jwt_token=None, symbol=None, quantity=None, interest_rate=None, 
+                       custodian_id=None, side="BID", api_key=None, api_secret=None, 
+                       logger=None, account_name=None, config_manager=None):
+      """
+      Place a repo order (borrow/lend) using API key authentication
+    
+      Args:
+          jwt_token: JWT token (not used, kept for compatibility)
+          symbol: Trading pair symbol (e.g., "BTC/USDC" or "BTC/USDT")
+          quantity: Amount to borrow
+          interest_rate: Interest rate (e.g., 10%)
+          custodian_id: Custodian ID
+          side: Order side (default: "BID" for borrowing)
+          api_key: API key for authentication
+          api_secret: API secret for signing requests
+          logger: Logger object for logging
+          account_name: Optional account name to get settings from
+          config_manager: Optional ConfigurationManager instance
+        
+      Returns:
+          Response from the API
+      """
+      log = logger or logging.getLogger('trading_utils')
+    
+      # Generate the repo symbol based on the trading pair
+      repo_symbol = symbol
+      if '/' in symbol and not symbol.endswith('110'):
+          repo_symbol = get_repo_symbol(symbol, config_manager, account_name)
+          if not repo_symbol:
+              log.error(f"Could not generate repo symbol for {symbol}")
+              return None
+        
+      if log:
+          log.info(f"Placing repo order - Symbol: {repo_symbol}, Quantity: {quantity}, Rate: {interest_rate}%")
+    
+      # Get credentials and settings from config if provided
+      if config_manager and account_name:
+          credentials = config_manager.get_account_credentials(account_name)
+          api_key = api_key or credentials.get('api_key')
+          api_secret = api_secret or credentials.get('api_secret')
+          custodian_id = custodian_id or credentials.get('custodian_id')
+          api_url = credentials.get('api_url')
+          interest_rate = interest_rate or float(config_manager.get_trading_setting(
+              account_name, 'repo_interest_rate', 10.0))
+      else:
+          # Use env vars if not provided
+          api_key = api_key or os.getenv('API_KEY')
+          api_secret = api_secret or os.getenv('API_SECRET')
+          custodian_id = custodian_id or os.getenv('CUSTODIAN_ID')
+          api_url = os.getenv('API_URL')
+          interest_rate = interest_rate or float(os.getenv('REPO_INTEREST_RATE', 10.0))
+    
+      # Check if credentials are valid
+      if not all([api_key, api_secret, custodian_id, api_url, repo_symbol, quantity]):
+          log.error("Missing required parameters for repo order placement")
+          return None
+    
+      # Set up URL
+      url = f"{api_url}/rest/orders"
+      endpoint = "/rest/orders"
+    
+      # Validate input
+      if not repo_symbol or not '/' in repo_symbol:
+          raise ValueError(f"Invalid repo symbol format: {repo_symbol}. Expected format: BASE/QUOTE110")
+    
+      # Extract currencies from repo symbol
+      base_currency = repo_symbol.split('/')[0]
+      quote_currency_with_110 = repo_symbol.split('/')[1]
+    
+      # Check if a repo already exists for this symbol
+      jwt_token = get_jwt_token(account_name, config_manager)
+      if jwt_token:
+          existing_repo = get_repo_details(
+              jwt_token, symbol, log, account_name, config_manager)
+          if existing_repo:
+              if log:
+                  log.warning(f"SAFEGUARD: Repo already exists for {repo_symbol} (ID: {existing_repo['id']}). Skipping new repo creation.")
+              return {"status": "skipped", "reason": "repo_exists", "existing_repo_id": existing_repo['id']}
+    
+      # Generate a unique repo client order ID
+      clordid = generate_repo_clordid()
+    
+      # Create repo order data
+      order_data = {
+          "side": side,
+          "price": float(interest_rate),
+          "custodianId": custodian_id,
+          "symbol": repo_symbol,
+          "currency": base_currency,
+          "currency2": quote_currency_with_110,
+          "orderQty": float(quantity),
+          "clOrdId": clordid,
+          "orderType": "LIMIT",
+          "tif": "GTC",
+          "dark": False,
+          "isAvgPrice": False,
+          "venue": "LIT"
+      }
+    
+      # Convert order data to JSON
+      body = json.dumps(order_data)
+    
+      # Create signature using body hash method
+      body_hash = base64.b64encode(hashlib.md5(body.encode()).digest()).decode()
+      string_to_sign = f"POST\n{endpoint}\n{body_hash}"
+      signature = base64.b64encode(
+          hmac.new(api_secret.encode(), string_to_sign.encode(), hashlib.sha256).digest()
+      ).decode()
+    
+      # Set up headers
+      headers = {
+          'api-key': api_key,
+          'api-sign': signature,
+          'Content-Type': 'application/json'
+      }
+    
+      if log:
+          log.debug(f"Repo order request: {url}")
+          log.debug(f"Repo order body: {body}")
+    
+      # Make the API request
+      try:
+          response = requests.post(url, headers=headers, data=body, timeout=30)
+        
+          if response.ok:
+              if log:
+                  log.info(f"Repo order placed successfully with API key auth")
+              if response.text:
+                  return response.json()
+              return {}
+          else:
+              log.error(f"Repo order failed with API key auth: {response.status_code} - {response.text}")
+              return None
+            
+      except Exception as e:
+          log.error(f"Error placing repo order with API key auth: {str(e)}")
+          return None
+
+
+
+DEPENDENCY ANALYSIS
+==================================================
+
+place_order dependencies:
+  - Decimal()
+  - JSONDecodeError()
+  - JSONDecoder()
+  - JSONEncoder()
+  - OrderPlacementError()
+  - OrderedDict()
+  - StringIO()
+  - TypeError()
+  - ValueError()
+  - adjust_price()
+  - as_complex()
+  - b64encode()
+  - bstartswith()
+  - choices()
+  - cls()
+  - complex()
+  - debug()
+  - decode()
+  - default()
+  - detect_encoding()
+  - digest()
+  - dump()
+  - dumps()
+  - encode()
+  - encode_complex()
+  - error()
+  - format()
+  - generate_clordid()
+  - get()
+  - get_account_credentials()
+  - get_currency_setting()
+  - get_price_precision()
+  - get_trading_setting()
+  - getenv()
+  - getvalue()
+  - info()
+  - iterencode()
+  - join()
+  - json()
+  - load()
+  - loads()
+  - md5()
+  - new()
+  - now()
+  - post()
+  - read()
+  - replace()
+  - repr()
+  - round()
+  - sleep()
+  - split()
+  - startswith()
+  - strftime()
+  - warning()
+  - write()
+
+place_repo_order dependencies:
+  - Decimal()
+  - JSONDecodeError()
+  - JSONDecoder()
+  - JSONEncoder()
+  - OrderedDict()
+  - StringIO()
+  - TypeError()
+  - ValueError()
+  - as_complex()
+  - b64encode()
+  - bstartswith()
+  - choices()
+  - cls()
+  - complex()
+  - debug()
+  - decode()
+  - default()
+  - detect_encoding()
+  - digest()
+  - dump()
+  - dumps()
+  - encode()
+  - encode_complex()
+  - endswith()
+  - error()
+  - format()
+  - generate_repo_clordid()
+  - get()
+  - getLogger()
+  - get_account_credentials()
+  - get_jwt_token()
+  - get_repo_details()
+  - get_repo_symbol()
+  - get_trading_setting()
+  - getenv()
+  - getvalue()
+  - info()
+  - iterencode()
+  - join()
+  - json()
+  - load()
+  - loads()
+  - md5()
+  - new()
+  - now()
+  - post()
+  - read()
+  - repr()
+  - split()
+  - startswith()
+  - strftime()
+  - time()
+  - warning()
+  - write()
+
+
+RELATED FUNCTIONS ANALYSIS
+==================================================
+
+Found 9 relevant functions:
+  - api_debug_wrapper
+  - close_repo
+  - generate_repo_clordid
+  - get_repo_details
+  - get_repo_symbol
+  - original_place_order
+  - original_place_repo_order
+  - place_order
+  - place_repo_order
+
+==================================================
+FUNCTION: api_debug_wrapper
+==================================================
+
+PARAMETERS (1):
+  - func
+
+DOCSTRING:
+  Decorator to add extensive API debugging.
+
+POTENTIAL FUNCTION CALLS:
+  - api_debug_wrapper()
+  - dumps()
+  - error()
+  - func()
+  - get()
+  - getLogger()
+  - info()
+  - items()
+  - join()
+  - repr()
+  - time()
+  - wrapper()
+  - wraps()
+
+SOURCE CODE:
+  def api_debug_wrapper(func):
+      """Decorator to add extensive API debugging."""
+      @functools.wraps(func)
+      def wrapper(*args, **kwargs):
+          if not ENABLE_API_DEBUG:
+              return func(*args, **kwargs)
+            
+          # Get logger
+          logger = kwargs.get('logger', logging.getLogger('system'))
+        
+          # Create a unique call ID
+          call_id = f"{time.time():.6f}"
+        
+          # Log function entry with arguments
+          arg_str = ", ".join([repr(a) for a in args])
+          kwarg_str = ", ".join([f"{k}={repr(v)}" for k, v in kwargs.items() if k != 'logger'])
+          logger.info(f"API DEBUG [{call_id}] - CALL START: {func.__name__}({arg_str}{', ' if arg_str and kwarg_str else ''}{kwarg_str})")
+        
+          # Track timing
+          start_time = time.time()
+        
+          try:
+              # Call the original function
+              result = func(*args, **kwargs)
+            
+              # Log success with result and timing
+              elapsed = time.time() - start_time
+              logger.info(f"API DEBUG [{call_id}] - CALL SUCCESS: {func.__name__} completed in {elapsed:.3f}s")
+              try:
+                  logger.info(f"API DEBUG [{call_id}] - CALL RESULT: {json.dumps(result, default=str, indent=2)}")
+              except:
+                  logger.info(f"API DEBUG [{call_id}] - CALL RESULT: {result}")
+              return result
+          except Exception as e:
+              # Log failure with exception details
+              elapsed = time.time() - start_time
+              logger.error(f"API DEBUG [{call_id}] - CALL FAILED: {func.__name__} failed after {elapsed:.3f}s")
+              logger.error(f"API DEBUG [{call_id}] - CALL ERROR: {str(e)}")
+              raise
+      return wrapper
+
+
+==================================================
+FUNCTION: close_repo
+==================================================
+
+PARAMETERS (7):
+  - jwt_token = None
+  - symbol = None
+  - logger = None
+  - api_key = None
+  - api_secret = None
+  - account_name = None
+  - config_manager = None
+
+DOCSTRING:
+  Close a repo contract with enhanced diagnostic and multiple approaches
+  to maximize chances of success
+
+POTENTIAL FUNCTION CALLS:
+  - close_repo()
+  - dumps()
+  - endswith()
+  - error()
+  - flush()
+  - get()
+  - getLogger()
+  - get_account_credentials()
+  - get_jwt_token()
+  - get_repo_symbol()
+  - getenv()
+  - json()
+  - post()
+  - print_exc()
+  - put()
+  - sleep()
+  - time()
+  - warning()
+
+SOURCE CODE:
+  def close_repo(jwt_token=None, symbol=None, logger=None, api_key=None, api_secret=None,
+                 account_name=None, config_manager=None):
+      """
+      Close a repo contract with enhanced diagnostic and multiple approaches
+      to maximize chances of success
+      """
+      log = logger or logging.getLogger('trading_utils')
+    
+      # Get the repo symbol based on the trading pair
+      repo_symbol = symbol
+      if '/' in symbol and not symbol.endswith('110'):
+          repo_symbol = get_repo_symbol(symbol, config_manager, account_name)
+          if not repo_symbol:
+              log.error(f"Could not generate repo symbol for {symbol}")
+              return False
+    
+      print("\n\n===== REPO CLOSING DIAGNOSTIC ANALYSIS =====")
+      print(f"Attempting to close repo for {repo_symbol}")
+    
+      import sys
+      import time
+      import json
+      import traceback
+    
+      # Get base_url from config or environment
+      base_url = None
+    
+      if config_manager and account_name:
+          credentials = config_manager.get_account_credentials(account_name)
+          base_url = credentials.get('api_base_url')
+      else:
+          base_url = os.getenv("API_BASE_URL")
+    
+      print(f"Using base URL: {base_url}")
+    
+      if not base_url:
+          log.error("No base URL available for repo closing")
+          print("DIAGNOSIS: No base URL found - verify config or environment variables")
+          return False
+    
+      # Normalize URL
+      if not base_url.endswith('/'):
+          base_url += '/'
+    
+      # Get JWT token if not provided
+      if not jwt_token:
+          print("Getting JWT token...")
+          if config_manager and account_name:
+              jwt_token = get_jwt_token(account_name, config_manager)
+          else:
+              jwt_token = get_jwt_token()
+            
+          if not jwt_token:
+              log.error("Failed to get JWT token")
+              print("DIAGNOSIS: JWT token generation failed - check credentials")
+              return False
+    
+      # Token security - only show first few characters
+      token_preview = jwt_token[:10] + "..." if jwt_token else None
+      print(f"JWT token: {token_preview}")
+    
+      # Set headers
+      headers = {
+          "Authorization": jwt_token,
+          "Content-Type": "application/json",
+          "User-Agent": "python-requests/2.28.1"
+      }
+    
+      # Get username from config or environment
+      if config_manager and account_name:
+          username = credentials.get('api_username')
+      else:
+          username = os.getenv("API_USERNAME")
+    
+      print(f"Using username: {username}")
+    
+      # Configure repo details request
+      repo_url = f"{base_url}rest/repocontract?sortBy=id&sortDirection=DESC&status=OPEN&repoSymbol={repo_symbol}"
+      print(f"Repo details URL: {repo_url}")
+    
+      payload = {
+          "userId": username,
+          "contractType": "BORROW",
+          "eventId": "event" + str(int(time.time())),
+          "repoSymbol": repo_symbol
+      }
+    
+      try:
+          print("Sending repo details request...")
+          sys.stdout.flush()
+        
+          # Get repo details
+          repo_response = requests.post(
+              url=repo_url,
+              headers=headers,
+              json=payload,
+              timeout=30
+          )
+        
+          print(f"Repo details response code: {repo_response.status_code}")
+          sys.stdout.flush()
+        
+          if not repo_response.ok:
+              log.error(f"Failed to get repo details: {repo_response.status_code} - {repo_response.text}")
+              print(f"DIAGNOSIS: API request for repo details failed with code {repo_response.status_code}")
+              print(f"Response text: {repo_response.text[:200]}")
+              return True
+        
+          try:
+              repo_data = repo_response.json()
+            
+              # Check for empty response
+              if not repo_data.get("content") or len(repo_data["content"]) == 0:
+                  log.warning(f"No open repo found for {repo_symbol}")
+                  print(f"No open repo found for {repo_symbol}")
+                  return True
+            
+              # Found repos!
+              repo_count = len(repo_data["content"])
+              print(f"Found {repo_count} repos in API response")
+            
+              # Get the first open repo
+              repo_contract = repo_data["content"][0]
+              repo_id = repo_contract.get("id")
+              event_id = repo_contract.get("eventId")
+              repo_status = repo_contract.get("status")
+            
+              if not repo_id:
+                  log.error("No repo ID found in response")
+                  print("DIAGNOSIS: Repo found but no ID field in the response")
+                  return True
+            
+              # Print ALL repo details for debugging
+              print("\n----- REPO DETAILS -----")
+              print(f"Repo ID: {repo_id}")
+              print(f"Event ID: {event_id}")
+              print(f"Status: {repo_status}")
+              print(f"Symbol: {repo_contract.get('repoSymbol')}")
+              if 'createdTime' in repo_contract:
+                  print(f"Created: {repo_contract.get('createdTime')}")
+              if 'qty' in repo_contract:
+                  print(f"Quantity: {repo_contract.get('qty')}")
+              if 'accountId' in repo_contract:
+                  print(f"Account ID: {repo_contract.get('accountId')}")
+              print("------------------------\n")
+                
+              # IMPORTANT: Print repo ID information
+              print(f"Found repo with ID: {repo_id} and event ID: {event_id}")
+            
+              #################################
+              # APPROACH 1: Original GET method
+              #################################
+            
+              # Create a new event ID for closing
+              close_event_id = "closeEvent" + str(int(time.time()))
+            
+              # Construct the URL for GET method
+              close_url = f"{base_url}rest/repocontract/close?repoContractId={repo_id}&eventId={close_event_id}"
+            
+              print(f"APPROACH 1: Closing repo with GET request URL: {close_url}")
+              sys.stdout.flush()
+            
+              # Use simple GET request
+              close_response = requests.get(
+                  url=close_url, 
+                  headers=headers,
+                  timeout=30
+              )
+            
+              # IMPORTANT: Print close response information
+              print(f"Approach 1 - Close Status Code: {close_response.status_code}")
+              print("Approach 1 - Close Response:")
+              print(close_response.text)
+              sys.stdout.flush()
+            
+              approach1_success = close_response.ok
+            
+              if approach1_success:
+                  print("Approach 1 reported success, waiting to verify...")
+                  time.sleep(3)  # Wait for system to process
+              else:
+                  print(f"Approach 1 failed with status code {close_response.status_code}")
+            
+              #################################
+              # APPROACH 2: POST method
+              #################################
+            
+              # Try a POST request with payload instead of GET
+              alt_close_url = f"{base_url}rest/repocontract/close"
+              alt_event_id = "closeEvent" + str(int(time.time()))
+              alt_payload = {
+                  "repoContractId": repo_id,
+                  "eventId": alt_event_id,
+                  "userId": username
+              }
+            
+              print("\nAPPROACH 2: Trying alternative close method with POST")
+              print(f"URL: {alt_close_url}")
+              print(f"Payload: {json.dumps(alt_payload, indent=2)}")
+              sys.stdout.flush()
+            
+              alt_close_response = requests.post(
+                  url=alt_close_url,
+                  headers=headers,
+                  json=alt_payload,
+                  timeout=30
+              )
+            
+              print(f"Approach 2 - Status Code: {alt_close_response.status_code}")
+              print(f"Approach 2 - Response: {alt_close_response.text}")
+              sys.stdout.flush()
+            
+              approach2_success = alt_close_response.ok
+            
+              if approach2_success:
+                  print("Approach 2 reported success, waiting to verify...")
+                  time.sleep(3)  # Wait for system to process
+              else:
+                  print(f"Approach 2 failed with status code {alt_close_response.status_code}")
+            
+              #################################
+              # APPROACH 3: PUT method
+              #################################
+            
+              # Try a PUT request as well
+              put_close_url = f"{base_url}rest/repocontract/{repo_id}/close"
+              put_event_id = "closeEvent" + str(int(time.time()))
+              put_payload = {
+                  "eventId": put_event_id,
+                  "userId": username
+              }
+            
+              print("\nAPPROACH 3: Trying close method with PUT")
+              print(f"URL: {put_close_url}")
+              print(f"Payload: {json.dumps(put_payload, indent=2)}")
+              sys.stdout.flush()
+            
+              put_close_response = requests.put(
+                  url=put_close_url,
+                  headers=headers,
+                  json=put_payload,
+                  timeout=30
+              )
+            
+              print(f"Approach 3 - Status Code: {put_close_response.status_code}")
+              print(f"Approach 3 - Response: {put_close_response.text}")
+              sys.stdout.flush()
+            
+              approach3_success = put_close_response.ok
+            
+              if approach3_success:
+                  print("Approach 3 reported success, waiting to verify...")
+                  time.sleep(3)  # Wait for system to process
+              else:
+                  print(f"Approach 3 failed with status code {put_close_response.status_code}")
+            
+              #################################
+              # VERIFICATION STEP
+              #################################
+            
+              # Now verify if the repo was actually closed
+              print("\nVERIFYING REPO CLOSURE...")
+              sys.stdout.flush()
+            
+              # Wait a bit longer to ensure changes propagate
+              time.sleep(5)
+            
+              # Create a new payload with different event ID to avoid caching
+              verify_event_id = "verifyEvent" + str(int(time.time()))
+              verify_payload = {
+                  "userId": username,
+                  "contractType": "BORROW",
+                  "eventId": verify_event_id,
+                  "repoSymbol": repo_symbol
+              }
+            
+              # Make the request to check if the repo is still open
+              verify_response = requests.post(
+                  url=repo_url,
+                  headers=headers,
+                  json=verify_payload,
+                  timeout=30
+              )
+            
+              if not verify_response.ok:
+                  print(f"VERIFICATION ERROR: Could not verify repo status - {verify_response.status_code}")
+                  return True
+            
+              verify_data = verify_response.json()
+              still_open_repos = [r for r in verify_data.get("content", []) if str(r.get("id")) == str(repo_id)]
+            
+              if not still_open_repos:
+                  print("\n✅ VERIFICATION SUCCESS: Repo is now CLOSED!")
+                  print(f"✅ Repo ID {repo_id} no longer appears in open repos list")
+                
+                  # Determine which approach succeeded
+                  if approach1_success:
+                      print("✅ Approach 1 (GET request) was successful")
+                  if approach2_success:
+                      print("✅ Approach 2 (POST request) was successful")
+                  if approach3_success:
+                      print("✅ Approach 3 (PUT request) was successful")
+              else:
+                  print("\n❌ VERIFICATION FAILED: Repo is still OPEN despite API success responses!")
+                  print(f"❌ Repo ID {repo_id} still appears in the open repos list")
+                  print("\nRepo details after close attempts:")
+                  print(json.dumps(still_open_repos[0], indent=2)[:500])
+                
+                  print("\nPOSSIBLE CAUSES:")
+                  print("1. API bug - The API reports success but doesn't actually close the repo")
+                  print("2. Permission issue - Your account lacks proper permissions to close repos")
+                  print("3. Repo is locked - Another operation might be pending on this repo")
+                  print("4. System lag - Changes may take longer to propagate than expected")
+                
+                  print("\nRECOMMENDED ACTIONS:")
+                  print("1. Try closing the repo manually through the UI")
+                  print("2. Check with API administrators about repo closing permissions")
+                  print("3. Check if there are any special conditions for closing repos")
+                  print("4. Try again after a longer delay (1-2 minutes)")
+            
+              print("\n===== END OF REPO CLOSING DIAGNOSTIC =====\n\n")
+              sys.stdout.flush()
+            
+              # Always return True to prevent blocking the trading sequence
+              return True
+            
+          except Exception as e:
+              traceback.print_exc()
+              log.error(f"Error processing repo details: {str(e)}")
+              print(f"Error processing repo details: {str(e)}")
+              print("DIAGNOSIS: Exception occurred when processing the API response")
+              print("LIKELY CAUSE: Unexpected API response format or connection issue")
+              return True
+            
+      except Exception as e:
+          traceback.print_exc()
+          log.error(f"Error in close_repo: {str(e)}")
+          print(f"Error in close_repo: {str(e)}")
+          print("DIAGNOSIS: Exception occurred during API communication")
+          print("LIKELY CAUSE: Connection issue, timeout, or invalid credentials")
+          return True
+
+
+==================================================
+FUNCTION: generate_repo_clordid
+==================================================
+
+PARAMETERS (0):
+
+DOCSTRING:
+  Generate a unique client order ID for repo orders
+
+POTENTIAL FUNCTION CALLS:
+  - choices()
+  - generate_repo_clordid()
+  - join()
+  - now()
+  - strftime()
+
+SOURCE CODE:
+  def generate_repo_clordid():
+      """Generate a unique client order ID for repo orders"""
+      now = datetime.datetime.now()
+      timestamp = now.strftime("%Y%m%d%H%M%S")
+      random_suffix = ''.join(random.choices(string.ascii_lowercase + string.digits, k=12))
+      return f"WEB:{random_suffix}-{timestamp}"
+
+
+==================================================
+FUNCTION: get_repo_details
+==================================================
+
+PARAMETERS (5):
+  - jwt_token = None
+  - symbol = None
+  - logger = None
+  - account_name = None
+  - config_manager = None
+
+DOCSTRING:
+  Get details of open repo contracts for a symbol
+
+  Args:
+      jwt_token: JWT token for authentication
+      symbol: Trading pair symbol (e.g., "BTC/USDC" or "BTC/USDT")
+      logger: Optional logger
+      account_name: Optional account name to get base_url from
+      config_manager: Optional ConfigurationManager instance
+    
+  Returns:
+      Repo details if found, None otherwise
+
+PARAMETER DESCRIPTIONS:
+  - jwt_token: JWT token for authentication
+  - symbol: Trading pair symbol (e.g., "BTC/USDC" or "BTC/USDT")
+  - logger: Optional logger
+  - account_name: Optional account name to get base_url from
+  - config_manager: Optional ConfigurationManager instance
+
+POTENTIAL FUNCTION CALLS:
+  - debug()
+  - endswith()
+  - error()
+  - get()
+  - getLogger()
+  - get_account_credentials()
+  - get_jwt_token()
+  - get_repo_details()
+  - get_repo_symbol()
+  - getenv()
+  - info()
+  - json()
+  - post()
+  - time()
+  - warning()
+
+SOURCE CODE:
+  def get_repo_details(jwt_token=None, symbol=None, logger=None, 
+                       account_name=None, config_manager=None):
+      """
+      Get details of open repo contracts for a symbol
+    
+      Args:
+          jwt_token: JWT token for authentication
+          symbol: Trading pair symbol (e.g., "BTC/USDC" or "BTC/USDT")
+          logger: Optional logger
+          account_name: Optional account name to get base_url from
+          config_manager: Optional ConfigurationManager instance
+        
+      Returns:
+          Repo details if found, None otherwise
+      """
+      log = logger or logging.getLogger('trading_utils')
+    
+      # Get the repo symbol (e.g., "BTC/USDC110" or "BTC/USDT110") based on the trading pair
+      repo_symbol = symbol
+      if '/' in symbol and not symbol.endswith('110'):
+          repo_symbol = get_repo_symbol(symbol, config_manager, account_name)
+          if not repo_symbol:
+              log.error(f"Could not generate repo symbol for {symbol}")
+              return None
+        
+      if log:
+          log.info(f"Getting repo details for {repo_symbol} (from trading pair {symbol})")
+    
+      # Get base_url from config if provided
+      if config_manager and account_name:
+          credentials = config_manager.get_account_credentials(account_name)
+          base_url = credentials.get('api_base_url')
+          username = credentials.get('api_username')
+      else:
+          base_url = os.getenv("API_BASE_URL")
+          username = os.getenv("API_USERNAME")
+        
+      # Ensure required parameters are present
+      if not all([base_url, username, repo_symbol]):
+          log.error("Missing required parameters for repo details lookup")
+          return None
+    
+      # Get JWT token if not provided
+      if not jwt_token:
+          jwt_token = get_jwt_token(account_name, config_manager)
+          if not jwt_token:
+              log.error("Failed to get JWT token")
+              return None
+    
+      # Set headers
+      headers = {
+          "Authorization": jwt_token,
+          "Content-Type": "application/json",
+          "User-Agent": "python-requests/2.28.1"
+      }
+    
+      # Ensure base_url ends with a slash
+      if not base_url.endswith('/'):
+          base_url += '/'
+    
+      # Create payload for POST request
+      payload = {
+          "userId": username,
+          "contractType": "BORROW",
+          "eventId": "event" + str(int(time.time())),
+          "repoSymbol": repo_symbol
+      }
+    
+      # URL for repo details
+      url = f"{base_url}rest/repocontract?sortBy=id&sortDirection=DESC&status=OPEN&repoSymbol={repo_symbol}"
+    
+      try:
+          # Make the POST request to get repo details
+          repo_response = requests.post(
+              url=url,
+              headers=headers,
+              json=payload,
+              timeout=30
+          )
+        
+          if log:
+              log.debug(f"Repo details response: {repo_response.status_code}")
+        
+          if not repo_response.ok:
+              if log:
+                  log.error(f"Failed to get repo details: {repo_response.text}")
+              return None
+        
+          repo_data = repo_response.json()
+        
+          if not repo_data.get("content") or len(repo_data["content"]) == 0:
+              if log:
+                  log.warning(f"No open repo found for {repo_symbol}")
+              return None
+        
+          # Get the first open repo
+          repo_contract = repo_data["content"][0]
+          repo_id = repo_contract.get("id")
+          event_id = repo_contract.get("eventId")
+        
+          if not repo_id:
+              if log:
+                  log.error("No repo ID found in response")
+              return None
+        
+          if log:
+              log.debug(f"Found repo with ID: {repo_id}, Event ID: {event_id}")
+            
+          return {
+              "id": repo_id,
+              "eventId": event_id
+          }
+        
+      except Exception as e:
+          if log:
+              log.error(f"Error retrieving repo details: {str(e)}")
+          return None
+
+
+==================================================
+FUNCTION: get_repo_symbol
+==================================================
+
+PARAMETERS (3):
+  - symbol
+  - config_manager = None
+  - account_name = None
+
+DOCSTRING:
+  Get the appropriate repo symbol based on the trading pair
+
+  Args:
+      symbol: Trading pair symbol (e.g., "BTC/USDC" or "BTC/USDT")
+      config_manager: Optional ConfigurationManager instance
+      account_name: Optional account name to get settings from
+    
+  Returns:
+      Repo symbol (e.g., "BTC/USDC110" or "BTC/USDT110")
+
+PARAMETER DESCRIPTIONS:
+  - symbol: Trading pair symbol (e.g., "BTC/USDC" or "BTC/USDT")
+  - config_manager: Optional ConfigurationManager instance
+  - account_name: Optional account name to get settings from
+
+POTENTIAL FUNCTION CALLS:
+  - error()
+  - get_repo_symbol()
+  - split()
+
+SOURCE CODE:
+  def get_repo_symbol(symbol, config_manager=None, account_name=None):
+      """
+      Get the appropriate repo symbol based on the trading pair
+    
+      Args:
+          symbol: Trading pair symbol (e.g., "BTC/USDC" or "BTC/USDT")
+          config_manager: Optional ConfigurationManager instance
+          account_name: Optional account name to get settings from
+        
+      Returns:
+          Repo symbol (e.g., "BTC/USDC110" or "BTC/USDT110")
+      """
+      try:
+          # Extract base and quote currencies from symbol
+          if '/' not in symbol:
+              return None
+            
+          parts = symbol.split('/')
+          if len(parts) != 2:
+              return None
+            
+          base_currency = parts[0]
+          quote_currency = parts[1]
+        
+          # Form repo symbol by appending '110' to the quote currency
+          repo_symbol = f"{base_currency}/{quote_currency}110"
+        
+          return repo_symbol
+      except Exception as e:
+          logger.error(f"Error generating repo symbol for {symbol}: {str(e)}")
+          return None
+
+
+==================================================
+FUNCTION: place_order
+==================================================
+
+PARAMETERS (11):
+  - api_key = None
+  - api_secret = None
+  - symbol = None
+  - side = None
+  - price = None
+  - quantity = None
+  - custodian_id = None
+  - tif = None
+  - max_retries = None
+  - config_manager = None
+  - account_name = None
+
+DOCSTRING:
+  Place a trading order with robust retry logic
+
+  Args:
+      api_key: API key for authentication
+      api_secret: API secret for signing requests
+      symbol: Trading pair symbol (e.g., "BTC/USDC")
+      side: Order side - "BID" for buy, "ASK" for sell
+      price: Order price
+      quantity: Order quantity
+      custodian_id: Custodian ID
+      tif: Time in force (IOC, GTC, etc.)
+      max_retries: Maximum number of retry attempts
+      config_manager: Optional ConfigurationManager instance
+      account_name: Optional account name for account-specific settings
+    
+  Returns:
+      Response dict with additional fill information for IOC orders
+      or None if the order failed to be placed/filled
+
+PARAMETER DESCRIPTIONS:
+  - api_key: API key for authentication
+  - api_secret: API secret for signing requests
+  - symbol: Trading pair symbol (e.g., "BTC/USDC")
+  - side: Order side - "BID" for buy, "ASK" for sell
+  - price: Order price
+  - quantity: Order quantity
+  - custodian_id: Custodian ID
+  - tif: Time in force (IOC, GTC, etc.)
+  - max_retries: Maximum number of retry attempts
+  - config_manager: Optional ConfigurationManager instance
+  - account_name: Optional account name for account-specific settings
+
+POTENTIAL FUNCTION CALLS:
+  - OrderPlacementError()
+  - adjust_price()
+  - b64encode()
+  - debug()
+  - decode()
+  - digest()
+  - dumps()
+  - encode()
+  - error()
+  - generate_clordid()
+  - get()
+  - get_account_credentials()
+  - get_trading_setting()
+  - getenv()
+  - info()
+  - json()
+  - md5()
+  - new()
+  - place_order()
+  - post()
+  - range()
+  - sleep()
+  - split()
+  - warning()
+
+SOURCE CODE:
+  def place_order(api_key=None, api_secret=None, symbol=None, side=None, price=None, 
+                  quantity=None, custodian_id=None, tif=None, max_retries=None,
+                  config_manager=None, account_name=None):
+      """
+      Place a trading order with robust retry logic
+    
+      Args:
+          api_key: API key for authentication
+          api_secret: API secret for signing requests
+          symbol: Trading pair symbol (e.g., "BTC/USDC")
+          side: Order side - "BID" for buy, "ASK" for sell
+          price: Order price
+          quantity: Order quantity
+          custodian_id: Custodian ID
+          tif: Time in force (IOC, GTC, etc.)
+          max_retries: Maximum number of retry attempts
+          config_manager: Optional ConfigurationManager instance
+          account_name: Optional account name for account-specific settings
+        
+      Returns:
+          Response dict with additional fill information for IOC orders
+          or None if the order failed to be placed/filled
+      """
+      # Get credentials from config if provided
+      if config_manager and account_name:
+          credentials = config_manager.get_account_credentials(account_name)
+          api_key = api_key or credentials.get('api_key')
+          api_secret = api_secret or credentials.get('api_secret')
+          custodian_id = custodian_id or credentials.get('custodian_id')
+          api_url = credentials.get('api_url')
+        
+          # Get trading settings from config
+          tif = tif or config_manager.get_trading_setting(account_name, 'default_tif', 'GTC')
+          max_retries = max_retries or int(config_manager.get_trading_setting(
+              account_name, 'max_retries', 3))
+          retry_delay = int(config_manager.get_trading_setting(
+              account_name, 'retry_delay', 1))
+      else:
+          # Use environment variables when parameters are not provided
+          api_key = api_key or os.getenv('API_KEY')
+          api_secret = api_secret or os.getenv('API_SECRET')
+          custodian_id = custodian_id or os.getenv('CUSTODIAN_ID')
+          api_url = os.getenv('API_URL')
+          tif = tif or os.getenv('DEFAULT_TIF', 'GTC')
+          max_retries = max_retries or int(os.getenv('MAX_RETRIES', 3))
+          retry_delay = int(os.getenv('RETRY_DELAY', 1))
+    
+      # Check if credentials are valid
+      if not all([api_key, api_secret, custodian_id, api_url]):
+          logger.error("Missing required credentials for order placement")
+          raise OrderPlacementError("Missing required credentials for order placement")
+    
+      # Set up URL
+      url = f"{api_url}/rest/orders"
+      endpoint = "/rest/orders"
+      method = "POST"
+    
+      logger.info(f"Placing Order - Symbol: {symbol}, Side: {side}, Price: {price}, Quantity: {quantity}, TIF: {tif}")
+    
+      try:
+          # Adjust price according to our strategy
+          adjusted_price = adjust_price(price, side, symbol, config_manager, account_name)
+        
+          # Generate a unique client order ID
+          clordid = generate_clordid()
+        
+          # Create order data
+          order_data = {
+              "side": side,
+              "price": adjusted_price,
+              "custodianId": custodian_id,
+              "symbol": symbol,
+              "orderQty": quantity,
+              "clOrdId": clordid,
+              "orderType": "LIMIT",
+              "tif": tif,
+              "dark": False,
+              "isAvgPrice": False,
+              "venue": "LIT"
+          }
+        
+          # Extract currencies from symbol
+          if '/' in symbol:
+              currencies = symbol.split('/')
+              if len(currencies) == 2:
+                  order_data["currency"] = currencies[0]
+                  order_data["currency2"] = currencies[1]
+        
+          # Convert order data to JSON
+          body = json.dumps(order_data)
+        
+          for attempt in range(max_retries):
+              try:
+                  logger.debug(f"Order placement attempt {attempt + 1}/{max_retries}")
+                
+                  # Create signature using body hash method
+                  body_hash = base64.b64encode(hashlib.md5(body.encode()).digest()).decode()
+                  string_to_sign = f"{method}\n{endpoint}\n{body_hash}"
+                  signature = base64.b64encode(
+                      hmac.new(api_secret.encode(), string_to_sign.encode(), hashlib.sha256).digest()
+                  ).decode()
+                
+                  # Set up headers
+                  headers = {
+                      'api-key': api_key,
+                      'api-sign': signature,
+                      'Content-Type': 'application/json'
+                  }
+                
+                  logger.debug(f"Order request: {url}")
+                  logger.debug(f"Order body: {body}")
+                
+                  # Make the API request
+                  response = requests.post(url, headers=headers, data=body, timeout=30)
+                
+                  if response.ok:
+                      logger.info(f"Order placed successfully: Status {response.status_code}")
+                    
+                      # For IOC orders, specifically check fill status
+                      if tif == 'IOC':
+                          response_data = response.json() if response.text else {}
+                        
+                          # Try to get fill information
+                          if response_data:
+                              # Check if the order was filled
+                              ord_status = response_data.get('ordStatus', '')
+                              leaves_qty = float(response_data.get('leavesQty', 0))
+                              cum_qty = float(response_data.get('cumQty', 0))
+                            
+                              # Add fill information to response
+                              response_data['fill_complete'] = (
+                                  ord_status == 'FILLED' or 
+                                  (cum_qty > 0 and leaves_qty == 0)
+                              )
+                            
+                              # If not filled, treat as failure for IOC
+                              if not response_data['fill_complete']:
+                                  logger.warning(f"IOC order not filled: {ord_status}, leaves_qty={leaves_qty}, cum_qty={cum_qty}")
+                                  if ord_status in ['EXPIRED', 'REJECTED', 'CANCELLED']:
+                                      return None  # Order failed to fill
+                            
+                              logger.info(f"IOC order fill status: {response_data['fill_complete']}")
+                              return response_data
+                    
+                      # For non-IOC orders, just return the response
+                      if response.text:
+                          return response.json()
+                      return {}
+                
+                  # Get the list of retriable errors from config if possible
+                  retry_conditions = [
+                      "No custodian isos",
+                      "No liquidity",
+                      "IOC expired",
+                      "Insufficient funds"
+                  ]
+                
+                  if any(error in response.text for error in retry_conditions) and attempt < max_retries - 1:
+                      logger.warning(f"Retriable error detected: {response.text}")
+                      time.sleep(retry_delay * (attempt + 1))
+                      continue
+                
+                  # Non-retriable error
+                  error_msg = f"Order placement failed: Status {response.status_code}, Details: {response.text}"
+                  logger.error(error_msg)
+                  raise OrderPlacementError(error_msg)
+                
+              except requests.exceptions.RequestException as e:
+                  if attempt < max_retries - 1:
+                      logger.warning(f"Network error on attempt {attempt + 1}: {str(e)}")
+                      time.sleep(retry_delay * (attempt + 1))
+                      continue
+                  raise OrderPlacementError(f"Network error: {str(e)}")
+                
+          raise OrderPlacementError(f"Failed to place order after {max_retries} attempts")
+    
+      except Exception as e:
+          logger.error(f"Error in order placement: {str(e)}")
+          raise
+
+
+==================================================
+FUNCTION: place_repo_order
+==================================================
+
+PARAMETERS (11):
+  - jwt_token = None
+  - symbol = None
+  - quantity = None
+  - interest_rate = None
+  - custodian_id = None
+  - side = BID
+  - api_key = None
+  - api_secret = None
+  - logger = None
+  - account_name = None
+  - config_manager = None
+
+DOCSTRING:
+  Place a repo order (borrow/lend) using API key authentication
+
+  Args:
+      jwt_token: JWT token (not used, kept for compatibility)
+      symbol: Trading pair symbol (e.g., "BTC/USDC" or "BTC/USDT")
+      quantity: Amount to borrow
+      interest_rate: Interest rate (e.g., 10%)
+      custodian_id: Custodian ID
+      side: Order side (default: "BID" for borrowing)
+      api_key: API key for authentication
+      api_secret: API secret for signing requests
+      logger: Logger object for logging
+      account_name: Optional account name to get settings from
+      config_manager: Optional ConfigurationManager instance
+    
+  Returns:
+      Response from the API
+
+PARAMETER DESCRIPTIONS:
+  - jwt_token: JWT token (not used, kept for compatibility)
+  - symbol: Trading pair symbol (e.g., "BTC/USDC" or "BTC/USDT")
+  - quantity: Amount to borrow
+  - interest_rate: Interest rate (e.g., 10%)
+  - custodian_id: Custodian ID
+  - side: Order side (default: "BID" for borrowing)
+  - api_key: API key for authentication
+  - api_secret: API secret for signing requests
+  - logger: Logger object for logging
+  - account_name: Optional account name to get settings from
+  - config_manager: Optional ConfigurationManager instance
+
+POTENTIAL FUNCTION CALLS:
+  - ValueError()
+  - b64encode()
+  - debug()
+  - decode()
+  - digest()
+  - dumps()
+  - encode()
+  - endswith()
+  - error()
+  - generate_repo_clordid()
+  - get()
+  - getLogger()
+  - get_account_credentials()
+  - get_jwt_token()
+  - get_repo_details()
+  - get_repo_symbol()
+  - get_trading_setting()
+  - getenv()
+  - info()
+  - json()
+  - md5()
+  - new()
+  - place_repo_order()
+  - post()
+  - split()
+  - warning()
+
+SOURCE CODE:
+  def place_repo_order(jwt_token=None, symbol=None, quantity=None, interest_rate=None, 
+                       custodian_id=None, side="BID", api_key=None, api_secret=None, 
+                       logger=None, account_name=None, config_manager=None):
+      """
+      Place a repo order (borrow/lend) using API key authentication
+    
+      Args:
+          jwt_token: JWT token (not used, kept for compatibility)
+          symbol: Trading pair symbol (e.g., "BTC/USDC" or "BTC/USDT")
+          quantity: Amount to borrow
+          interest_rate: Interest rate (e.g., 10%)
+          custodian_id: Custodian ID
+          side: Order side (default: "BID" for borrowing)
+          api_key: API key for authentication
+          api_secret: API secret for signing requests
+          logger: Logger object for logging
+          account_name: Optional account name to get settings from
+          config_manager: Optional ConfigurationManager instance
+        
+      Returns:
+          Response from the API
+      """
+      log = logger or logging.getLogger('trading_utils')
+    
+      # Generate the repo symbol based on the trading pair
+      repo_symbol = symbol
+      if '/' in symbol and not symbol.endswith('110'):
+          repo_symbol = get_repo_symbol(symbol, config_manager, account_name)
+          if not repo_symbol:
+              log.error(f"Could not generate repo symbol for {symbol}")
+              return None
+        
+      if log:
+          log.info(f"Placing repo order - Symbol: {repo_symbol}, Quantity: {quantity}, Rate: {interest_rate}%")
+    
+      # Get credentials and settings from config if provided
+      if config_manager and account_name:
+          credentials = config_manager.get_account_credentials(account_name)
+          api_key = api_key or credentials.get('api_key')
+          api_secret = api_secret or credentials.get('api_secret')
+          custodian_id = custodian_id or credentials.get('custodian_id')
+          api_url = credentials.get('api_url')
+          interest_rate = interest_rate or float(config_manager.get_trading_setting(
+              account_name, 'repo_interest_rate', 10.0))
+      else:
+          # Use env vars if not provided
+          api_key = api_key or os.getenv('API_KEY')
+          api_secret = api_secret or os.getenv('API_SECRET')
+          custodian_id = custodian_id or os.getenv('CUSTODIAN_ID')
+          api_url = os.getenv('API_URL')
+          interest_rate = interest_rate or float(os.getenv('REPO_INTEREST_RATE', 10.0))
+    
+      # Check if credentials are valid
+      if not all([api_key, api_secret, custodian_id, api_url, repo_symbol, quantity]):
+          log.error("Missing required parameters for repo order placement")
+          return None
+    
+      # Set up URL
+      url = f"{api_url}/rest/orders"
+      endpoint = "/rest/orders"
+    
+      # Validate input
+      if not repo_symbol or not '/' in repo_symbol:
+          raise ValueError(f"Invalid repo symbol format: {repo_symbol}. Expected format: BASE/QUOTE110")
+    
+      # Extract currencies from repo symbol
+      base_currency = repo_symbol.split('/')[0]
+      quote_currency_with_110 = repo_symbol.split('/')[1]
+    
+      # Check if a repo already exists for this symbol
+      jwt_token = get_jwt_token(account_name, config_manager)
+      if jwt_token:
+          existing_repo = get_repo_details(
+              jwt_token, symbol, log, account_name, config_manager)
+          if existing_repo:
+              if log:
+                  log.warning(f"SAFEGUARD: Repo already exists for {repo_symbol} (ID: {existing_repo['id']}). Skipping new repo creation.")
+              return {"status": "skipped", "reason": "repo_exists", "existing_repo_id": existing_repo['id']}
+    
+      # Generate a unique repo client order ID
+      clordid = generate_repo_clordid()
+    
+      # Create repo order data
+      order_data = {
+          "side": side,
+          "price": float(interest_rate),
+          "custodianId": custodian_id,
+          "symbol": repo_symbol,
+          "currency": base_currency,
+          "currency2": quote_currency_with_110,
+          "orderQty": float(quantity),
+          "clOrdId": clordid,
+          "orderType": "LIMIT",
+          "tif": "GTC",
+          "dark": False,
+          "isAvgPrice": False,
+          "venue": "LIT"
+      }
+    
+      # Convert order data to JSON
+      body = json.dumps(order_data)
+    
+      # Create signature using body hash method
+      body_hash = base64.b64encode(hashlib.md5(body.encode()).digest()).decode()
+      string_to_sign = f"POST\n{endpoint}\n{body_hash}"
+      signature = base64.b64encode(
+          hmac.new(api_secret.encode(), string_to_sign.encode(), hashlib.sha256).digest()
+      ).decode()
+    
+      # Set up headers
+      headers = {
+          'api-key': api_key,
+          'api-sign': signature,
+          'Content-Type': 'application/json'
+      }
+    
+      if log:
+          log.debug(f"Repo order request: {url}")
+          log.debug(f"Repo order body: {body}")
+    
+      # Make the API request
+      try:
+          response = requests.post(url, headers=headers, data=body, timeout=30)
+        
+          if response.ok:
+              if log:
+                  log.info(f"Repo order placed successfully with API key auth")
+              if response.text:
+                  return response.json()
+              return {}
+          else:
+              log.error(f"Repo order failed with API key auth: {response.status_code} - {response.text}")
+              return None
+            
+      except Exception as e:
+          log.error(f"Error placing repo order with API key auth: {str(e)}")
+          return None
+
+
+==================================================
+FUNCTION: place_order
+==================================================
+
+PARAMETERS (11):
+  - api_key = None
+  - api_secret = None
+  - symbol = None
+  - side = None
+  - price = None
+  - quantity = None
+  - custodian_id = None
+  - tif = None
+  - max_retries = None
+  - config_manager = None
+  - account_name = None
+
+DOCSTRING:
+  Place a trading order with robust retry logic
+
+  Args:
+      api_key: API key for authentication
+      api_secret: API secret for signing requests
+      symbol: Trading pair symbol (e.g., "BTC/USDC")
+      side: Order side - "BID" for buy, "ASK" for sell
+      price: Order price
+      quantity: Order quantity
+      custodian_id: Custodian ID
+      tif: Time in force (IOC, GTC, etc.)
+      max_retries: Maximum number of retry attempts
+      config_manager: Optional ConfigurationManager instance
+      account_name: Optional account name for account-specific settings
+    
+  Returns:
+      Response dict with additional fill information for IOC orders
+      or None if the order failed to be placed/filled
+
+PARAMETER DESCRIPTIONS:
+  - api_key: API key for authentication
+  - api_secret: API secret for signing requests
+  - symbol: Trading pair symbol (e.g., "BTC/USDC")
+  - side: Order side - "BID" for buy, "ASK" for sell
+  - price: Order price
+  - quantity: Order quantity
+  - custodian_id: Custodian ID
+  - tif: Time in force (IOC, GTC, etc.)
+  - max_retries: Maximum number of retry attempts
+  - config_manager: Optional ConfigurationManager instance
+  - account_name: Optional account name for account-specific settings
+
+POTENTIAL FUNCTION CALLS:
+  - OrderPlacementError()
+  - adjust_price()
+  - b64encode()
+  - debug()
+  - decode()
+  - digest()
+  - dumps()
+  - encode()
+  - error()
+  - generate_clordid()
+  - get()
+  - get_account_credentials()
+  - get_trading_setting()
+  - getenv()
+  - info()
+  - json()
+  - md5()
+  - new()
+  - place_order()
+  - post()
+  - range()
+  - sleep()
+  - split()
+  - warning()
+
+SOURCE CODE:
+  def place_order(api_key=None, api_secret=None, symbol=None, side=None, price=None, 
+                  quantity=None, custodian_id=None, tif=None, max_retries=None,
+                  config_manager=None, account_name=None):
+      """
+      Place a trading order with robust retry logic
+    
+      Args:
+          api_key: API key for authentication
+          api_secret: API secret for signing requests
+          symbol: Trading pair symbol (e.g., "BTC/USDC")
+          side: Order side - "BID" for buy, "ASK" for sell
+          price: Order price
+          quantity: Order quantity
+          custodian_id: Custodian ID
+          tif: Time in force (IOC, GTC, etc.)
+          max_retries: Maximum number of retry attempts
+          config_manager: Optional ConfigurationManager instance
+          account_name: Optional account name for account-specific settings
+        
+      Returns:
+          Response dict with additional fill information for IOC orders
+          or None if the order failed to be placed/filled
+      """
+      # Get credentials from config if provided
+      if config_manager and account_name:
+          credentials = config_manager.get_account_credentials(account_name)
+          api_key = api_key or credentials.get('api_key')
+          api_secret = api_secret or credentials.get('api_secret')
+          custodian_id = custodian_id or credentials.get('custodian_id')
+          api_url = credentials.get('api_url')
+        
+          # Get trading settings from config
+          tif = tif or config_manager.get_trading_setting(account_name, 'default_tif', 'GTC')
+          max_retries = max_retries or int(config_manager.get_trading_setting(
+              account_name, 'max_retries', 3))
+          retry_delay = int(config_manager.get_trading_setting(
+              account_name, 'retry_delay', 1))
+      else:
+          # Use environment variables when parameters are not provided
+          api_key = api_key or os.getenv('API_KEY')
+          api_secret = api_secret or os.getenv('API_SECRET')
+          custodian_id = custodian_id or os.getenv('CUSTODIAN_ID')
+          api_url = os.getenv('API_URL')
+          tif = tif or os.getenv('DEFAULT_TIF', 'GTC')
+          max_retries = max_retries or int(os.getenv('MAX_RETRIES', 3))
+          retry_delay = int(os.getenv('RETRY_DELAY', 1))
+    
+      # Check if credentials are valid
+      if not all([api_key, api_secret, custodian_id, api_url]):
+          logger.error("Missing required credentials for order placement")
+          raise OrderPlacementError("Missing required credentials for order placement")
+    
+      # Set up URL
+      url = f"{api_url}/rest/orders"
+      endpoint = "/rest/orders"
+      method = "POST"
+    
+      logger.info(f"Placing Order - Symbol: {symbol}, Side: {side}, Price: {price}, Quantity: {quantity}, TIF: {tif}")
+    
+      try:
+          # Adjust price according to our strategy
+          adjusted_price = adjust_price(price, side, symbol, config_manager, account_name)
+        
+          # Generate a unique client order ID
+          clordid = generate_clordid()
+        
+          # Create order data
+          order_data = {
+              "side": side,
+              "price": adjusted_price,
+              "custodianId": custodian_id,
+              "symbol": symbol,
+              "orderQty": quantity,
+              "clOrdId": clordid,
+              "orderType": "LIMIT",
+              "tif": tif,
+              "dark": False,
+              "isAvgPrice": False,
+              "venue": "LIT"
+          }
+        
+          # Extract currencies from symbol
+          if '/' in symbol:
+              currencies = symbol.split('/')
+              if len(currencies) == 2:
+                  order_data["currency"] = currencies[0]
+                  order_data["currency2"] = currencies[1]
+        
+          # Convert order data to JSON
+          body = json.dumps(order_data)
+        
+          for attempt in range(max_retries):
+              try:
+                  logger.debug(f"Order placement attempt {attempt + 1}/{max_retries}")
+                
+                  # Create signature using body hash method
+                  body_hash = base64.b64encode(hashlib.md5(body.encode()).digest()).decode()
+                  string_to_sign = f"{method}\n{endpoint}\n{body_hash}"
+                  signature = base64.b64encode(
+                      hmac.new(api_secret.encode(), string_to_sign.encode(), hashlib.sha256).digest()
+                  ).decode()
+                
+                  # Set up headers
+                  headers = {
+                      'api-key': api_key,
+                      'api-sign': signature,
+                      'Content-Type': 'application/json'
+                  }
+                
+                  logger.debug(f"Order request: {url}")
+                  logger.debug(f"Order body: {body}")
+                
+                  # Make the API request
+                  response = requests.post(url, headers=headers, data=body, timeout=30)
+                
+                  if response.ok:
+                      logger.info(f"Order placed successfully: Status {response.status_code}")
+                    
+                      # For IOC orders, specifically check fill status
+                      if tif == 'IOC':
+                          response_data = response.json() if response.text else {}
+                        
+                          # Try to get fill information
+                          if response_data:
+                              # Check if the order was filled
+                              ord_status = response_data.get('ordStatus', '')
+                              leaves_qty = float(response_data.get('leavesQty', 0))
+                              cum_qty = float(response_data.get('cumQty', 0))
+                            
+                              # Add fill information to response
+                              response_data['fill_complete'] = (
+                                  ord_status == 'FILLED' or 
+                                  (cum_qty > 0 and leaves_qty == 0)
+                              )
+                            
+                              # If not filled, treat as failure for IOC
+                              if not response_data['fill_complete']:
+                                  logger.warning(f"IOC order not filled: {ord_status}, leaves_qty={leaves_qty}, cum_qty={cum_qty}")
+                                  if ord_status in ['EXPIRED', 'REJECTED', 'CANCELLED']:
+                                      return None  # Order failed to fill
+                            
+                              logger.info(f"IOC order fill status: {response_data['fill_complete']}")
+                              return response_data
+                    
+                      # For non-IOC orders, just return the response
+                      if response.text:
+                          return response.json()
+                      return {}
+                
+                  # Get the list of retriable errors from config if possible
+                  retry_conditions = [
+                      "No custodian isos",
+                      "No liquidity",
+                      "IOC expired",
+                      "Insufficient funds"
+                  ]
+                
+                  if any(error in response.text for error in retry_conditions) and attempt < max_retries - 1:
+                      logger.warning(f"Retriable error detected: {response.text}")
+                      time.sleep(retry_delay * (attempt + 1))
+                      continue
+                
+                  # Non-retriable error
+                  error_msg = f"Order placement failed: Status {response.status_code}, Details: {response.text}"
+                  logger.error(error_msg)
+                  raise OrderPlacementError(error_msg)
+                
+              except requests.exceptions.RequestException as e:
+                  if attempt < max_retries - 1:
+                      logger.warning(f"Network error on attempt {attempt + 1}: {str(e)}")
+                      time.sleep(retry_delay * (attempt + 1))
+                      continue
+                  raise OrderPlacementError(f"Network error: {str(e)}")
+                
+          raise OrderPlacementError(f"Failed to place order after {max_retries} attempts")
+    
+      except Exception as e:
+          logger.error(f"Error in order placement: {str(e)}")
+          raise
+
+
+==================================================
+FUNCTION: place_repo_order
+==================================================
+
+PARAMETERS (11):
+  - jwt_token = None
+  - symbol = None
+  - quantity = None
+  - interest_rate = None
+  - custodian_id = None
+  - side = BID
+  - api_key = None
+  - api_secret = None
+  - logger = None
+  - account_name = None
+  - config_manager = None
+
+DOCSTRING:
+  Place a repo order (borrow/lend) using API key authentication
+
+  Args:
+      jwt_token: JWT token (not used, kept for compatibility)
+      symbol: Trading pair symbol (e.g., "BTC/USDC" or "BTC/USDT")
+      quantity: Amount to borrow
+      interest_rate: Interest rate (e.g., 10%)
+      custodian_id: Custodian ID
+      side: Order side (default: "BID" for borrowing)
+      api_key: API key for authentication
+      api_secret: API secret for signing requests
+      logger: Logger object for logging
+      account_name: Optional account name to get settings from
+      config_manager: Optional ConfigurationManager instance
+    
+  Returns:
+      Response from the API
+
+PARAMETER DESCRIPTIONS:
+  - jwt_token: JWT token (not used, kept for compatibility)
+  - symbol: Trading pair symbol (e.g., "BTC/USDC" or "BTC/USDT")
+  - quantity: Amount to borrow
+  - interest_rate: Interest rate (e.g., 10%)
+  - custodian_id: Custodian ID
+  - side: Order side (default: "BID" for borrowing)
+  - api_key: API key for authentication
+  - api_secret: API secret for signing requests
+  - logger: Logger object for logging
+  - account_name: Optional account name to get settings from
+  - config_manager: Optional ConfigurationManager instance
+
+POTENTIAL FUNCTION CALLS:
+  - ValueError()
+  - b64encode()
+  - debug()
+  - decode()
+  - digest()
+  - dumps()
+  - encode()
+  - endswith()
+  - error()
+  - generate_repo_clordid()
+  - get()
+  - getLogger()
+  - get_account_credentials()
+  - get_jwt_token()
+  - get_repo_details()
+  - get_repo_symbol()
+  - get_trading_setting()
+  - getenv()
+  - info()
+  - json()
+  - md5()
+  - new()
+  - place_repo_order()
+  - post()
+  - split()
+  - warning()
+
+SOURCE CODE:
+  def place_repo_order(jwt_token=None, symbol=None, quantity=None, interest_rate=None, 
+                       custodian_id=None, side="BID", api_key=None, api_secret=None, 
+                       logger=None, account_name=None, config_manager=None):
+      """
+      Place a repo order (borrow/lend) using API key authentication
+    
+      Args:
+          jwt_token: JWT token (not used, kept for compatibility)
+          symbol: Trading pair symbol (e.g., "BTC/USDC" or "BTC/USDT")
+          quantity: Amount to borrow
+          interest_rate: Interest rate (e.g., 10%)
+          custodian_id: Custodian ID
+          side: Order side (default: "BID" for borrowing)
+          api_key: API key for authentication
+          api_secret: API secret for signing requests
+          logger: Logger object for logging
+          account_name: Optional account name to get settings from
+          config_manager: Optional ConfigurationManager instance
+        
+      Returns:
+          Response from the API
+      """
+      log = logger or logging.getLogger('trading_utils')
+    
+      # Generate the repo symbol based on the trading pair
+      repo_symbol = symbol
+      if '/' in symbol and not symbol.endswith('110'):
+          repo_symbol = get_repo_symbol(symbol, config_manager, account_name)
+          if not repo_symbol:
+              log.error(f"Could not generate repo symbol for {symbol}")
+              return None
+        
+      if log:
+          log.info(f"Placing repo order - Symbol: {repo_symbol}, Quantity: {quantity}, Rate: {interest_rate}%")
+    
+      # Get credentials and settings from config if provided
+      if config_manager and account_name:
+          credentials = config_manager.get_account_credentials(account_name)
+          api_key = api_key or credentials.get('api_key')
+          api_secret = api_secret or credentials.get('api_secret')
+          custodian_id = custodian_id or credentials.get('custodian_id')
+          api_url = credentials.get('api_url')
+          interest_rate = interest_rate or float(config_manager.get_trading_setting(
+              account_name, 'repo_interest_rate', 10.0))
+      else:
+          # Use env vars if not provided
+          api_key = api_key or os.getenv('API_KEY')
+          api_secret = api_secret or os.getenv('API_SECRET')
+          custodian_id = custodian_id or os.getenv('CUSTODIAN_ID')
+          api_url = os.getenv('API_URL')
+          interest_rate = interest_rate or float(os.getenv('REPO_INTEREST_RATE', 10.0))
+    
+      # Check if credentials are valid
+      if not all([api_key, api_secret, custodian_id, api_url, repo_symbol, quantity]):
+          log.error("Missing required parameters for repo order placement")
+          return None
+    
+      # Set up URL
+      url = f"{api_url}/rest/orders"
+      endpoint = "/rest/orders"
+    
+      # Validate input
+      if not repo_symbol or not '/' in repo_symbol:
+          raise ValueError(f"Invalid repo symbol format: {repo_symbol}. Expected format: BASE/QUOTE110")
+    
+      # Extract currencies from repo symbol
+      base_currency = repo_symbol.split('/')[0]
+      quote_currency_with_110 = repo_symbol.split('/')[1]
+    
+      # Check if a repo already exists for this symbol
+      jwt_token = get_jwt_token(account_name, config_manager)
+      if jwt_token:
+          existing_repo = get_repo_details(
+              jwt_token, symbol, log, account_name, config_manager)
+          if existing_repo:
+              if log:
+                  log.warning(f"SAFEGUARD: Repo already exists for {repo_symbol} (ID: {existing_repo['id']}). Skipping new repo creation.")
+              return {"status": "skipped", "reason": "repo_exists", "existing_repo_id": existing_repo['id']}
+    
+      # Generate a unique repo client order ID
+      clordid = generate_repo_clordid()
+    
+      # Create repo order data
+      order_data = {
+          "side": side,
+          "price": float(interest_rate),
+          "custodianId": custodian_id,
+          "symbol": repo_symbol,
+          "currency": base_currency,
+          "currency2": quote_currency_with_110,
+          "orderQty": float(quantity),
+          "clOrdId": clordid,
+          "orderType": "LIMIT",
+          "tif": "GTC",
+          "dark": False,
+          "isAvgPrice": False,
+          "venue": "LIT"
+      }
+    
+      # Convert order data to JSON
+      body = json.dumps(order_data)
+    
+      # Create signature using body hash method
+      body_hash = base64.b64encode(hashlib.md5(body.encode()).digest()).decode()
+      string_to_sign = f"POST\n{endpoint}\n{body_hash}"
+      signature = base64.b64encode(
+          hmac.new(api_secret.encode(), string_to_sign.encode(), hashlib.sha256).digest()
+      ).decode()
+    
+      # Set up headers
+      headers = {
+          'api-key': api_key,
+          'api-sign': signature,
+          'Content-Type': 'application/json'
+      }
+    
+      if log:
+          log.debug(f"Repo order request: {url}")
+          log.debug(f"Repo order body: {body}")
+    
+      # Make the API request
+      try:
+          response = requests.post(url, headers=headers, data=body, timeout=30)
+        
+          if response.ok:
+              if log:
+                  log.info(f"Repo order placed successfully with API key auth")
+              if response.text:
+                  return response.json()
+              return {}
+          else:
+              log.error(f"Repo order failed with API key auth: {response.status_code} - {response.text}")
+              return None
+            
+      except Exception as e:
+          log.error(f"Error placing repo order with API key auth: {str(e)}")
+          return None
+
+
+
+GLOBAL VARIABLES
+==================================================
+
+Found 2 global variables that might affect API behavior:
+  - ENABLE_API_DEBUG = True
+  - logger = <Logger trading_utils (WARNING)>
+
+
+ANALYSIS COMPLETE!
